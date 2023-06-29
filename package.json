@@ -7,8 +7,12 @@
         "@symfony/stimulus-bridge": "^3.2.0",
         "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
         "@symfony/webpack-encore": "^4.0.0",
+        "@types/jest": "^29.5.2",
         "core-js": "^3.23.0",
+        "fork-ts-checker-webpack-plugin": "^7.0.0",
         "regenerator-runtime": "^0.13.9",
+        "ts-loader": "^9.0.0",
+        "typescript": "^5.1.6",
         "webpack": "^5.74.0",
         "webpack-cli": "^4.10.0",
         "webpack-notifier": "^1.15.0"

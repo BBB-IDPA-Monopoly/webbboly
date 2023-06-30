@@ -11,6 +11,8 @@
         "core-js": "^3.23.0",
         "fork-ts-checker-webpack-plugin": "^7.0.0",
         "regenerator-runtime": "^0.13.9",
+        "sass": "^1.63.6",
+        "sass-loader": "^13.0.0",
         "ts-loader": "^9.0.0",
         "typescript": "^5.1.6",
         "webpack": "^5.74.0",
@@ -20,9 +22,17 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-        "dev-server": "encore dev-server",
-        "dev": "encore dev",
-        "watch": "encore dev --watch",
-        "build": "encore production --progress"
+      "docker:build": "docker compose build --pull --no-cache",
+      "docker:up": "docker-compose up",
+      "docker:down": "docker-compose down",
+      "docker:exec": "docker exec php sh",
+      "encore:dev-server": "encore dev-server",
+      "encore:dev": "encore dev",
+      "encore:watch": "encore dev --watch",
+      "encore:build": "encore production --progress"
+    },
+    "dependencies": {
+        "@testing-library/dom": "^9.3.1",
+        "bootstrap": "^5.3.0"
     }
 }

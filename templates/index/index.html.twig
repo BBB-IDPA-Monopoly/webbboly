@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+    <div class="p-5 text-center" style="height: 100vh;">
+        <div class="h-50">
+            <h1 class="fw-bold" style="font-size: 20rem">Webbboly</h1>
+        </div>
+        <div class="h-50">
+            <div class="h-50">
+                <div class="col-lg-4 mx-auto">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Game code" aria-label="Game code" autofocus>
+                        <button class="btn btn-success" type="button">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div class="h-50">
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Create Game</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

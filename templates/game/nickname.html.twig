@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
+{% block title %}Nickname{% endblock %}
 
 {% block body %}
     <div class="p-5 text-center" style="height: 100vh;">
@@ -10,18 +10,14 @@
         </div>
         <div class="h-50">
             <div class="h-50">
-                {{ form_start(form) }}
+                {{ form_start(nicknameForm) }}
                 <div class="col-lg-4 mx-auto">
                     <div class="input-group input-group-lg has-validation">
-                        {{ form_row(form.code) }}
-                        <button class="btn btn-success" type="submit">Join</button>
+                        {{ form_row(nicknameForm.nickname) }}
+                        <button class="btn btn-success" type="submit">Enter</button>
                     </div>
                 </div>
-                {{ form_end(form) }}
-            </div>
-            <div class="h-50">
-                <div id="my_div_id" {{ turbo_stream_listen('https://example.com/index') }}></div>
-                <a class="btn btn-outline-secondary btn-lg px-4" href="{{ path('app_game_create') }}">Create Game</a>
+                {{ form_end(nicknameForm) }}
             </div>
         </div>
     </div>

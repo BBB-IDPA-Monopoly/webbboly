@@ -58,6 +58,7 @@ class Game
         if (!$this->players->contains($player)) {
             $this->players->add($player);
             $player->setGame($this);
+            $player->setNumber($this->players->count());
         }
 
         return $this;

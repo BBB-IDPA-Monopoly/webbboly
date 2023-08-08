@@ -13,21 +13,36 @@ class Player
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int|null $id = null;
+
+    #[ORM\Column(type: 'smallint')]
+    private int|null $number = null;
 
     #[ORM\Column(length: 20)]
-    private ?string $nickname = null;
+    private string|null $nickname = null;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Game $game = null;
+    private Game|null $game = null;
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getNickname(): ?string
+    public function getNumber(): int|null
+    {
+        return $this->number;
+    }
+
+    public function setNumber(int $number): static
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    public function getNickname(): string|null
     {
         return $this->nickname;
     }
@@ -39,12 +54,12 @@ class Player
         return $this;
     }
 
-    public function getGame(): ?Game
+    public function getGame(): Game|null
     {
         return $this->game;
     }
 
-    public function setGame(?Game $game): static
+    public function setGame(Game|null $game): static
     {
         $this->game = $game;
 

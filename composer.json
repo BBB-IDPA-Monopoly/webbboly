@@ -91,7 +91,7 @@
     "require-dev": {
         "symfony/debug-bundle": "6.3.*",
         "symfony/maker-bundle": "^1.49",
-        "symfony/monolog-bundle": "^3.0",
+        "symfony/monolog-bundle": "*",
         "symfony/stopwatch": "6.3.*",
         "symfony/web-profiler-bundle": "6.3.*"
     }

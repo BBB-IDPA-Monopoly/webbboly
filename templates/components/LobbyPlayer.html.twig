@@ -1,0 +1,18 @@
+<div id="player-{{ this.player.id }}">
+    Player {{ this.player.number }}: {{ this.player.nickname }}
+    {% if this.isHost %}
+        <span class="badge bg-secondary">Host</span>
+    {% endif %}
+    {% if this.isMe %}
+        <span class="badge bg-primary">Me</span>
+    {% endif %}
+    {% if this.player.isReady %}
+        <span class="badge bg-success">Ready</span>
+    {% endif %}
+    {% if this.forHost %}
+        <a class="badge bg-danger" href="{{ path('app_game_kick', {
+            'code': this.player.game.code,
+            'number': this.player.number
+        }) }}">Kick</a>
+    {% endif %}
+</div>

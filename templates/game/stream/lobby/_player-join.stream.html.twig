@@ -1,0 +1,10 @@
+<turbo-stream action="append" target="players">
+    <template>
+        {{ component('LobbyPlayer', {
+            'player': player,
+            'isMe': false,
+            'isHost': false,
+            'forHost': forHost,
+        }) }}
+    </template>
+</turbo-stream>

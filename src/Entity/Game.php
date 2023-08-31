@@ -6,10 +6,10 @@ use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\UX\Turbo\Attribute\Broadcast;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
-#[Broadcast]
+#[UniqueEntity(fields: ['code'])]
 class Game
 {
     #[ORM\Id]
@@ -55,7 +55,7 @@ class Game
 
     public function addPlayer(Player $player): static
     {
-        if (!$this->players->contains($player)) {
+        if (!$this->players->contains($player) && !$this->isGameFull()) {
             $this->players->add($player);
             $player->setGame($this);
             $player->setNumber($this->players->count());
@@ -71,5 +71,31 @@ class Game
         }
 
         return $this;
+    }
+
+    public function getHost(): Player|null
+    {
+        return $this->players->first() ?: null;
+    }
+
+    public function isGameFull(): bool
+    {
+        return $this->players->count() >= 4;
+    }
+
+    public function allPlayersReady(): bool
+    {
+        foreach ($this->players as $player) {
+            if (!$player->isReady()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function isGameReady(): bool
+    {
+        return $this->isGameFull() && $this->allPlayersReady();
     }
 }

@@ -7,19 +7,22 @@ use App\Entity\Player;
 use App\Form\NicknameType;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
+use App\Service\GameStreamService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 final class GameController extends AbstractController
 {
     public function __construct(
         private readonly GameRepository $gameRepository,
         private readonly PlayerRepository $playerRepository,
+        private readonly GameStreamService $gameStreamService,
     ) {}
 
     /**
@@ -28,7 +31,13 @@ final class GameController extends AbstractController
     #[Route('/game/create', name: 'app_game_create')]
     public function create(): Response
     {
-        $code = random_int(100000, 999999);
+        while (true) {
+            $code = random_int(100000, 999999);
+
+            if (!$this->gameRepository->findOneBy(compact('code'))) {
+                break;
+            }
+        }
 
         $game = new Game();
         $game->setCode($code);
@@ -38,25 +47,19 @@ final class GameController extends AbstractController
         return $this->redirectToRoute('app_game_nickname', compact('code'));
     }
 
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
     #[Route('/game/nickname/{code}', name: 'app_game_nickname')]
-    public function nickname(Request $request, int $code): Response
+    public function nickname(Game $game, Request $request): Response
     {
-        //Get the game
-        $game = $this->gameRepository->findOneBy(compact('code'));
-
-        if (!$game) {
-            $this->addFlash('danger', 'The game does not exist.');
-            return $this->redirectToRoute('app_index');
-        }
-
-        //Check if the game is full
         if ($game->getPlayers()->count() >= 4) {
             $this->addFlash('danger', 'The game is full.');
             return $this->redirectToRoute('app_index');
         }
 
-        //Check if the game is started
-        //Check if the game is finished
         $form = $this->createForm(NicknameType::class);
 
         $form->handleRequest($request);
@@ -65,7 +68,7 @@ final class GameController extends AbstractController
 
             if ($game->getPlayers()->exists(static fn (int $key, Player $player) => $player->getNickname() === $nickname)) {
                 $this->addFlash('error', 'The nickname is already taken.');
-                return $this->redirectToRoute('app_game_nickname', compact('code'));
+                return $this->redirectToRoute('app_game_nickname', ['code' => $game->getCode()]);
             }
 
             $player = new Player();
@@ -74,11 +77,11 @@ final class GameController extends AbstractController
             $game->addPlayer($player);
 
             $this->playerRepository->save($player, true);
-            $this->gameRepository->save($game, true);
+            $this->gameStreamService->sendPlayerJoin($game->getCode(), $player);
 
             $request->getSession()->set('player_id', $player->getId());
 
-            return $this->redirectToRoute('app_game_lobby', compact('code'));
+            return $this->redirectToRoute('app_game_lobby', ['code' => $game->getCode()]);
         }
 
         return $this->render(
@@ -88,17 +91,8 @@ final class GameController extends AbstractController
     }
 
     #[Route('/game/lobby/{code}', name: 'app_game_lobby')]
-    public function lobby(Request $request, HubInterface $hub, int $code): Response
+    public function lobby(Game $game, Request $request): Response
     {
-        //Get the game
-        $game = $this->gameRepository->findOneBy(compact('code'));
-
-        if (!$game) {
-            $this->addFlash('danger', 'The game does not exist.');
-            return $this->redirectToRoute('app_index');
-        }
-
-        //Get the user
         $playerId = $request->getSession()->get('player_id');
 
         if (!$playerId) {
@@ -106,21 +100,60 @@ final class GameController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        $player = $this->playerRepository->find($playerId);
+        $currentPlayer = $this->playerRepository->find($playerId);
 
-        if (!$player || $player->getGame() !== $game) {
+        if (!$currentPlayer || $currentPlayer->getGame() !== $game) {
             $this->addFlash('danger', 'You are not in the game.');
             return $this->redirectToRoute('app_index');
         }
 
-        //new Update with the stream template
-        $update = new Update(
-            sprintf('https://example.com/game/%d', $game->getId()),
-            $this->renderView('game/stream/_player-join.stream.html.twig', compact('player')),
-        );
+        return $this->render('game/lobby.html.twig', compact('game', 'currentPlayer'));
+    }
 
-        $hub->publish($update);
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/ready/{code}', name: 'app_game_ready')]
+    public function ready(Game $game, Request $request): Response
+    {
+        $playerId = $request->getSession()->get('player_id');
 
-        return $this->render('game/lobby.html.twig', compact('game', 'player'));
+        if (!$playerId) {
+            $this->addFlash('danger', 'You are not a player.');
+            return $this->redirectToRoute('app_index');
+        }
+
+        $currentPlayer = $this->playerRepository->find($playerId);
+
+        if (!$currentPlayer || $currentPlayer->getGame() !== $game) {
+            $this->addFlash('danger', 'You are not in the game.');
+            return $this->redirectToRoute('app_index');
+        }
+
+        $currentPlayer->setReady(!$currentPlayer->isReady());
+
+        $this->playerRepository->save($currentPlayer, true);
+
+        $this->gameStreamService->sendPlayerReady($game->getCode(), $currentPlayer);
+
+        return $this->redirectToRoute('app_game_lobby', ['code' => $game->getCode()]);
+    }
+
+    //remove player from game
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/kick/{code}/{number}', name: 'app_game_kick')]
+    public function kick(Game $game, Player $player): Response
+    {
+        $this->playerRepository->remove($player, true);
+        $this->gameStreamService->sendPlayerLeave($game->getCode(), $player);
+
+        return $this->redirectToRoute('app_game_lobby', ['code' => $game->getCode()]);
     }
 }

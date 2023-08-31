@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
-#[Broadcast]
 class Player
 {
     #[ORM\Id]
@@ -20,6 +19,9 @@ class Player
 
     #[ORM\Column(length: 20)]
     private string|null $nickname = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isReady = false;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
     #[ORM\JoinColumn(nullable: false)]
@@ -54,6 +56,18 @@ class Player
         return $this;
     }
 
+    public function isReady(): bool
+    {
+        return $this->isReady;
+    }
+
+    public function setReady(bool $isReady): static
+    {
+        $this->isReady = $isReady;
+
+        return $this;
+    }
+
     public function getGame(): Game|null
     {
         return $this->game;
@@ -64,5 +78,10 @@ class Player
         $this->game = $game;
 
         return $this;
+    }
+
+    public function isHost(): bool
+    {
+        return $this->game->getHost() === $this;
     }
 }

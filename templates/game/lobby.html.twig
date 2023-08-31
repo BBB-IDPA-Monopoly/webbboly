@@ -1,28 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <div {{ turbo_stream_listen('https://example.com/game/' ~ game.id) }}></div>
-
-
-    Lobby
-    {% for i in 1..4 %}
-        {% if game.players[i-1] is defined %}
-            <div id="player-{{ game.players[i-1].number }}" {% if game.players[i-1] is same as(player) %} class="bg-danger" {% endif %} >
-                Player 2: {{ game.players[i-1].nickname }}
-            </div>
-        {% else %}
-            <div id="player-{{ i }}">
-                Player {{ i }}
-            </div>
-        {% endif %}
-    {% endfor %}
-
-    {% if game.players[0] is defined and game.players[1] is defined and game.players[2] is defined and game.players[3] is defined %}
-        <a href="">Start game</a>
-    {% endif %}
-{% endblock %}
-
 {% block title %}
     Lobby
+{% endblock %}
+
+{% block body %}
+    {% if currentPlayer.isHost %}
+        <div {{ turbo_stream_listen('game/' ~ game.id ~ '/host') }}></div>
+    {% else %}
+        <div {{ turbo_stream_listen('game/' ~ game.id) }}></div>
+    {% endif %}
+
+    <div {{ stimulus_controller('disable-turbo-stream', {
+        'action': 'update',
+        'target': 'player-' ~ currentPlayer.id,
+    }) }}></div>
+
+    <h1>Lobby</h1>
+    <div id="players" >
+        {% for player in game.players %}
+            {{ component('LobbyPlayer', {
+                'player': player,
+                'isMe': player is same as(currentPlayer),
+                'isHost': player.isHost,
+                'forHost': currentPlayer.isHost,
+            }) }}
+        {% endfor %}
+    </div>
+
+    <div id="actions">
+
+        <a href="{{ path('app_game_ready', {
+            'code': game.code,
+        }) }}">
+            {% if currentPlayer.isReady %}
+                Unready
+            {% else %}
+                Ready
+            {% endif %}
+        </a>
+
+        {% if currentPlayer is same as(game.host) %}
+            {% if game.isGameReady %}
+                <a href="">Start game</a>
+            {% elseif game.isGameFull %}
+                <span>Waiting for players to be ready...</span>
+            {% else %}
+                <span>Waiting for players to join...</span>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}
 

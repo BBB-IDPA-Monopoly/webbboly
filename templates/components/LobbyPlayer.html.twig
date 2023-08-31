@@ -9,8 +9,8 @@
     {% if this.player.isReady %}
         <span class="badge bg-success">Ready</span>
     {% endif %}
-    {% if this.forHost %}
-        <a class="badge bg-danger" href="{{ path('app_game_kick', {
+    {% if this.forHost and not this.isMe %}
+        <a class="badge bg-danger" href="{{ path('app_lobby_kick', {
             'code': this.player.game.code,
             'number': this.player.number
         }) }}">Kick</a>

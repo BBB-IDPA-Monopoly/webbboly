@@ -75,7 +75,7 @@ class Game
 
     public function getHost(): Player|null
     {
-        return $this->players->first() ?: null;
+        return $this->players->filter(static fn (Player $player) => $player->getNumber() === 1)->first() ?: null;
     }
 
     public function isGameFull(): bool

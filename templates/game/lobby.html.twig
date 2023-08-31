@@ -1,54 +1,77 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Lobby
+    Lobby #{{ game.code }}
 {% endblock %}
 
 {% block body %}
-    {% if currentPlayer.isHost %}
-        <div {{ turbo_stream_listen('game/' ~ game.id ~ '/host') }}></div>
-    {% else %}
-        <div {{ turbo_stream_listen('game/' ~ game.id) }}></div>
-    {% endif %}
-
-    <div {{ stimulus_controller('disable-turbo-stream', {
-        'action': 'update',
-        'target': 'player-' ~ currentPlayer.id,
-    }) }}></div>
-
-    <h1>Lobby</h1>
-    <div id="players" >
-        {% for player in game.players %}
-            {{ component('LobbyPlayer', {
-                'player': player,
-                'isMe': player is same as(currentPlayer),
-                'isHost': player.isHost,
-                'forHost': currentPlayer.isHost,
-            }) }}
-        {% endfor %}
-    </div>
-
-    <div id="actions">
-
-        <a href="{{ path('app_game_ready', {
-            'code': game.code,
-        }) }}">
-            {% if currentPlayer.isReady %}
-                Unready
-            {% else %}
-                Ready
-            {% endif %}
-        </a>
-
-        {% if currentPlayer is same as(game.host) %}
-            {% if game.isGameReady %}
-                <a href="">Start game</a>
-            {% elseif game.isGameFull %}
-                <span>Waiting for players to be ready...</span>
-            {% else %}
-                <span>Waiting for players to join...</span>
-            {% endif %}
+    <div id="lobby">
+        {% if currentPlayer.isHost %}
+            <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code ~ '/host') }}></div>
         {% endif %}
+
+        <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code) }}></div>
+        <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code ~ '/player/' ~ currentPlayer.number) }}></div>
+
+        <div {{ stimulus_controller('disable-turbo-stream', {
+            'action': 'update',
+            'target': 'player-' ~ currentPlayer.id,
+        }) }}></div>
+
+        <h1>Lobby #{{ game.code }}</h1>
+        <div id="players" >
+            {% for player in game.players %}
+                {{ component('LobbyPlayer', {
+                    'player': player,
+                    'isMe': player is same as(currentPlayer),
+                    'isHost': player.isHost,
+                    'forHost': currentPlayer.isHost,
+                }) }}
+            {% endfor %}
+        </div>
+
+        <div id="actions">
+
+            {% if currentPlayer.isReady %}
+                <a class="btn btn-danger" href="{{ path('app_lobby_ready', {
+                    'code': game.code,
+                }) }}">
+                    Unready
+                </a>
+            {% else %}
+                <a class="btn btn-success" href="{{ path('app_lobby_ready', {
+                    'code': game.code,
+                }) }}">
+                    Ready
+                </a>
+            {% endif %}
+
+            {% if currentPlayer is same as(game.host) %}
+                <a id="startGame"
+                   class="btn btn-success {% if not game.isGameReady %} disabled {% endif %}"
+                   href="">
+                    Start game
+
+                    {% if game.isGameFull %}
+                        <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to be ready...</span>
+                    {% else %}
+                        <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to join...</span>
+                    {% endif %}
+                </a>
+
+                <a class="btn btn-danger" href="{{ path('app_lobby_delete', {
+                    'code': game.code,
+                }) }}">
+                    Delete game
+                </a>
+            {% else %}
+                <a class="btn btn-danger" href="{{ path('app_lobby_leave', {
+                    'code': game.code,
+                }) }}">
+                    Leave game
+                </a>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 

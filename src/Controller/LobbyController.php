@@ -7,7 +7,7 @@ use App\Entity\Player;
 use App\Form\NicknameType;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
-use App\Service\GameStreamService;
+use App\Service\LobbyStreamService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,18 +17,18 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-final class GameController extends AbstractController
+final class LobbyController extends AbstractController
 {
     public function __construct(
-        private readonly GameRepository $gameRepository,
-        private readonly PlayerRepository $playerRepository,
-        private readonly GameStreamService $gameStreamService,
+        private readonly GameRepository     $gameRepository,
+        private readonly PlayerRepository   $playerRepository,
+        private readonly LobbyStreamService $lobbyStreamService,
     ) {}
 
     /**
      * @throws Exception
      */
-    #[Route('/game/create', name: 'app_game_create')]
+    #[Route('/game/create', name: 'app_lobby_create')]
     public function create(): Response
     {
         while (true) {
@@ -44,7 +44,7 @@ final class GameController extends AbstractController
 
         $this->gameRepository->save($game, true);
 
-        return $this->redirectToRoute('app_game_nickname', compact('code'));
+        return $this->redirectToRoute('app_lobby_nickname', compact('code'));
     }
 
     /**
@@ -52,7 +52,26 @@ final class GameController extends AbstractController
      * @throws SyntaxError
      * @throws LoaderError
      */
-    #[Route('/game/nickname/{code}', name: 'app_game_nickname')]
+    #[Route('/game/remove/{code}', name: 'app_lobby_delete')]
+    public function delete(Game $game): Response
+    {
+        foreach ($game->getPlayers() as $player) {
+            $this->playerRepository->remove($player, true);
+        }
+
+        $this->gameRepository->remove($game, true);
+
+        $this->lobbyStreamService->sendGameDelete($game->getCode());
+
+        return $this->redirectToRoute('app_index');
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/nickname/{code}', name: 'app_lobby_nickname')]
     public function nickname(Game $game, Request $request): Response
     {
         if ($game->getPlayers()->count() >= 4) {
@@ -68,7 +87,7 @@ final class GameController extends AbstractController
 
             if ($game->getPlayers()->exists(static fn (int $key, Player $player) => $player->getNickname() === $nickname)) {
                 $this->addFlash('error', 'The nickname is already taken.');
-                return $this->redirectToRoute('app_game_nickname', ['code' => $game->getCode()]);
+                return $this->redirectToRoute('app_lobby_nickname', ['code' => $game->getCode()]);
             }
 
             $player = new Player();
@@ -77,11 +96,11 @@ final class GameController extends AbstractController
             $game->addPlayer($player);
 
             $this->playerRepository->save($player, true);
-            $this->gameStreamService->sendPlayerJoin($game->getCode(), $player);
+            $this->lobbyStreamService->sendPlayerJoin($game->getCode(), $player);
 
             $request->getSession()->set('player_id', $player->getId());
 
-            return $this->redirectToRoute('app_game_lobby', ['code' => $game->getCode()]);
+            return $this->redirectToRoute('app_lobby_overview', ['code' => $game->getCode()]);
         }
 
         return $this->render(
@@ -90,7 +109,12 @@ final class GameController extends AbstractController
         );
     }
 
-    #[Route('/game/lobby/{code}', name: 'app_game_lobby')]
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/lobby/{code}', name: 'app_lobby_overview')]
     public function lobby(Game $game, Request $request): Response
     {
         $playerId = $request->getSession()->get('player_id');
@@ -107,6 +131,10 @@ final class GameController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
+        if ($game->isGameFull() && !$game->isGameReady()) {
+            $this->lobbyStreamService->sendGameFull($game->getCode());
+        }
+
         return $this->render('game/lobby.html.twig', compact('game', 'currentPlayer'));
     }
 
@@ -115,7 +143,7 @@ final class GameController extends AbstractController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    #[Route('/game/ready/{code}', name: 'app_game_ready')]
+    #[Route('/game/ready/{code}', name: 'app_lobby_ready')]
     public function ready(Game $game, Request $request): Response
     {
         $playerId = $request->getSession()->get('player_id');
@@ -136,24 +164,54 @@ final class GameController extends AbstractController
 
         $this->playerRepository->save($currentPlayer, true);
 
-        $this->gameStreamService->sendPlayerReady($game->getCode(), $currentPlayer);
+        $this->lobbyStreamService->sendPlayerReady($game->getCode(), $currentPlayer);
 
-        return $this->redirectToRoute('app_game_lobby', ['code' => $game->getCode()]);
+        if ($game->isGameReady()) {
+            $this->lobbyStreamService->sendGameReady($game->getCode());
+        }
+
+        return $this->redirectToRoute('app_lobby_overview', ['code' => $game->getCode()]);
     }
 
-    //remove player from game
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/leave/{code}', name: 'app_lobby_leave')]
+    public function leave(Game $game, Request $request): Response
+    {
+        $playerId = $request->getSession()->get('player_id');
+
+        if (!$playerId) {
+            $this->addFlash('danger', 'You are not a player.');
+            return $this->redirectToRoute('app_index');
+        }
+
+        $currentPlayer = $this->playerRepository->find($playerId);
+
+        if (!$currentPlayer || $currentPlayer->getGame() !== $game) {
+            $this->addFlash('danger', 'You are not in the game.');
+            return $this->redirectToRoute('app_index');
+        }
+
+        $this->lobbyStreamService->sendPlayerLeave($game->getCode(), $currentPlayer);
+        $this->playerRepository->remove($currentPlayer, true);
+
+        return $this->redirectToRoute('app_index');
+    }
 
     /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
      */
-    #[Route('/game/kick/{code}/{number}', name: 'app_game_kick')]
+    #[Route('/game/kick/{code}/{number}', name: 'app_lobby_kick')]
     public function kick(Game $game, Player $player): Response
     {
+        $this->lobbyStreamService->sendPlayerKick($game->getCode(), $player);
         $this->playerRepository->remove($player, true);
-        $this->gameStreamService->sendPlayerLeave($game->getCode(), $player);
 
-        return $this->redirectToRoute('app_game_lobby', ['code' => $game->getCode()]);
+        return $this->redirectToRoute('app_lobby_overview', ['code' => $game->getCode()]);
     }
 }

@@ -1,0 +1,18 @@
+{% component LinkComponent with {
+    id: 'startGame',
+    type: 'success',
+    href: game.isGameReady ? path('app_lobby_start', {
+        'code': game.code,
+    }) : '#',
+    disabled: not game.isGameReady,
+} %}
+    {% block content %}
+        Start game
+
+        {% if game.isGameFull and not game.isGameReady %}
+            <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to be ready...</span>
+        {% elseif not game.isGameReady %}
+            <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to join...</span>
+        {% endif %}
+    {% endblock %}
+{% endcomponent %}

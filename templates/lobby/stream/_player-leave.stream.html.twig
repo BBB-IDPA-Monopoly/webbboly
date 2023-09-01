@@ -1,0 +1,11 @@
+<turbo-stream action="append" target="lobby">
+    <template>
+        <div {{ stimulus_controller('redirect', {
+            path: path('app_index'),
+            params: {
+                message: 'You have left the lobby.',
+                type: 'info'
+            }
+        }) }}></div>
+    </template>
+</turbo-stream>

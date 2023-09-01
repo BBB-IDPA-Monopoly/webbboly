@@ -1,7 +1,7 @@
 <turbo-stream action="replace" target="startGame">
     <template>
-        <a id="startGame" class="btn btn-success" href="">
-            Start game
-        </a>
+        {{ component('StartGameLinkComponent', {
+            game: game,
+        }) }}
     </template>
 </turbo-stream>

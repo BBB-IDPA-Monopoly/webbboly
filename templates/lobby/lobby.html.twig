@@ -47,29 +47,25 @@
             {% endif %}
 
             {% if currentPlayer is same as(game.host) %}
-                <a id="startGame"
-                   class="btn btn-success {% if not game.isGameReady %} disabled {% endif %}"
-                   href="">
-                    Start game
+                {{ component('StartGameLinkComponent', {
+                    game: game,
+                }) }}
 
-                    {% if game.isGameFull %}
-                        <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to be ready...</span>
-                    {% else %}
-                        <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to join...</span>
-                    {% endif %}
-                </a>
-
-                <a class="btn btn-danger" href="{{ path('app_lobby_delete', {
-                    'code': game.code,
-                }) }}">
-                    Delete game
-                </a>
+                {{ component('LinkComponent', {
+                    type: 'danger',
+                    href: path('app_lobby_delete', {
+                        'code': game.code,
+                    }),
+                    text: 'Delete game',
+                }) }}
             {% else %}
-                <a class="btn btn-danger" href="{{ path('app_lobby_leave', {
-                    'code': game.code,
-                }) }}">
-                    Leave game
-                </a>
+                {{ component('LinkComponent', {
+                    type: 'danger',
+                    href: path('app_lobby_leave', {
+                        'code': game.code,
+                    }),
+                    text: 'Leave game',
+                }) }}
             {% endif %}
         </div>
     </div>

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Form\GameCodeType;
-use App\Twig\AlertComponent;
+use App\Twig\Components\AlertComponent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

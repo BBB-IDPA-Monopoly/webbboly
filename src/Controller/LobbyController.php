@@ -61,7 +61,7 @@ final class LobbyController extends AbstractController
 
         $this->gameRepository->remove($game, true);
 
-        $this->lobbyStreamService->sendGameDelete($game->getCode());
+        $this->lobbyStreamService->sendGameDelete($game);
 
         return $this->redirectToRoute('app_index');
     }
@@ -70,6 +70,7 @@ final class LobbyController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
+     * @throws Exception
      */
     #[Route('/game/nickname/{code}', name: 'app_lobby_nickname')]
     public function nickname(Game $game, Request $request): Response
@@ -79,14 +80,20 @@ final class LobbyController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        $form = $this->createForm(NicknameType::class);
+        $form = $this->createForm(NicknameType::class, options: [
+            'taken_nicknames' => $game->getPlayers()->map(
+                static fn (Player $player) => $player->getNickname()
+            )->toArray(),
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $nickname = $form->get('nickname')->getData();
 
-            if ($game->getPlayers()->exists(static fn (int $key, Player $player) => $player->getNickname() === $nickname)) {
-                $this->addFlash('error', 'The nickname is already taken.');
+            if ($game->getPlayers()->exists(
+                static fn (int $key, Player $player) => strtolower($player->getNickname()) === strtolower($nickname)
+            )) {
+                $this->addFlash('danger', 'The nickname is already taken.');
                 return $this->redirectToRoute('app_lobby_nickname', ['code' => $game->getCode()]);
             }
 
@@ -96,7 +103,7 @@ final class LobbyController extends AbstractController
             $game->addPlayer($player);
 
             $this->playerRepository->save($player, true);
-            $this->lobbyStreamService->sendPlayerJoin($game->getCode(), $player);
+            $this->lobbyStreamService->sendPlayerJoin($game, $player);
 
             $request->getSession()->set('player_id', $player->getId());
 
@@ -104,7 +111,7 @@ final class LobbyController extends AbstractController
         }
 
         return $this->render(
-            'game/nickname.html.twig',
+            'lobby/nickname.html.twig',
             ['nicknameForm' => $form,]
         );
     }
@@ -132,10 +139,10 @@ final class LobbyController extends AbstractController
         }
 
         if ($game->isGameFull() && !$game->isGameReady()) {
-            $this->lobbyStreamService->sendGameFull($game->getCode());
+            $this->lobbyStreamService->sendUpdateStartLink($game);
         }
 
-        return $this->render('game/lobby.html.twig', compact('game', 'currentPlayer'));
+        return $this->render('lobby/lobby.html.twig', compact('game', 'currentPlayer'));
     }
 
     /**
@@ -164,10 +171,10 @@ final class LobbyController extends AbstractController
 
         $this->playerRepository->save($currentPlayer, true);
 
-        $this->lobbyStreamService->sendPlayerReady($game->getCode(), $currentPlayer);
+        $this->lobbyStreamService->sendPlayerReady($game, $currentPlayer);
 
         if ($game->isGameReady()) {
-            $this->lobbyStreamService->sendGameReady($game->getCode());
+            $this->lobbyStreamService->sendUpdateStartLink($game);
         }
 
         return $this->redirectToRoute('app_lobby_overview', ['code' => $game->getCode()]);
@@ -195,7 +202,8 @@ final class LobbyController extends AbstractController
             return $this->redirectToRoute('app_index');
         }
 
-        $this->lobbyStreamService->sendPlayerLeave($game->getCode(), $currentPlayer);
+        $game->removePlayer($currentPlayer);
+        $this->lobbyStreamService->sendPlayerLeave($game, $currentPlayer);
         $this->playerRepository->remove($currentPlayer, true);
 
         return $this->redirectToRoute('app_index');
@@ -209,9 +217,23 @@ final class LobbyController extends AbstractController
     #[Route('/game/kick/{code}/{number}', name: 'app_lobby_kick')]
     public function kick(Game $game, Player $player): Response
     {
-        $this->lobbyStreamService->sendPlayerKick($game->getCode(), $player);
+        $game->removePlayer($player);
+        $this->lobbyStreamService->sendPlayerKick($game, $player);
         $this->playerRepository->remove($player, true);
 
         return $this->redirectToRoute('app_lobby_overview', ['code' => $game->getCode()]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/start/{code}', name: 'app_lobby_start')]
+    public function start(Game $game): Response
+    {
+        $this->lobbyStreamService->sendGameStart($game);
+
+        return $this->redirectToRoute('app_game_start', ['code' => $game->getCode()]);
     }
 }

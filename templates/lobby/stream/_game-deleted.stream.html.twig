@@ -1,0 +1,11 @@
+<turbo-stream action="append" target="lobby">
+    <template>
+        <div {{ stimulus_controller('redirect', {
+            path: path('app_index'),
+            params: {
+                message: 'The game has been deleted by the host.',
+                type: 'danger'
+            }
+        }) }}></div>
+    </template>
+</turbo-stream>

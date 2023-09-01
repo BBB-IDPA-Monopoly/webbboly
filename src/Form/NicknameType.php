@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Expression;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -26,6 +27,10 @@ class NicknameType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3, 'max' => 20]),
+                    new Expression(
+                        'value not in ' . json_encode($options['taken_nicknames']),
+                        'This nickname is already taken.'
+                    ),
                 ],
                 'invalid_message' => 'Please enter a valid nickname (3-20 characters).',
             ])
@@ -35,7 +40,7 @@ class NicknameType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'taken_nicknames' => [],
         ]);
     }
 }

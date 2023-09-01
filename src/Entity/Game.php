@@ -6,6 +6,7 @@ use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
@@ -47,10 +48,19 @@ class Game
 
     /**
      * @return Collection<int, Player>
+     * @throws Exception
      */
     public function getPlayers(): Collection
     {
-        return $this->players;
+        $iterator = $this->players->getIterator();
+        $iterator->uasort(static fn (Player $a, Player $b) => $a->getNumber() <=> $b->getNumber());
+
+        return new ArrayCollection(iterator_to_array($iterator));
+    }
+
+    public function getPlayerByNickname(string $nickname)
+    {
+        return $this->players->filter(static fn (Player $player) => $player->getNickname() === $nickname)->first() ?: null;
     }
 
     public function addPlayer(Player $player): static

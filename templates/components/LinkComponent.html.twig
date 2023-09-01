@@ -1,0 +1,6 @@
+<a {{ attributes.defaults({
+    class: 'btn btn-' ~ type ~ ' ' ~ (disabled ? 'disabled' : null),
+    href: href,
+}) }}>
+    {% block content %}{{ text|raw }}{% endblock %}
+</a>

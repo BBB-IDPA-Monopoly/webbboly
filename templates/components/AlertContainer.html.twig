@@ -1,7 +1,7 @@
 {% if this.hasAlerts %}
     {% for type, messages in this.alerts %}
         {% for message in messages %}
-            {{ component('Alert', {
+            {{ component('AlertComponent', {
                 type: type,
                 message: message,
                 dismissible: this.dismissible,

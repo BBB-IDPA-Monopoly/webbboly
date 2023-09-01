@@ -4,7 +4,7 @@ namespace App\Twig\Components;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent('Alert')]
+#[AsTwigComponent]
 final class AlertComponent
 {
     const ALERT_TYPE_SUCCESS = 'success';

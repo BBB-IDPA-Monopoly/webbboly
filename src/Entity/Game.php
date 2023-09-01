@@ -24,9 +24,17 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Player::class)]
     private Collection $players;
 
+    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameBuilding::class)]
+    private Collection $buildings;
+
+    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameCard::class)]
+    private Collection $card;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
+        $this->buildings = new ArrayCollection();
+        $this->card = new ArrayCollection();
     }
 
     public function getId(): int|null
@@ -107,5 +115,59 @@ class Game
     public function isGameReady(): bool
     {
         return $this->isGameFull() && $this->allPlayersReady();
+    }
+
+    /**
+     * @return Collection<int, GameBuilding>
+     */
+    public function getBuildings(): Collection
+    {
+        return $this->buildings;
+    }
+
+    public function addBuilding(GameBuilding $building): static
+    {
+        if (!$this->buildings->contains($building)) {
+            $this->buildings->add($building);
+            $building->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuilding(GameBuilding $building): static
+    {
+        if ($this->buildings->removeElement($building) && $building->getGame() === $this) {
+            $building->setGame(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GameCard>
+     */
+    public function getCard(): Collection
+    {
+        return $this->card;
+    }
+
+    public function addCard(GameCard $card): static
+    {
+        if (!$this->card->contains($card)) {
+            $this->card->add($card);
+            $card->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCard(GameCard $card): static
+    {
+        if ($this->card->removeElement($card) && $card->getGame() === $this) {
+            $card->setGame(null);
+        }
+
+        return $this;
     }
 }

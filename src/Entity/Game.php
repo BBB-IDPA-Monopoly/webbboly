@@ -27,6 +27,9 @@ class Game
     #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameBuilding::class)]
     private Collection $buildings;
 
+    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameActionField::class)]
+    private Collection $actionFields;
+
     #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameCard::class)]
     private Collection $card;
 
@@ -34,6 +37,7 @@ class Game
     {
         $this->players = new ArrayCollection();
         $this->buildings = new ArrayCollection();
+        $this->actionFields = new ArrayCollection();
         $this->card = new ArrayCollection();
     }
 
@@ -75,8 +79,6 @@ class Game
     {
         if (!$this->players->contains($player) && !$this->isGameFull()) {
             $this->players->add($player);
-            $player->setGame($this);
-            $player->setNumber($this->players->count());
         }
 
         return $this;
@@ -139,6 +141,33 @@ class Game
     {
         if ($this->buildings->removeElement($building) && $building->getGame() === $this) {
             $building->setGame(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GameActionField>
+     */
+    public function getActionFields(): Collection
+    {
+        return $this->actionFields;
+    }
+
+    public function addActionField(GameActionField $actionField): static
+    {
+        if (!$this->actionFields->contains($actionField)) {
+            $this->actionFields->add($actionField);
+            $actionField->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionField(GameActionField $actionField): static
+    {
+        if ($this->actionFields->removeElement($actionField) && $actionField->getGame() === $this) {
+            $actionField->setGame(null);
         }
 
         return $this;

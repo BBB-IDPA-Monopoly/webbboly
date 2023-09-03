@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Game #{{ game.code }}
+{% endblock %}
+
+{% block body %}
+    <div id="game">
+        <div id="board">
+            {% block playing_field %}
+                {% include 'game/partials/_board.html.twig' %}
+            {% endblock %}
+        </div>
+        <div id="actions">
+            {% block actions %}
+                {% include 'game/partials/_actions.html.twig' %}
+            {% endblock %}
+        </div>
+        <div id="players">
+            {% block players %}
+                {% include 'game/partials/_players.html.twig' %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

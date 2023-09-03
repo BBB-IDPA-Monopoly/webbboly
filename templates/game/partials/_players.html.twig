@@ -1,0 +1,7 @@
+{% for player in game.players %}
+    {{ component('PlayerComponent', {
+        'player': player,
+        'isMe': player is same as(currentPlayer),
+        'isHost': player.isHost,
+    }) }}
+{% endfor %}

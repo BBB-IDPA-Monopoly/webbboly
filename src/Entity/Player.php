@@ -21,6 +21,9 @@ class Player
     #[ORM\Column(length: 20)]
     private string|null $nickname = null;
 
+    #[ORM\Column]
+    private int $money = 0;
+
     #[ORM\Column(type: 'boolean')]
     private bool $isReady = false;
 
@@ -29,14 +32,14 @@ class Player
     private Game|null $game = null;
 
     #[ORM\OneToMany(mappedBy: 'Owner', targetEntity: GameBuilding::class)]
-    private Collection $properties;
+    private Collection $buildings;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GameCard::class)]
     private Collection $cards;
 
     public function __construct()
     {
-        $this->properties = new ArrayCollection();
+        $this->buildings = new ArrayCollection();
         $this->cards = new ArrayCollection();
     }
 
@@ -65,6 +68,18 @@ class Player
     public function setNickname(string $nickname): static
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function getMoney(): int
+    {
+        return $this->money;
+    }
+
+    public function setMoney(int $money): static
+    {
+        $this->money = $money;
 
         return $this;
     }
@@ -101,15 +116,15 @@ class Player
     /**
      * @return Collection<int, GameBuilding>
      */
-    public function getProperties(): Collection
+    public function getBuildings(): Collection
     {
-        return $this->properties;
+        return $this->buildings;
     }
 
     public function addProperty(GameBuilding $property): static
     {
-        if (!$this->properties->contains($property)) {
-            $this->properties->add($property);
+        if (!$this->buildings->contains($property)) {
+            $this->buildings->add($property);
             $property->setOwner($this);
         }
 
@@ -118,7 +133,7 @@ class Player
 
     public function removeProperty(GameBuilding $property): static
     {
-        if ($this->properties->removeElement($property) && $property->getOwner() === $this) {
+        if ($this->buildings->removeElement($property) && $property->getOwner() === $this) {
             $property->setOwner(null);
         }
 

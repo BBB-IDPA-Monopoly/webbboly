@@ -7,6 +7,7 @@ use App\Entity\Player;
 use App\Form\NicknameType;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
+use App\Service\GameService;
 use App\Service\LobbyStreamService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,7 @@ use Twig\Error\SyntaxError;
 final class LobbyController extends AbstractController
 {
     public function __construct(
+        private readonly GameService        $gameService,
         private readonly GameRepository     $gameRepository,
         private readonly PlayerRepository   $playerRepository,
         private readonly LobbyStreamService $lobbyStreamService,
@@ -31,26 +33,18 @@ final class LobbyController extends AbstractController
     #[Route('/game/create', name: 'app_lobby_create')]
     public function create(): Response
     {
-        while (true) {
-            $code = random_int(100000, 999999);
+        $game = $this->gameService->createGame();
 
-            if (!$this->gameRepository->findOneBy(compact('code'))) {
-                break;
-            }
-        }
-
-        $game = new Game();
-        $game->setCode($code);
-
-        $this->gameRepository->save($game, true);
-
-        return $this->redirectToRoute('app_lobby_nickname', compact('code'));
+        return $this->redirectToRoute('app_lobby_nickname', [
+            'code' => $game->getCode(),
+        ]);
     }
 
     /**
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
+     * @throws Exception
      */
     #[Route('/game/remove/{code}', name: 'app_lobby_delete')]
     public function delete(Game $game): Response
@@ -97,12 +91,7 @@ final class LobbyController extends AbstractController
                 return $this->redirectToRoute('app_lobby_nickname', ['code' => $game->getCode()]);
             }
 
-            $player = new Player();
-            $player->setNickname($nickname);
-
-            $game->addPlayer($player);
-
-            $this->playerRepository->save($player, true);
+            $player = $this->gameService->joinGame($game, $nickname);
             $this->lobbyStreamService->sendPlayerJoin($game, $player);
 
             $request->getSession()->set('player_id', $player->getId());

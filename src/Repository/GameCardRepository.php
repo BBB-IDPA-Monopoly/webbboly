@@ -21,6 +21,24 @@ class GameCardRepository extends ServiceEntityRepository
         parent::__construct($registry, GameCard::class);
     }
 
+    public function save(GameCard $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(GameCard $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
 //    /**
 //     * @return GameCard[] Returns an array of GameCard objects
 //     */

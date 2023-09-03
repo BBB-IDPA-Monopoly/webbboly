@@ -6,19 +6,14 @@ use App\Repository\GameBuildingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameBuildingRepository::class)]
-class GameBuilding
+class GameBuilding extends GameField
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private int|null $id = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private Building|null $building = null;
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
-    private Player|null $Owner = null;
+    private Player|null $owner = null;
 
     #[ORM\Column]
     private int $houses = 0;
@@ -29,11 +24,6 @@ class GameBuilding
     #[ORM\ManyToOne(inversedBy: 'buildings')]
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $Game = null;
-
-    public function getId(): int|null
-    {
-        return $this->id;
-    }
 
     public function getBuilding(): Building|null
     {
@@ -49,12 +39,12 @@ class GameBuilding
 
     public function getOwner(): Player|null
     {
-        return $this->Owner;
+        return $this->owner;
     }
 
     public function setOwner(Player|null $Owner): static
     {
-        $this->Owner = $Owner;
+        $this->owner = $Owner;
 
         return $this;
     }

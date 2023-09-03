@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\GameBuilding;
+use App\Entity\GameActionField;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<GameBuilding>
+ * @extends ServiceEntityRepository<GameActionField>
  *
- * @method GameBuilding|null find($id, $lockMode = null, $lockVersion = null)
- * @method GameBuilding|null findOneBy(array $criteria, array $orderBy = null)
- * @method GameBuilding[]    findAll()
- * @method GameBuilding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method GameActionField|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GameActionField|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GameActionField[]    findAll()
+ * @method GameActionField[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GameBuildingRepository extends ServiceEntityRepository
+class GameActionFieldRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, GameBuilding::class);
+        parent::__construct($registry, GameActionField::class);
     }
 
-    public function save(GameBuilding $entity, bool $flush = false): void
+    public function save(GameActionField $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class GameBuildingRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(GameBuilding $entity, bool $flush = false): void
+    public function remove(GameActionField $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class GameBuildingRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return GameBuilding[] Returns an array of GameBuilding objects
+//     * @return GameActionField[] Returns an array of GameActionField objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class GameBuildingRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?GameBuilding
+//    public function findOneBySomeField($value): ?GameActionField
 //    {
 //        return $this->createQueryBuilder('g')
 //            ->andWhere('g.exampleField = :val')

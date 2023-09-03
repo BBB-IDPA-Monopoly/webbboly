@@ -6,16 +6,8 @@ use App\Repository\BuildingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BuildingRepository::class)]
-class Building
+class Building extends Field
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private int|null $id = null;
-
-    #[ORM\Column(length: 255)]
-    private string|null $name = null;
-
     #[ORM\Column]
     private int|null $unitRent = null;
 
@@ -43,29 +35,9 @@ class Building
     #[ORM\Column]
     private int|null $mortgageFee = null;
 
-    #[ORM\Column]
-    private int|null $position = null;
-
     #[ORM\ManyToOne(inversedBy: 'buildings')]
     #[ORM\JoinColumn(nullable: false)]
     private Street|null $Street = null;
-
-    public function getId(): int|null
-    {
-        return $this->id;
-    }
-
-    public function getName(): string|null
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     public function getUnitRent(): int|null
     {
@@ -171,18 +143,6 @@ class Building
     public function setMortgageFee(int $mortgageFee): static
     {
         $this->mortgageFee = $mortgageFee;
-
-        return $this;
-    }
-
-    public function getPosition(): int|null
-    {
-        return $this->position;
-    }
-
-    public function setPosition(int $position): static
-    {
-        $this->position = $position;
 
         return $this;
     }

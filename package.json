@@ -22,16 +22,17 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-      "docker:build": "docker compose build --pull --no-cache",
-      "docker:up": "docker-compose up",
-      "docker:down": "docker-compose down",
-      "docker:exec": "docker compose exec php sh",
-      "encore:dev-server": "encore dev-server",
-      "encore:dev": "encore dev",
-      "encore:watch": "encore dev --watch",
-      "encore:build": "encore production --progress"
+        "docker:build": "docker compose build --pull --no-cache",
+        "docker:up": "docker-compose up",
+        "docker:down": "docker-compose down",
+        "docker:exec": "docker compose exec php sh",
+        "encore:dev-server": "encore dev-server",
+        "encore:dev": "encore dev",
+        "encore:watch": "encore dev --watch",
+        "encore:build": "encore production --progress"
     },
     "dependencies": {
+        "@popperjs/core": "^2.11.8",
         "@testing-library/dom": "^9.3.1",
         "bootstrap": "^5.3.0"
     }

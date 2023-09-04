@@ -5,28 +5,274 @@ body {
 }
 
 #game {
-    // creates a grid with 2 rows and 2 columns
     display: grid;
+    grid-template-columns: 3fr 1fr;
     grid-template-rows: 4fr 1fr;
-    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
     height: 100vh;
     width: 100vw;
-}
 
-#game #board {
-    // takes up the first row and both columns
-    grid-row: 1 / 2;
-    grid-column: 1 / 3;
-}
+    #boardContainer {
+        grid-area: 1 / 1 / 2 / 3;
+        background-color: #f16565;
 
-#game #players {
-    // takes up the second row and the first column
-    grid-row: 2 / 3;
-    grid-column: 1 / 2;
-}
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
 
-#game #actions {
-    // takes up the second row and the second column
-    grid-row: 2 / 3;
-    grid-column: 2 / 3;
+        #board {
+            display: grid;
+            grid-template-columns: repeat(13, 1fr);
+            grid-template-rows: repeat(13, 1fr);
+            grid-column-gap: 0;
+            grid-row-gap: 0;
+
+            background-color: #a463f2;
+            max-width: 80vh;
+
+            #center {
+                grid-area: 3 / 3 / 12 / 12;
+                background-color: #f7be16;
+            }
+
+            #start {
+                grid-area: 12 / 12 / 14 / 14;
+                background-color: #7a57e5;
+            }
+
+            #jail {
+                grid-area: 12 / 1 / 14 / 3;
+                background-color: #7a57e5;
+            }
+
+            #jail {
+                grid-area: 12 / 1 / 14 / 3;
+                background-color: #7a57e5;
+            }
+
+            #parking {
+                grid-area: 1 / 1 / 3 / 3;
+                background-color: #7a57e5;
+            }
+
+            #goToJail {
+                grid-area: 1 / 12 / 3 / 14;
+                background-color: #3816a0;
+            }
+
+            #cell1 {
+                grid-area: 12 / 11 / 14 / 12;
+                background-color: #3816a0;
+            }
+
+            #cell2 {
+                grid-area: 12 / 10 / 14 / 11;
+                background-color: #3816a0;
+            }
+
+            #cell3 {
+                grid-area: 12 / 9 / 14 / 10;
+                background-color: #3816a0;
+            }
+
+            #cell4 {
+                grid-area: 12 / 8 / 14 / 9;
+                background-color: #3816a0;
+            }
+
+            #cell5 {
+                grid-area: 12 / 7 / 14 / 8;
+                background-color: #3816a0;
+            }
+
+            #cell6 {
+                grid-area: 12 / 6 / 14 / 7;
+                background-color: #3816a0;
+            }
+
+            #cell7 {
+                grid-area: 12 / 5 / 14 / 6;
+                background-color: #3816a0;
+            }
+
+            #cell8 {
+                grid-area: 12 / 4 / 14 / 5;
+                background-color: #3816a0;
+            }
+
+            #cell9 {
+                grid-area: 12 / 3 / 14 / 4;
+                background-color: #3816a0;
+            }
+
+            #cell10 {
+                grid-area: 11 / 1 / 12 / 3;
+                background-color: #f76516;
+            }
+
+            #cell11 {
+                grid-area: 10 / 1 / 11 / 3;
+                background-color: #f76516;
+            }
+
+            #cell12 {
+                grid-area: 9 / 1 / 10 / 3;
+                background-color: #f76516;
+            }
+
+            #cell13 {
+                grid-area: 8 / 1 / 9 / 3;
+                background-color: #f76516;
+            }
+
+            #cell14 {
+                grid-area: 7 / 1 / 8 / 3;
+                background-color: #f76516;
+            }
+
+            #cell15 {
+                grid-area: 6 / 1 / 7 / 3;
+                background-color: #f76516;
+            }
+
+            #cell16 {
+                grid-area: 5 / 1 / 6 / 3;
+                background-color: #f76516;
+            }
+
+            #cell17 {
+                grid-area: 4 / 1 / 5 / 3;
+                background-color: #f76516;
+            }
+
+            #cell18 {
+                grid-area: 3 / 1 / 4 / 3;
+                background-color: #f76516;
+            }
+
+            #cell19 {
+                grid-area: 1 / 3 / 3 / 4;
+                background-color: #16a085;
+            }
+
+            #cell20 {
+                grid-area: 1 / 4 / 3 / 5;
+                background-color: #16a085;
+            }
+
+            #cell21 {
+                grid-area: 1 / 5 / 3 / 6;
+                background-color: #16a085;
+            }
+
+            #cell22 {
+                grid-area: 1 / 6 / 3 / 7;
+                background-color: #16a085;
+            }
+
+            #cell23 {
+                grid-area: 1 / 7 / 3 / 8;
+                background-color: #16a085;
+            }
+
+            #cell24 {
+                grid-area: 1 / 8 / 3 / 9;
+                background-color: #16a085;
+            }
+
+            #cell25 {
+                grid-area: 1 / 9 / 3 / 10;
+                background-color: #16a085;
+            }
+
+            #cell26 {
+                grid-area: 1 / 10 / 3 / 11;
+                background-color: #16a085;
+            }
+
+            #cell27 {
+                grid-area: 1 / 11 / 3 / 12;
+                background-color: #16a085;
+            }
+
+            #cell28 {
+                grid-area: 3 / 12 / 4 / 14;
+                background-color: #54b931;
+            }
+
+            #cell29 {
+                grid-area: 4 / 12 / 5 / 14;
+                background-color: #54b931;
+            }
+
+            #cell30 {
+                grid-area: 5 / 12 / 6 / 14;
+                background-color: #54b931;
+            }
+
+            #cell31 {
+                grid-area: 6 / 12 / 7 / 14;
+                background-color: #54b931;
+            }
+
+            #cell32 {
+                grid-area: 7 / 12 / 8 / 14;
+                background-color: #54b931;
+            }
+
+            #cell33 {
+                grid-area: 8 / 12 / 9 / 14;
+                background-color: #54b931;
+            }
+
+            #cell34 {
+                grid-area: 9 / 12 / 10 / 14;
+                background-color: #54b931;
+            }
+
+            #cell35 {
+                grid-area: 10 / 12 / 11 / 14;
+                background-color: #54b931;
+            }
+
+            #cell36 {
+                grid-area: 11 / 12 / 12 / 14;
+                background-color: #54b931;
+            }
+        }
+    }
+
+    #players {
+        grid-area: 2 / 1 / 3 / 2;
+        background-color: #f76516;
+
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 4fr;
+        grid-column-gap: 1rem;
+        grid-row-gap: 0;
+
+        padding: 1rem;
+    }
+
+    #actions {
+        grid-area: 2 / 2 / 3 / 3;
+        background-color: #16a085;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-column-gap: 1rem;
+        grid-row-gap: 1rem;
+
+        padding: 1rem;
+        align-items: center;
+        justify-items: center;
+
+        :first-child {
+            grid-area: 1 / 1 / 3 / 2;
+        }
+    }
 }

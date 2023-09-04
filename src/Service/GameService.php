@@ -58,7 +58,7 @@ final readonly class GameService
     {
         $player = new Player();
         $player->setNickname($nickname);
-        $player->setNumber($game->getPlayers()->count());
+        $player->setNumber($game->getPlayers()->count() + 1);
         $player->setGame($game);
 
         $this->playerRepository->save($player, true);

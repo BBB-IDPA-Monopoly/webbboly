@@ -1,0 +1,7 @@
+<div{{ attributes }}>
+    {% if isBuilding %}
+        <h6>{{ field.building.name }}</h6>
+    {% else %}
+        <h6>{{ field.actionField.name }}</h6>
+    {% endif %}
+</div>

@@ -1,4 +1,4 @@
-<turbo-stream action="update" target="player-{{ player.id }}">
+<turbo-stream action="replace" target="player-{{ player.id }}">
     <template>
         {{ component('LobbyPlayer', {
             'player': player,

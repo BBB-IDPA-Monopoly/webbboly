@@ -23,7 +23,7 @@ class GameBuilding extends GameField
 
     #[ORM\ManyToOne(inversedBy: 'buildings')]
     #[ORM\JoinColumn(nullable: false)]
-    private Game|null $Game = null;
+    private Game|null $game = null;
 
     public function getBuilding(): Building|null
     {
@@ -75,12 +75,12 @@ class GameBuilding extends GameField
 
     public function getGame(): Game|null
     {
-        return $this->Game;
+        return $this->game;
     }
 
     public function setGame(Game|null $Game): static
     {
-        $this->Game = $Game;
+        $this->game = $Game;
 
         return $this;
     }

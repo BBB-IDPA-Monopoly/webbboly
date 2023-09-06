@@ -1,43 +1,207 @@
 <div id="board" class="rounded ratio ratio-1x1">
-    <div id="center"></div>
-    <div id="start"></div>
-    <div id="jail"></div>
-    <div id="parking"></div>
-    <div id="goToJail"></div>
-    <div id="cell1"></div>
-    <div id="cell2"></div>
-    <div id="cell3"></div>
-    <div id="cell4"></div>
-    <div id="cell5"></div>
-    <div id="cell6"></div>
-    <div id="cell7"></div>
-    <div id="cell8"></div>
-    <div id="cell9"></div>
-    <div id="cell10"></div>
-    <div id="cell11"></div>
-    <div id="cell12"></div>
-    <div id="cell13"></div>
-    <div id="cell14"></div>
-    <div id="cell15"></div>
-    <div id="cell16"></div>
-    <div id="cell17"></div>
-    <div id="cell18"></div>
-    <div id="cell19"></div>
-    <div id="cell20"></div>
-    <div id="cell21"></div>
-    <div id="cell22"></div>
-    <div id="cell23"></div>
-    <div id="cell24"></div>
-    <div id="cell25"></div>
-    <div id="cell26"></div>
-    <div id="cell27"></div>
-    <div id="cell28"></div>
-    <div id="cell29"></div>
-    <div id="cell30"></div>
-    <div id="cell31"></div>
-    <div id="cell32"></div>
-    <div id="cell33"></div>
-    <div id="cell34"></div>
-    <div id="cell35"></div>
-    <div id="cell36"></div>
+    <div id="center">
+        <div class="text-center">
+            <h1>Webbboly</h1>
+        </div>
+    </div>
+    <div id="start">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(0),
+        }) }}
+    </div>
+    <div id="jail">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(10),
+        }) }}
+    </div>
+    <div id="parking">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(20),
+        }) }}
+    </div>
+    <div id="goToJail">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(30),
+        }) }}
+    </div>
+    <div id="cell1">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(1),
+        }) }}
+    </div>
+    <div id="cell2">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(2),
+        }) }}
+    </div>
+    <div id="cell3">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(3),
+        }) }}
+    </div>
+    <div id="cell4">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(4),
+        }) }}
+    </div>
+    <div id="cell5">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(5),
+        }) }}
+    </div>
+    <div id="cell6">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(6),
+        }) }}
+    </div>
+    <div id="cell7">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(7),
+        }) }}
+    </div>
+    <div id="cell8">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(8),
+        }) }}
+    </div>
+    <div id="cell9">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(9),
+        }) }}
+    </div>
+    <div id="cell10">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(11),
+        }) }}
+    </div>
+    <div id="cell11">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(12),
+        }) }}
+    </div>
+    <div id="cell12">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(13),
+        }) }}
+    </div>
+    <div id="cell13">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(14),
+        }) }}
+    </div>
+    <div id="cell14">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(15),
+        }) }}
+    </div>
+    <div id="cell15">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(16),
+        }) }}
+    </div>
+    <div id="cell16">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(17),
+        }) }}
+    </div>
+    <div id="cell17">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(18),
+        }) }}
+    </div>
+    <div id="cell18">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(19),
+        }) }}
+    </div>
+    <div id="cell19">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(21),
+        }) }}
+    </div>
+    <div id="cell20">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(22),
+        }) }}
+    </div>
+    <div id="cell21">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(23),
+        }) }}
+    </div>
+    <div id="cell22">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(24),
+        }) }}
+    </div>
+    <div id="cell23">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(25),
+        }) }}
+    </div>
+    <div id="cell24">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(26),
+        }) }}
+    </div>
+    <div id="cell25">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(27),
+        }) }}
+    </div>
+    <div id="cell26">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(28),
+        }) }}
+    </div>
+    <div id="cell27">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(29),
+        }) }}
+    </div>
+    <div id="cell28">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(31),
+        }) }}
+    </div>
+    <div id="cell29">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(32),
+        }) }}
+    </div>
+    <div id="cell30">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(33),
+        }) }}
+    </div>
+    <div id="cell31">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(34),
+        }) }}
+    </div>
+    <div id="cell32">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(35),
+        }) }}
+    </div>
+    <div id="cell33">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(37),
+        }) }}
+    </div>
+    <div id="cell34">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(38),
+        }) }}
+    </div>
+    <div id="cell35">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(39),
+        }) }}
+    </div>
+    <div id="cell36">
+        {{ component('FieldComponent', {
+            field: game.getFieldByPosition(40),
+        }) }}
+    </div>
 </div>

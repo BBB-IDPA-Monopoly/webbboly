@@ -199,4 +199,23 @@ class Game
 
         return $this;
     }
+
+    public function getFields(): array
+    {
+        return [...$this->getActionFields(), ...$this->getBuildings()];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getFieldByPosition(int $position): Field
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getPosition() === $position) {
+                return $field;
+            }
+        }
+
+        throw new Exception('Field not found');
+    }
 }

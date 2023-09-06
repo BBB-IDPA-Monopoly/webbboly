@@ -22,6 +22,9 @@ class Street
     #[ORM\OneToMany(mappedBy: 'Street', targetEntity: Building::class)]
     private Collection $buildings;
 
+    #[ORM\Column]
+    private ?int $houseCost = null;
+
     public function __construct()
     {
         $this->buildings = new ArrayCollection();
@@ -67,6 +70,18 @@ class Street
         if ($this->buildings->removeElement($building) && $building->getStreet() === $this) {
             $building->setStreet(null);
         }
+
+        return $this;
+    }
+
+    public function getHouseCost(): ?int
+    {
+        return $this->houseCost;
+    }
+
+    public function setHouseCost(int $houseCost): static
+    {
+        $this->houseCost = $houseCost;
 
         return $this;
     }

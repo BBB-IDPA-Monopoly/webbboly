@@ -37,6 +37,9 @@ class Player
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GameCard::class)]
     private Collection $cards;
 
+    #[ORM\Column(nullable: true)]
+    private int|null $position = null;
+
     public function __construct()
     {
         $this->buildings = new ArrayCollection();
@@ -163,6 +166,18 @@ class Player
         if ($this->cards->removeElement($card) && $card->getOwner() === $this) {
             $card->setOwner(null);
         }
+
+        return $this;
+    }
+
+    public function getPosition(): int|null
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int|null $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }

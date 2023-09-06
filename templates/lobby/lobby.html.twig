@@ -14,7 +14,7 @@
         <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code ~ '/player/' ~ currentPlayer.number) }}></div>
 
         <div {{ stimulus_controller('disable-turbo-stream', {
-            'action': 'update',
+            'action': 'replace',
             'target': 'player-' ~ currentPlayer.id,
         }) }}></div>
 
@@ -26,16 +26,12 @@
                 <table class="table table-hover">
                     <tbody>
                         {% for player in game.players %}
-                            <tr>
-                                <td>
-                                    {{ component('LobbyPlayer', {
-                                        'player': player,
-                                        'isMe': player is same as(currentPlayer),
-                                        'isHost': player.isHost,
-                                        'forHost': currentPlayer.isHost,
-                                    }) }}
-                                </td>
-                            </tr>
+                            {{ component('LobbyPlayer', {
+                                'player': player,
+                                'isMe': player is same as(currentPlayer),
+                                'isHost': player.isHost,
+                                'forHost': currentPlayer.isHost,
+                            }) }}
                         {% endfor %}
                     </tbody>
                 </table>

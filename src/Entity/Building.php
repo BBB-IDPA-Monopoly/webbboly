@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Building extends Field
 {
     #[ORM\Column]
+    private int|null $price = null;
+
+    #[ORM\Column]
     private int|null $unitRent = null;
 
     #[ORM\Column]
@@ -32,12 +35,21 @@ class Building extends Field
     #[ORM\Column]
     private int|null $mortgage = null;
 
-    #[ORM\Column]
-    private int|null $mortgageFee = null;
-
     #[ORM\ManyToOne(inversedBy: 'buildings')]
     #[ORM\JoinColumn(nullable: false)]
     private Street|null $Street = null;
+
+    public function getPrice(): int|null
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
 
     public function getUnitRent(): int|null
     {
@@ -131,18 +143,6 @@ class Building extends Field
     public function setMortgage(int $mortgage): static
     {
         $this->mortgage = $mortgage;
-
-        return $this;
-    }
-
-    public function getMortgageFee(): int|null
-    {
-        return $this->mortgageFee;
-    }
-
-    public function setMortgageFee(int $mortgageFee): static
-    {
-        $this->mortgageFee = $mortgageFee;
 
         return $this;
     }

@@ -15,14 +15,14 @@ class GameCard
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private Card|null $Card = null;
+    private Card|null $card = null;
 
     #[ORM\ManyToOne(inversedBy: 'cards')]
     private Player|null $owner = null;
 
     #[ORM\ManyToOne(inversedBy: 'card')]
     #[ORM\JoinColumn(nullable: false)]
-    private Game|null $Game = null;
+    private Game|null $game = null;
 
     public function getId(): int|null
     {
@@ -31,12 +31,12 @@ class GameCard
 
     public function getCard(): Card|null
     {
-        return $this->Card;
+        return $this->card;
     }
 
-    public function setCard(Card|null $Card): static
+    public function setCard(Card|null $card): static
     {
-        $this->Card = $Card;
+        $this->card = $card;
 
         return $this;
     }
@@ -55,12 +55,12 @@ class GameCard
 
     public function getGame(): Game|null
     {
-        return $this->Game;
+        return $this->game;
     }
 
-    public function setGame(Game|null $Game): static
+    public function setGame(Game|null $game): static
     {
-        $this->Game = $Game;
+        $this->game = $game;
 
         return $this;
     }

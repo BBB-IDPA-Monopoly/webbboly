@@ -12,7 +12,7 @@ class GameBuilding extends GameField
     #[ORM\JoinColumn(nullable: false)]
     private Building|null $building = null;
 
-    #[ORM\ManyToOne(inversedBy: 'properties')]
+    #[ORM\ManyToOne(inversedBy: 'gameBuildings')]
     private Player|null $owner = null;
 
     #[ORM\Column]
@@ -21,7 +21,7 @@ class GameBuilding extends GameField
     #[ORM\Column]
     private bool $mortgaged = false;
 
-    #[ORM\ManyToOne(inversedBy: 'buildings')]
+    #[ORM\ManyToOne(inversedBy: 'gameBuildings')]
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $game = null;
 

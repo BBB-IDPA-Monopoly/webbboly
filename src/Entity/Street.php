@@ -19,11 +19,11 @@ class Street
     #[ORM\Column(length: 255)]
     private string|null $color = null;
 
-    #[ORM\OneToMany(mappedBy: 'Street', targetEntity: Building::class)]
+    #[ORM\OneToMany(mappedBy: 'street', targetEntity: Building::class)]
     private Collection $buildings;
 
     #[ORM\Column]
-    private ?int $houseCost = null;
+    private int|null $houseCost = null;
 
     public function __construct()
     {
@@ -74,7 +74,7 @@ class Street
         return $this;
     }
 
-    public function getHouseCost(): ?int
+    public function getHouseCost(): int|null
     {
         return $this->houseCost;
     }

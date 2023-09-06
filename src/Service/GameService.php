@@ -15,7 +15,6 @@ use App\Repository\GameBuildingRepository;
 use App\Repository\GameCardRepository;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
 final readonly class GameService
@@ -29,7 +28,6 @@ final readonly class GameService
         private BuildingRepository $buildingRepository,
         private ActionFieldRepository $actionFieldRepository,
         private CardRepository $cardRepository,
-        private EntityManagerInterface $entityManager,
     ) {}
 
     /**
@@ -86,10 +84,7 @@ final readonly class GameService
         $buildings = $this->buildingRepository->findAll();
 
         foreach ($buildings as $building) {
-            $gameBuilding = $this->gameBuildingRepository->findOneBy([
-                'game' => $game,
-                'building' => $building,
-            ]);
+            $gameBuilding = $this->gameBuildingRepository->findOneBy(compact('game', 'building'));
 
             if (!$gameBuilding) {
                 $gameBuilding = new GameBuilding();

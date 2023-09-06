@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: space-between;
 
-    #players {
+    #playersContainer {
         width: 60%;
         display: flex;
         flex-direction: column;
@@ -31,7 +31,7 @@ body {
             tr {
                 text-align: center;
                 border-bottom-color: slategrey;
-    
+
                 td {
                     background-color: #95a6b7;
                 }
@@ -105,187 +105,250 @@ body {
 
             #goToJail {
                 grid-area: 1 / 12 / 3 / 14;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell1 {
                 grid-area: 12 / 11 / 14 / 12;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell2 {
                 grid-area: 12 / 10 / 14 / 11;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell3 {
                 grid-area: 12 / 9 / 14 / 10;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell4 {
                 grid-area: 12 / 8 / 14 / 9;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell5 {
                 grid-area: 12 / 7 / 14 / 8;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell6 {
                 grid-area: 12 / 6 / 14 / 7;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell7 {
                 grid-area: 12 / 5 / 14 / 6;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell8 {
                 grid-area: 12 / 4 / 14 / 5;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell9 {
                 grid-area: 12 / 3 / 14 / 4;
-                background-color: #3816a0;
+                background-color: white;
             }
 
             #cell10 {
                 grid-area: 11 / 1 / 12 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell11 {
                 grid-area: 10 / 1 / 11 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell12 {
                 grid-area: 9 / 1 / 10 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell13 {
                 grid-area: 8 / 1 / 9 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell14 {
                 grid-area: 7 / 1 / 8 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell15 {
                 grid-area: 6 / 1 / 7 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell16 {
                 grid-area: 5 / 1 / 6 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell17 {
                 grid-area: 4 / 1 / 5 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell18 {
                 grid-area: 3 / 1 / 4 / 3;
-                background-color: #f76516;
+                background-color: white;
             }
 
             #cell19 {
                 grid-area: 1 / 3 / 3 / 4;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell20 {
                 grid-area: 1 / 4 / 3 / 5;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell21 {
                 grid-area: 1 / 5 / 3 / 6;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell22 {
                 grid-area: 1 / 6 / 3 / 7;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell23 {
                 grid-area: 1 / 7 / 3 / 8;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell24 {
                 grid-area: 1 / 8 / 3 / 9;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell25 {
                 grid-area: 1 / 9 / 3 / 10;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell26 {
                 grid-area: 1 / 10 / 3 / 11;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell27 {
                 grid-area: 1 / 11 / 3 / 12;
-                background-color: #16a085;
+                background-color: white;
             }
 
             #cell28 {
                 grid-area: 3 / 12 / 4 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell29 {
                 grid-area: 4 / 12 / 5 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell30 {
                 grid-area: 5 / 12 / 6 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell31 {
                 grid-area: 6 / 12 / 7 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell32 {
                 grid-area: 7 / 12 / 8 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell33 {
                 grid-area: 8 / 12 / 9 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell34 {
                 grid-area: 9 / 12 / 10 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell35 {
                 grid-area: 10 / 12 / 11 / 14;
-                background-color: #54b931;
+                background-color: white;
             }
 
             #cell36 {
                 grid-area: 11 / 12 / 12 / 14;
-                background-color: #54b931;
+                background-color: white;
+            }
+
+            .cell {
+                display: flex;
+                flex-direction: column;
+                font-size: x-small;
+                height: 100%;
+                width: 100%;
+                text-align: center;
+
+                .cell-content {
+                    height: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: column;
+                }
+
+                .cell-color {
+                    height: 15%;
+                }
+
+                &.cell-rotated-90 {
+                    writing-mode: vertical-rl;
+
+                    .cell-color {
+                        height: 100%;
+                        width: 15%;
+                    }
+
+                    .cell-content {
+                        @extend .cell-content;
+                        width: 100%;
+                    }
+
+                    .img-fluid {
+                        @extend .img-fluid;
+                        transform: rotate(90deg);
+                    }
+                }
+
+                &.cell-rotated-180 {
+                    transform: rotate(180deg);
+                }
+
+                &.cell-rotated-270 {
+                    writing-mode: vertical-rl;
+                    transform: rotate(180deg);
+
+                    .cell-color {
+                        height: 100%;
+                        width: 15%;
+                    }
+
+                    .cell-content {
+                        @extend .cell-content;
+                        width: 100%;
+                    }
+
+                    .img-fluid {
+                        @extend .img-fluid;
+                        transform: rotate(90deg);
+                    }
+                }
             }
         }
     }

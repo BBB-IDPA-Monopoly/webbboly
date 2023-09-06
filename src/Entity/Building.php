@@ -37,7 +37,7 @@ class Building extends Field
 
     #[ORM\ManyToOne(inversedBy: 'buildings')]
     #[ORM\JoinColumn(nullable: false)]
-    private Street|null $Street = null;
+    private Street|null $street = null;
 
     public function getPrice(): int|null
     {
@@ -149,12 +149,12 @@ class Building extends Field
 
     public function getStreet(): Street|null
     {
-        return $this->Street;
+        return $this->street;
     }
 
-    public function setStreet(Street|null $Street): static
+    public function setStreet(Street|null $street): static
     {
-        $this->Street = $Street;
+        $this->street = $street;
 
         return $this;
     }

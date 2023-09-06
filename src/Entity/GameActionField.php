@@ -14,7 +14,7 @@ class GameActionField extends GameField
 
     #[ORM\ManyToOne(inversedBy: 'actionFields')]
     #[ORM\JoinColumn(nullable: false)]
-    private Game|null $Game = null;
+    private Game|null $game = null;
 
     public function getActionField(): ActionField|null
     {
@@ -30,12 +30,12 @@ class GameActionField extends GameField
 
     public function getGame(): Game|null
     {
-        return $this->Game;
+        return $this->game;
     }
 
-    public function setGame(Game|null $Game): static
+    public function setGame(Game|null $game): static
     {
-        $this->Game = $Game;
+        $this->game = $game;
 
         return $this;
     }

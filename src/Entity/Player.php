@@ -31,19 +31,19 @@ class Player
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $game = null;
 
-    #[ORM\OneToMany(mappedBy: 'Owner', targetEntity: GameBuilding::class)]
-    private Collection $buildings;
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GameBuilding::class)]
+    private Collection $gameBuildings;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GameCard::class)]
-    private Collection $cards;
+    private Collection $gameCards;
 
     #[ORM\Column(nullable: true)]
     private int|null $position = null;
 
     public function __construct()
     {
-        $this->buildings = new ArrayCollection();
-        $this->cards = new ArrayCollection();
+        $this->gameBuildings = new ArrayCollection();
+        $this->gameCards = new ArrayCollection();
     }
 
     public function getId(): int|null
@@ -119,15 +119,15 @@ class Player
     /**
      * @return Collection<int, GameBuilding>
      */
-    public function getBuildings(): Collection
+    public function getGameBuildings(): Collection
     {
-        return $this->buildings;
+        return $this->gameBuildings;
     }
 
     public function addProperty(GameBuilding $property): static
     {
-        if (!$this->buildings->contains($property)) {
-            $this->buildings->add($property);
+        if (!$this->gameBuildings->contains($property)) {
+            $this->gameBuildings->add($property);
             $property->setOwner($this);
         }
 
@@ -136,7 +136,7 @@ class Player
 
     public function removeProperty(GameBuilding $property): static
     {
-        if ($this->buildings->removeElement($property) && $property->getOwner() === $this) {
+        if ($this->gameBuildings->removeElement($property) && $property->getOwner() === $this) {
             $property->setOwner(null);
         }
 
@@ -146,15 +146,15 @@ class Player
     /**
      * @return Collection<int, GameCard>
      */
-    public function getCards(): Collection
+    public function getGameCards(): Collection
     {
-        return $this->cards;
+        return $this->gameCards;
     }
 
     public function addCard(GameCard $card): static
     {
-        if (!$this->cards->contains($card)) {
-            $this->cards->add($card);
+        if (!$this->gameCards->contains($card)) {
+            $this->gameCards->add($card);
             $card->setOwner($this);
         }
 
@@ -163,7 +163,7 @@ class Player
 
     public function removeCard(GameCard $card): static
     {
-        if ($this->cards->removeElement($card) && $card->getOwner() === $this) {
+        if ($this->gameCards->removeElement($card) && $card->getOwner() === $this) {
             $card->setOwner(null);
         }
 

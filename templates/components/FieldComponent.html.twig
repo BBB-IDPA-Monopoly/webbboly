@@ -1,7 +1,17 @@
-<div{{ attributes }}>
-    {% if isBuilding %}
-        <h6>{{ field.building.name }}</h6>
-    {% else %}
-        <h6>{{ field.actionField.name }}</h6>
-    {% endif %}
+<div class="{{ this.getClasses }}">
+    {% block content %}
+        {% if this.isBuilding %}
+            <div class="cell-color"
+                 style="background-color: {{ field.street.color }}; color: {{ field.street.color }}"></div>
+        {% endif %}
+
+        <div class="cell-content">
+            <span>{{ field.name }}</span>
+
+            {% if this.isBuilding %}
+                <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail" alt="{{ field.name }}">
+                <span>{{ field.price }}</span>
+            {% endif %}
+        </div>
+    {% endblock %}
 </div>

@@ -24,21 +24,21 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Player::class)]
     private Collection $players;
 
-    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameBuilding::class)]
-    private Collection $buildings;
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: GameBuilding::class)]
+    private Collection $gameBuildings;
 
-    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameActionField::class)]
-    private Collection $actionFields;
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: GameActionField::class)]
+    private Collection $gameActionFields;
 
-    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: GameCard::class)]
-    private Collection $card;
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: GameCard::class)]
+    private Collection $gameCards;
 
     public function __construct()
     {
         $this->players = new ArrayCollection();
-        $this->buildings = new ArrayCollection();
-        $this->actionFields = new ArrayCollection();
-        $this->card = new ArrayCollection();
+        $this->gameBuildings = new ArrayCollection();
+        $this->gameActionFields = new ArrayCollection();
+        $this->gameCards = new ArrayCollection();
     }
 
     public function getId(): int|null
@@ -122,15 +122,15 @@ class Game
     /**
      * @return Collection<int, GameBuilding>
      */
-    public function getBuildings(): Collection
+    public function getGameBuildings(): Collection
     {
-        return $this->buildings;
+        return $this->gameBuildings;
     }
 
     public function addBuilding(GameBuilding $building): static
     {
-        if (!$this->buildings->contains($building)) {
-            $this->buildings->add($building);
+        if (!$this->gameBuildings->contains($building)) {
+            $this->gameBuildings->add($building);
             $building->setGame($this);
         }
 
@@ -139,7 +139,7 @@ class Game
 
     public function removeBuilding(GameBuilding $building): static
     {
-        if ($this->buildings->removeElement($building) && $building->getGame() === $this) {
+        if ($this->gameBuildings->removeElement($building) && $building->getGame() === $this) {
             $building->setGame(null);
         }
 
@@ -149,15 +149,15 @@ class Game
     /**
      * @return Collection<int, GameActionField>
      */
-    public function getActionFields(): Collection
+    public function getGameActionFields(): Collection
     {
-        return $this->actionFields;
+        return $this->gameActionFields;
     }
 
     public function addActionField(GameActionField $actionField): static
     {
-        if (!$this->actionFields->contains($actionField)) {
-            $this->actionFields->add($actionField);
+        if (!$this->gameActionFields->contains($actionField)) {
+            $this->gameActionFields->add($actionField);
             $actionField->setGame($this);
         }
 
@@ -166,7 +166,7 @@ class Game
 
     public function removeActionField(GameActionField $actionField): static
     {
-        if ($this->actionFields->removeElement($actionField) && $actionField->getGame() === $this) {
+        if ($this->gameActionFields->removeElement($actionField) && $actionField->getGame() === $this) {
             $actionField->setGame(null);
         }
 
@@ -176,15 +176,15 @@ class Game
     /**
      * @return Collection<int, GameCard>
      */
-    public function getCard(): Collection
+    public function getGameCards(): Collection
     {
-        return $this->card;
+        return $this->gameCards;
     }
 
     public function addCard(GameCard $card): static
     {
-        if (!$this->card->contains($card)) {
-            $this->card->add($card);
+        if (!$this->gameCards->contains($card)) {
+            $this->gameCards->add($card);
             $card->setGame($this);
         }
 
@@ -193,16 +193,33 @@ class Game
 
     public function removeCard(GameCard $card): static
     {
-        if ($this->card->removeElement($card) && $card->getGame() === $this) {
+        if ($this->gameCards->removeElement($card) && $card->getGame() === $this) {
             $card->setGame(null);
         }
 
         return $this;
     }
 
+    /**
+     * @return array<int, Field>
+     */
     public function getFields(): array
     {
-        return [...$this->getActionFields(), ...$this->getBuildings()];
+        $fields = [];
+
+        foreach ($this->getGameBuildings() as $gameBuilding) {
+            $building = $gameBuilding->getBuilding();
+            $fields[$building->getPosition()] = $building;
+        }
+
+        foreach ($this->getGameActionFields() as $gameActionField) {
+            $actionField = $gameActionField->getActionField();
+            $fields[$actionField->getPosition()] = $actionField;
+        }
+
+        ksort($fields);
+
+        return $fields;
     }
 
     /**
@@ -210,10 +227,10 @@ class Game
      */
     public function getFieldByPosition(int $position): Field
     {
-        foreach ($this->getFields() as $field) {
-            if ($field->getPosition() === $position) {
-                return $field;
-            }
+        $fields = $this->getFields();
+
+        if (isset($fields[$position])) {
+            return $fields[$position];
         }
 
         throw new Exception('Field not found');

@@ -22,9 +22,9 @@
             <h1>Lobby #{{ game.code }}</h1>
         </div>
         <div class="players-actions-container">
-            <div id="players">
+            <div id="playersContainer">
                 <table class="table table-hover">
-                    <tbody>
+                    <tbody id="players">
                         {% for player in game.players %}
                             {{ component('LobbyPlayer', {
                                 'player': player,

@@ -1,0 +1,7 @@
+{% if computed.players|length > 0 %}
+    <div class="visitors">
+        {% for player in computed.players %}
+            <span class="visitor rounded-circle"></span>
+        {% endfor %}
+    </div>
+{% endif %}

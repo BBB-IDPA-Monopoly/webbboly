@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/src/Twig/Components/LobbyPlayerComponent.php" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/templates/components/Alert.html.twig" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/templates/components/AlertContainer.html.twig" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/templates/components/GameActionFieldComponent.html.twig" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/templates/index/streams/index.stream.html.twig" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/templates/lobby/lobby.html.twig" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/templates/lobby/nickname.html.twig" charset="UTF-8" />

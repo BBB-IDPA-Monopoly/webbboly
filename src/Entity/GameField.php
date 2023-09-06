@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-class GameField
+abstract class GameField
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,4 +49,6 @@ class GameField
 
         return $this;
     }
+
+    abstract public function getField(): Field;
 }

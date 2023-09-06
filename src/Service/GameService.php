@@ -19,6 +19,9 @@ use Exception;
 
 final readonly class GameService
 {
+    const STARTING_MONEY = 1500;
+    const STARTING_POSITION = 0;
+
     public function __construct(
         private GameRepository $gameRepository,
         private PlayerRepository $playerRepository,
@@ -74,6 +77,15 @@ final readonly class GameService
         $this->createBuildings($game);
         $this->createActionFields($game);
         $this->createCards($game);
+
+        $players = $game->getPlayers();
+
+        foreach ($players as $player) {
+            $player->setMoney(self::STARTING_MONEY);
+            $player->setPosition(self::STARTING_POSITION);
+
+            $this->playerRepository->save($player, true);
+        }
     }
 
     /**

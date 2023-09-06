@@ -201,20 +201,18 @@ class Game
     }
 
     /**
-     * @return array<int, Field>
+     * @return array<int, GameField>
      */
-    public function getFields(): array
+    public function getFieldsWithPositions(): array
     {
         $fields = [];
 
         foreach ($this->getGameBuildings() as $gameBuilding) {
-            $building = $gameBuilding->getBuilding();
-            $fields[$building->getPosition()] = $building;
+            $fields[$gameBuilding->getBuilding()->getPosition()] = $gameBuilding;
         }
 
         foreach ($this->getGameActionFields() as $gameActionField) {
-            $actionField = $gameActionField->getActionField();
-            $fields[$actionField->getPosition()] = $actionField;
+            $fields[$gameActionField->getActionField()->getPosition()] = $gameActionField;
         }
 
         ksort($fields);
@@ -225,9 +223,9 @@ class Game
     /**
      * @throws Exception
      */
-    public function getFieldByPosition(int $position): Field
+    public function getFieldByPosition(int $position): GameField
     {
-        $fields = $this->getFields();
+        $fields = $this->getFieldsWithPositions();
 
         if (isset($fields[$position])) {
             return $fields[$position];

@@ -84,4 +84,9 @@ class GameBuilding extends GameField
 
         return $this;
     }
+
+    public function getField(): Building
+    {
+        return $this->getBuilding();
+    }
 }

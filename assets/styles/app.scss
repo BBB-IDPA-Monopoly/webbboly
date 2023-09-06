@@ -105,7 +105,7 @@ body {
 
             #goToJail {
                 grid-area: 1 / 12 / 3 / 14;
-                background-color: white;
+                background-color: #7a57e5;
             }
 
             #cell1 {
@@ -295,6 +295,26 @@ body {
                 height: 100%;
                 width: 100%;
                 text-align: center;
+
+                .visitors {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-template-rows: repeat(2, 1fr);
+                    width: 25%;
+                    height: 25%;
+                    align-items: center;
+                    justify-items: center;
+
+                    .visitor {
+                        width: 50%;
+                        height: 50%;
+                        background-color: #f7be16;
+                    }
+                }
 
                 .cell-content {
                     height: 100%;

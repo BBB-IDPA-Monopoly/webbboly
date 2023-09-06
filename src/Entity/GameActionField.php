@@ -39,4 +39,9 @@ class GameActionField extends GameField
 
         return $this;
     }
+
+    public function getField(): ActionField
+    {
+        return $this->getActionField();
+    }
 }

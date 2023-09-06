@@ -1,0 +1,13 @@
+<div class="{{ this.classes }}">
+    <div class="cell-color"
+         style="background-color: {{ field.building.street.color }}; color: {{ field.building.street.color }}"></div>
+
+    <div class="cell-content">
+        <span>{{ field.building.name }}</span>
+
+        <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail" alt="{{ field.building.name }}">
+        <span>{{ field.building.price }}</span>
+    </div>
+
+    {{ include('game/partials/_visitor.html.twig') }}
+</div>

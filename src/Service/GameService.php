@@ -16,6 +16,9 @@ use App\Repository\GameCardRepository;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
 use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 final readonly class GameService
 {
@@ -31,6 +34,7 @@ final readonly class GameService
         private BuildingRepository $buildingRepository,
         private ActionFieldRepository $actionFieldRepository,
         private CardRepository $cardRepository,
+        private GameStreamService $gameStreamService,
     ) {}
 
     /**
@@ -86,6 +90,8 @@ final readonly class GameService
 
             $this->playerRepository->save($player, true);
         }
+
+        $this->gameStreamService->sendGameStart($game);
     }
 
     /**
@@ -146,5 +152,40 @@ final readonly class GameService
 
             $this->gameCardRepository->save($gameCard, true);
         }
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function move(Game $game, Player $currentPlayer, int $position): void
+    {
+        $fields = $game->getFieldsWithPositions();
+
+        if ($position > count($fields)) {
+            $position = $position - count($fields);
+        }
+
+        $currentField = $fields[$currentPlayer->getPosition()];
+        $newPosition = $fields[$position];
+
+        $currentPlayer->setPosition($position);
+
+        $this->playerRepository->save($currentPlayer, true);
+
+//        if ($newPosition instanceof GameBuilding) {
+//            if ($newPosition->getOwner() === null) {
+//                $newPosition->setOwner($currentPlayer);
+//                $this->gameBuildingRepository->save($newPosition, true);
+//            } else {
+//                $this->payRent($game, $currentPlayer, $newPosition->getOwner(), $newPosition->getBuilding());
+//            }
+//        } else {
+//            dump('action field');
+//        }
+
+        $this->gameStreamService->sendUpdateField($game, $currentField);
+        $this->gameStreamService->sendUpdateField($game, $newPosition);
     }
 }

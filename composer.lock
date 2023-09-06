@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e0d6c484e94bc2d91a060199e822200",
+    "content-hash": "a8b180cf9ade9ab1f926dbafb0e6bca3",
     "packages": [
         {
             "name": "api-platform/core",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/api-platform/core.git",
-                "reference": "0b51d280a101e9f8bd9cfe9c18968164d8e19375"
+                "reference": "9fa59e23f9000d6016aef00fad5b5cd72ac07919"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/api-platform/core/zipball/0b51d280a101e9f8bd9cfe9c18968164d8e19375",
-                "reference": "0b51d280a101e9f8bd9cfe9c18968164d8e19375",
+                "url": "https://api.github.com/repos/api-platform/core/zipball/9fa59e23f9000d6016aef00fad5b5cd72ac07919",
+                "reference": "9fa59e23f9000d6016aef00fad5b5cd72ac07919",
                 "shasum": ""
             },
             "require": {
@@ -165,7 +165,7 @@
             ],
             "support": {
                 "issues": "https://github.com/api-platform/core/issues",
-                "source": "https://github.com/api-platform/core/tree/v3.1.15"
+                "source": "https://github.com/api-platform/core/tree/v3.1.16"
             },
             "funding": [
                 {
@@ -173,7 +173,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-25T08:54:22+00:00"
+            "time": "2023-09-02T07:06:13+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -5616,16 +5616,16 @@
         },
         {
             "name": "symfony/stimulus-bundle",
-            "version": "v2.11.0",
+            "version": "v2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stimulus-bundle.git",
-                "reference": "8c94fd88cbc9f4ee8177a2b04e69532a2e01145c"
+                "reference": "e0e19de8df4d5b2bed57328ae69ef7904df660c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/8c94fd88cbc9f4ee8177a2b04e69532a2e01145c",
-                "reference": "8c94fd88cbc9f4ee8177a2b04e69532a2e01145c",
+                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/e0e19de8df4d5b2bed57328ae69ef7904df660c7",
+                "reference": "e0e19de8df4d5b2bed57328ae69ef7904df660c7",
                 "shasum": ""
             },
             "require": {
@@ -5664,7 +5664,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.11.0"
+                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.11.1"
             },
             "funding": [
                 {
@@ -5680,7 +5680,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-24T16:25:14+00:00"
+            "time": "2023-08-28T18:00:50+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -6103,7 +6103,7 @@
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.11.0",
+            "version": "v2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
@@ -6179,7 +6179,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.11.0"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.11.1"
             },
             "funding": [
                 {
@@ -6199,16 +6199,16 @@
         },
         {
             "name": "symfony/ux-twig-component",
-            "version": "v2.11.0",
+            "version": "v2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-twig-component.git",
-                "reference": "bdb97c22a597ec6b9e4a611886f82d5081a43a1b"
+                "reference": "61dad8823fdc203aec51066f57ee926933f42eb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/bdb97c22a597ec6b9e4a611886f82d5081a43a1b",
-                "reference": "bdb97c22a597ec6b9e4a611886f82d5081a43a1b",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/61dad8823fdc203aec51066f57ee926933f42eb7",
+                "reference": "61dad8823fdc203aec51066f57ee926933f42eb7",
                 "shasum": ""
             },
             "require": {
@@ -6261,7 +6261,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-twig-component/tree/v2.11.0"
+                "source": "https://github.com/symfony/ux-twig-component/tree/v2.11.1"
             },
             "funding": [
                 {
@@ -6277,7 +6277,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-24T23:46:09+00:00"
+            "time": "2023-09-05T18:44:15+00:00"
         },
         {
             "name": "symfony/validator",
@@ -7658,5 +7658,8 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "8.2.9"
+    },
     "plugin-api-version": "2.3.0"
 }

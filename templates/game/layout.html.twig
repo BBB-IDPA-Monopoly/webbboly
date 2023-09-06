@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block body %}
+    <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code) }}></div>
+
     <div id="game">
         <div id="boardContainer">
             {% block playing_field %}

@@ -20,9 +20,6 @@ final class GameActionFieldComponent extends AbstractFieldComponent
         $resolver = new OptionsResolver();
         $resolver->setRequired('field');
         $resolver->setAllowedTypes('field', GameActionField::class);
-        $resolver->setDefaults([
-            'rotation' => self::ROTATION_0,
-        ]);
 
         return $resolver->resolve($data);
     }

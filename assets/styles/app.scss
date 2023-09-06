@@ -61,7 +61,6 @@ body {
 
     #boardContainer {
         grid-area: 1 / 1 / 2 / 3;
-        background-color: #f16565;
 
         display: flex;
         justify-content: center;
@@ -75,218 +74,182 @@ body {
             grid-column-gap: 0;
             grid-row-gap: 0;
 
-            background-color: #a463f2;
             max-width: 80vh;
+            border: 0.5rem solid black;
+            background-color: white;
 
             #center {
                 grid-area: 3 / 3 / 12 / 12;
-                background-color: #f7be16;
+                border: 0.5rem solid black;
             }
 
             #start {
                 grid-area: 12 / 12 / 14 / 14;
-                background-color: #7a57e5;
             }
 
             #jail {
                 grid-area: 12 / 1 / 14 / 3;
-                background-color: #7a57e5;
             }
 
             #jail {
                 grid-area: 12 / 1 / 14 / 3;
-                background-color: #7a57e5;
             }
 
             #parking {
                 grid-area: 1 / 1 / 3 / 3;
-                background-color: #7a57e5;
             }
 
             #goToJail {
                 grid-area: 1 / 12 / 3 / 14;
-                background-color: #7a57e5;
             }
 
             #cell1 {
                 grid-area: 12 / 11 / 14 / 12;
-                background-color: white;
             }
 
             #cell2 {
                 grid-area: 12 / 10 / 14 / 11;
-                background-color: white;
             }
 
             #cell3 {
                 grid-area: 12 / 9 / 14 / 10;
-                background-color: white;
             }
 
             #cell4 {
                 grid-area: 12 / 8 / 14 / 9;
-                background-color: white;
             }
 
             #cell5 {
                 grid-area: 12 / 7 / 14 / 8;
-                background-color: white;
             }
 
             #cell6 {
                 grid-area: 12 / 6 / 14 / 7;
-                background-color: white;
             }
 
             #cell7 {
                 grid-area: 12 / 5 / 14 / 6;
-                background-color: white;
             }
 
             #cell8 {
                 grid-area: 12 / 4 / 14 / 5;
-                background-color: white;
             }
 
             #cell9 {
                 grid-area: 12 / 3 / 14 / 4;
-                background-color: white;
             }
 
             #cell10 {
                 grid-area: 11 / 1 / 12 / 3;
-                background-color: white;
             }
 
             #cell11 {
                 grid-area: 10 / 1 / 11 / 3;
-                background-color: white;
             }
 
             #cell12 {
                 grid-area: 9 / 1 / 10 / 3;
-                background-color: white;
             }
 
             #cell13 {
                 grid-area: 8 / 1 / 9 / 3;
-                background-color: white;
             }
 
             #cell14 {
                 grid-area: 7 / 1 / 8 / 3;
-                background-color: white;
             }
 
             #cell15 {
                 grid-area: 6 / 1 / 7 / 3;
-                background-color: white;
             }
 
             #cell16 {
                 grid-area: 5 / 1 / 6 / 3;
-                background-color: white;
             }
 
             #cell17 {
                 grid-area: 4 / 1 / 5 / 3;
-                background-color: white;
             }
 
             #cell18 {
                 grid-area: 3 / 1 / 4 / 3;
-                background-color: white;
             }
 
             #cell19 {
                 grid-area: 1 / 3 / 3 / 4;
-                background-color: white;
             }
 
             #cell20 {
                 grid-area: 1 / 4 / 3 / 5;
-                background-color: white;
             }
 
             #cell21 {
                 grid-area: 1 / 5 / 3 / 6;
-                background-color: white;
             }
 
             #cell22 {
                 grid-area: 1 / 6 / 3 / 7;
-                background-color: white;
             }
 
             #cell23 {
                 grid-area: 1 / 7 / 3 / 8;
-                background-color: white;
             }
 
             #cell24 {
                 grid-area: 1 / 8 / 3 / 9;
-                background-color: white;
             }
 
             #cell25 {
                 grid-area: 1 / 9 / 3 / 10;
-                background-color: white;
             }
 
             #cell26 {
                 grid-area: 1 / 10 / 3 / 11;
-                background-color: white;
             }
 
             #cell27 {
                 grid-area: 1 / 11 / 3 / 12;
-                background-color: white;
             }
 
             #cell28 {
                 grid-area: 3 / 12 / 4 / 14;
-                background-color: white;
             }
 
             #cell29 {
                 grid-area: 4 / 12 / 5 / 14;
-                background-color: white;
             }
 
             #cell30 {
                 grid-area: 5 / 12 / 6 / 14;
-                background-color: white;
             }
 
             #cell31 {
                 grid-area: 6 / 12 / 7 / 14;
-                background-color: white;
             }
 
             #cell32 {
                 grid-area: 7 / 12 / 8 / 14;
-                background-color: white;
             }
 
             #cell33 {
                 grid-area: 8 / 12 / 9 / 14;
-                background-color: white;
             }
 
             #cell34 {
                 grid-area: 9 / 12 / 10 / 14;
-                background-color: white;
             }
 
             #cell35 {
                 grid-area: 10 / 12 / 11 / 14;
-                background-color: white;
             }
 
             #cell36 {
                 grid-area: 11 / 12 / 12 / 14;
-                background-color: white;
             }
+
+            //.cell-container {
+            //    border-left: 0.2rem solid black;
+            //}
 
             .cell {
                 display: flex;
@@ -299,20 +262,19 @@ body {
                 .visitors {
                     position: absolute;
                     top: 50%;
-                    left: 50%;
+                    left: 40%;
                     transform: translate(-50%, -50%);
                     display: grid;
                     grid-template-columns: repeat(2, 1fr);
                     grid-template-rows: repeat(2, 1fr);
-                    width: 25%;
-                    height: 25%;
+                    width: 50px;
+                    height: 50px;
                     align-items: center;
                     justify-items: center;
 
                     .visitor {
                         width: 50%;
                         height: 50%;
-                        background-color: #f7be16;
                     }
                 }
 
@@ -375,7 +337,6 @@ body {
 
     #players {
         grid-area: 2 / 1 / 3 / 2;
-        background-color: #f76516;
 
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -388,7 +349,6 @@ body {
 
     #actions {
         grid-area: 2 / 2 / 3 / 3;
-        background-color: #16a085;
 
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -402,6 +362,16 @@ body {
 
         :first-child {
             grid-area: 1 / 1 / 3 / 2;
+        }
+
+        #diceContainer {
+            &:has(#rollTheDice.disabled) {
+                opacity: 0.4;
+            }
+
+            #rollTheDice.disabled {
+                cursor: progress;
+            }
         }
     }
 }

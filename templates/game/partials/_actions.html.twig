@@ -1,5 +1,8 @@
-<div class="h-100 w-100 rounded bg-secondary position-relative">
-    <a href="#" class="stretched-link">Rolle the Dice</a>
+<div id="diceContainer" class="h-100 w-100 d-flex justify-content-center align-items-center rounded bg-secondary position-relative">
+    <a href="#" class="stretched-link" id="rollTheDice"></a>
+    <div class="bg-light px-2 m-2 rounded"><span class="fs-1" id="dice1">0</span></div>
+    +
+    <div class="bg-light px-2 m-2 rounded"><span class="fs-1" id="dice2">0</span></div>
 </div>
 <div class="h-100 w-100 rounded bg-primary position-relative">
     <a href="#" class="stretched-link">Trade</a>
@@ -7,3 +10,45 @@
 <div class="h-100 w-100 rounded bg-danger position-relative">
     <a href="#" class="stretched-link">Give up / Leave</a>
 </div>
+<script>
+    let position = {{ currentPlayer.position }};
+
+    document.getElementById('rollTheDice').addEventListener('click', rollTheDice);
+
+    function rollTheDice() {
+        const dice1 = Math.floor(Math.random() * 6) + 1;
+        const dice2 = Math.floor(Math.random() * 6) + 1;
+
+        document.getElementById('dice1').innerHTML = dice1.toString();
+        document.getElementById('dice2').innerHTML = dice2.toString();
+
+        position = position + dice1 + dice2;
+
+        const url = window.location.origin + '/game/{{ game.code }}/move/{{ currentPlayer.id }}/' + position;
+
+        disable('rollTheDice');
+
+        fetch(url, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                position = data.position;
+                enable('rollTheDice');
+            });
+    }
+
+    function disable(id) {
+        const element = document.getElementById(id);
+
+        element.classList.add('disabled');
+        element.removeEventListener('click', rollTheDice);
+    }
+
+    function enable(id) {
+        const element = document.getElementById(id);
+
+        element.classList.remove('disabled');
+        element.addEventListener('click', rollTheDice);
+    }
+</script>

@@ -10,26 +10,23 @@ use LogicException;
 
 abstract class AbstractFieldComponent
 {
-    const ROTATION_0 = 0;
-    const ROTATION_90 = 90;
-    const ROTATION_180 = 180;
-    const ROTATION_270 = 270;
-
-    public int $rotation;
-
     public function __construct(
         private readonly PlayerRepository $playerRepository,
     ) {}
 
     public function getClasses(): string
     {
-        return match ($this->rotation) {
-            self::ROTATION_0 => 'cell',
-            self::ROTATION_90 => 'cell cell-rotated-90',
-            self::ROTATION_180 => 'cell cell-rotated-180',
-            self::ROTATION_270=> 'cell cell-rotated-270',
-            default => throw new LogicException('Invalid rotation'),
-        };
+        $position = $this->getField()->getPosition();
+
+        if ($position > 10 && $position < 20) {
+            return 'cell cell-rotated-90';
+        } elseif ($position > 20 && $position < 30) {
+            return 'cell cell-rotated-180';
+        } elseif ($position > 30 && $position < 40) {
+            return 'cell cell-rotated-270';
+        } else {
+            return 'cell';
+        }
     }
 
     /**
@@ -41,6 +38,17 @@ abstract class AbstractFieldComponent
         $position = $this->getField()->getPosition();
 
         return $this->playerRepository->findBy(compact('game', 'position'));
+    }
+
+    public function getPlayerClass(Player $player): string
+    {
+        return match ($player->getNumber()) {
+            1 => 'bg-primary',
+            2 => 'bg-success',
+            3 => 'bg-danger',
+            4 => 'bg-warning',
+            default => throw new LogicException('Invalid player number'),
+        };
     }
 
     abstract public function getField(): Field;

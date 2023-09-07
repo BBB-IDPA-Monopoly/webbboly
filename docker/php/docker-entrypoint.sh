@@ -56,6 +56,13 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
 			bin/console doctrine:migrations:migrate --no-interaction
 		fi
+
+		if [ "$( find ./migrations -iname '*.sql' -print -quit )" ]; then
+			bin/console dbal:run-sql "$(cat ./migrations/*.sql)"
+			echo "The db has been populated data file"
+		else
+			echo "The db has not been populated with data file"
+		fi
 	fi
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var

@@ -1,3 +1,13 @@
+DELETE FROM game_building WHERE id > 0;
+DELETE FROM game_action_field WHERE id > 0;
+DELETE FROM game_card WHERE id > 0;
+DELETE FROM player WHERE id > 0;
+DELETE FROM game WHERE id > 0;
+DELETE FROM card WHERE id > 0;
+DELETE FROM building WHERE id > 0;
+DELETE FROM action_field WHERE id > 0;
+DELETE FROM street WHERE id > 0;
+
 INSERT INTO street (id, color, house_cost)
 VALUES (1,'#5e4228',50), -- Brown
        (2,'#79e4fc',50), -- Light Blue

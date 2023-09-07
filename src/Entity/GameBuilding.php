@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\GameBuildingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity(repositoryClass: GameBuildingRepository::class)]
 class GameBuilding extends GameField
@@ -88,5 +89,21 @@ class GameBuilding extends GameField
     public function getField(): Building
     {
         return $this->getBuilding();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getRent($wholeStreetOwned = false): int|null
+    {
+        return match ($this->getHouses()) {
+            0 => $wholeStreetOwned ? $this->getBuilding()->getStreetRent() : $this->getBuilding()->getUnitRent(),
+            1 => $this->getBuilding()->getSingleHouseRent(),
+            2 => $this->getBuilding()->getDoubleHouseRent(),
+            3 => $this->getBuilding()->getTripleHouseRent(),
+            4 => $this->getBuilding()->getQuadrupleHouseRent(),
+            5 => $this->getBuilding()->getHotelRent(),
+            default => throw new Exception('Invalid number of houses'),
+        };
     }
 }

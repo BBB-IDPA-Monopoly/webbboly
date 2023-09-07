@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Game;
 use App\Entity\GameBuilding;
+use App\Entity\Street;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -10,9 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @extends ServiceEntityRepository<GameBuilding>
  *
  * @method GameBuilding|null find($id, $lockMode = null, $lockVersion = null)
- * @method GameBuilding|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GameBuilding|null findOneBy(array $criteria, array|null $orderBy = null)
  * @method GameBuilding[]    findAll()
- * @method GameBuilding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method GameBuilding[]    findBy(array $criteria, array|null $orderBy = null, $limit = null, $offset = null)
  */
 class GameBuildingRepository extends ServiceEntityRepository
 {
@@ -37,6 +39,22 @@ class GameBuildingRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return GameBuilding[]
+     */
+    public function findByGameAndStreet(Game $game, Street $street): array
+    {
+        return $this->createQueryBuilder('gb')
+            ->leftJoin('gb.building', 'b')
+            ->andWhere('gb.game = :game')
+            ->andWhere('b.street = :street')
+            ->setParameter('game', $game)
+            ->setParameter('street', $street)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**

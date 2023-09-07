@@ -87,6 +87,20 @@ class Player
         return $this;
     }
 
+    public function addMoney(int $money): static
+    {
+        $this->money += $money;
+
+        return $this;
+    }
+
+    public function subtractMoney(int $money): static
+    {
+        $this->money -= $money;
+
+        return $this;
+    }
+
     public function isReady(): bool
     {
         return $this->isReady;

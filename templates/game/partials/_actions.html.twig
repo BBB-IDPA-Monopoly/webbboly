@@ -4,7 +4,7 @@
     +
     <div class="bg-light px-2 m-2 rounded"><span class="fs-1" id="dice2">0</span></div>
 </div>
-<div class="h-100 w-100 rounded bg-primary position-relative">
+<div id="trade" class="h-100 w-100 rounded bg-primary position-relative">
     <a href="#" class="stretched-link">Trade</a>
 </div>
 <div class="h-100 w-100 rounded bg-danger position-relative">
@@ -24,7 +24,7 @@
 
         position = position + dice1 + dice2;
 
-        const url = window.location.origin + '/game/{{ game.code }}/move/{{ currentPlayer.id }}/' + position;
+        const url = window.location.origin + '/game/{{ game.code }}/turn/{{ currentPlayer.id }}/' + position;
 
         disable('rollTheDice');
 

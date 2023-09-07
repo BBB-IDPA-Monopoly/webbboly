@@ -63,14 +63,14 @@ final class GameController extends AbstractController
      * @throws SyntaxError
      * @throws LoaderError
      */
-    #[Route('/game/{code}/move/{id}/{position}', name: 'app_game_move')]
-    public function move(
+    #[Route('/game/{code}/turn/{id}/{position}', name: 'app_game_move')]
+    public function turn(
         #[MapEntity(mapping: ['code' => 'code'])] Game $game,
         #[MapEntity(id: 'id')] Player $player,
         int $position
     ): Response
     {
-        $this->gameService->move($game, $player, $position);
+        $this->gameService->turn($game, $player, $position);
 
         return $this->json([
             'success' => true,

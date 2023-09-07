@@ -35,6 +35,7 @@ final readonly class GameService
         private ActionFieldRepository $actionFieldRepository,
         private CardRepository $cardRepository,
         private GameStreamService $gameStreamService,
+        private GameFunctions $gameFunctions,
     ) {}
 
     /**
@@ -158,34 +159,66 @@ final readonly class GameService
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
+     * @throws Exception
      */
-    public function move(Game $game, Player $currentPlayer, int $position): void
+    public function turn(Game $game, Player $currentPlayer, int $position): void
     {
         $fields = $game->getFieldsWithPositions();
 
         if ($position > count($fields)) {
             $position = $position - count($fields);
+            $currentPlayer->addMoney(200);
         }
 
         $currentField = $fields[$currentPlayer->getPosition()];
         $newPosition = $fields[$position];
 
+        if ($newPosition instanceof GameBuilding) {
+            if ($newPosition->getOwner() === null) {
+                if ($currentPlayer->getMoney() > $newPosition->getBuilding()->getPrice()) {
+                    $currentPlayer->subtractMoney($newPosition->getBuilding()->getPrice());
+                    $newPosition->setOwner($currentPlayer);
+                    $this->gameBuildingRepository->save($newPosition, true);
+                }
+            } else {
+                $this->payRent($currentPlayer, $newPosition);
+            }
+        } elseif ($newPosition instanceof GameActionField) {
+            $this->gameFunctions->{$newPosition->getField()->getFunction()}($currentPlayer);
+        }
+
         $currentPlayer->setPosition($position);
 
         $this->playerRepository->save($currentPlayer, true);
-
-//        if ($newPosition instanceof GameBuilding) {
-//            if ($newPosition->getOwner() === null) {
-//                $newPosition->setOwner($currentPlayer);
-//                $this->gameBuildingRepository->save($newPosition, true);
-//            } else {
-//                $this->payRent($game, $currentPlayer, $newPosition->getOwner(), $newPosition->getBuilding());
-//            }
-//        } else {
-//            dump('action field');
-//        }
-
         $this->gameStreamService->sendUpdateField($game, $currentField);
         $this->gameStreamService->sendUpdateField($game, $newPosition);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function payRent(Player $currentPlayer, GameBuilding $newPosition): void
+    {
+        if ($newPosition->getOwner() === $currentPlayer) {
+            return;
+        } elseif ($newPosition->getOwner() === null) {
+            throw new Exception('This should not happen.');
+        }
+
+        $streetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
+            $newPosition->getGame(),
+            $newPosition->getBuilding()->getStreet()
+        );
+
+        $wholeStreetOwned = array_map(static fn(GameBuilding $building) => $building->getOwner() === $newPosition->getOwner(), $streetBuildings);
+
+        $owner = $newPosition->getOwner();
+        $rent = $newPosition->getRent($wholeStreetOwned);
+
+        $currentPlayer->subtractMoney($rent);
+        $owner->addMoney($rent);
+
+        $this->playerRepository->save($currentPlayer, true);
+        $this->playerRepository->save($owner, true);
     }
 }

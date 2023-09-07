@@ -2,11 +2,13 @@
 
 namespace App\Service;
 
+use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameActionField;
 use App\Entity\GameBuilding;
 use App\Entity\GameCard;
 use App\Entity\Player;
+use App\Entity\Street;
 use App\Repository\ActionFieldRepository;
 use App\Repository\BuildingRepository;
 use App\Repository\CardRepository;
@@ -175,16 +177,16 @@ final readonly class GameService
 
         if ($newPosition instanceof GameBuilding) {
             if ($newPosition->getOwner() === null) {
-                if ($currentPlayer->getMoney() > $newPosition->getBuilding()->getPrice()) {
-                    $currentPlayer->subtractMoney($newPosition->getBuilding()->getPrice());
-                    $newPosition->setOwner($currentPlayer);
-                    $this->gameBuildingRepository->save($newPosition, true);
-                }
+                $this->gameStreamService->sendShowBuildingCard($newPosition->getBuilding(), $currentPlayer);
             } else {
                 $this->payRent($currentPlayer, $newPosition);
             }
         } elseif ($newPosition instanceof GameActionField) {
-            $this->gameFunctions->{$newPosition->getField()->getFunction()}($currentPlayer);
+            $function = $newPosition->getActionField()->getFunction();
+
+            if (method_exists($this->gameFunctions, $function)) {
+                $this->gameFunctions->$function($currentPlayer);
+            }
         }
 
         $currentPlayer->setPosition($position);
@@ -192,6 +194,54 @@ final readonly class GameService
         $this->playerRepository->save($currentPlayer, true);
         $this->gameStreamService->sendUpdateField($game, $currentField);
         $this->gameStreamService->sendUpdateField($game, $newPosition);
+        $this->gameStreamService->sendUpdatePlayer($game, $currentPlayer);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function buyBuilding(Game $game, Player $player, GameBuilding $gameBuilding): void
+    {
+        if ($player->getMoney() < $gameBuilding->getBuilding()->getPrice()) {
+            return;
+        }
+
+        $gameBuilding->setOwner($player);
+        $player->subtractMoney($gameBuilding->getBuilding()->getPrice());
+
+        $this->gameBuildingRepository->save($gameBuilding, true);
+        $this->playerRepository->save($player, true);
+
+        $this->gameStreamService->sendUpdateField($game, $gameBuilding);
+        $this->gameStreamService->sendUpdatePlayer($game, $player);
+    }
+
+    public function wholeStreetOwned(Game $game, Building $building): bool
+    {
+        $street = $building->getStreet();
+
+        $buildings = $this->gameBuildingRepository->findByGameAndStreet($game, $street);
+
+        $owners = array_map(static fn(GameBuilding $building) => $building->getOwner(), $buildings);
+
+        $sameOwner = false;
+        foreach ($owners as $owner) {
+            if ($owner === null) {
+                return false;
+            }
+
+            if ($sameOwner === false) {
+                $sameOwner = $owner;
+            }
+
+            if ($sameOwner !== $owner) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -205,12 +255,7 @@ final readonly class GameService
             throw new Exception('This should not happen.');
         }
 
-        $streetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
-            $newPosition->getGame(),
-            $newPosition->getBuilding()->getStreet()
-        );
-
-        $wholeStreetOwned = array_map(static fn(GameBuilding $building) => $building->getOwner() === $newPosition->getOwner(), $streetBuildings);
+        $wholeStreetOwned = $this->wholeStreetOwned($newPosition->getGame(), $newPosition->getBuilding());
 
         $owner = $newPosition->getOwner();
         $rent = $newPosition->getRent($wholeStreetOwned);
@@ -220,5 +265,7 @@ final readonly class GameService
 
         $this->playerRepository->save($currentPlayer, true);
         $this->playerRepository->save($owner, true);
+
+        $this->gameStreamService->sendUpdatePlayer($newPosition->getGame(), $owner);
     }
 }

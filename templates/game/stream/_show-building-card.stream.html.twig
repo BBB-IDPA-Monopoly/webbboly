@@ -1,0 +1,12 @@
+<turbo-stream action="update" target="modal">
+    <template>
+        {% include 'game/partials/_card-modal.html.twig' %}
+
+        <div
+            {{ stimulus_controller('bootstrap-modal', {
+                modalId: 'buildingCardModal',
+            }) }}
+            {{ stimulus_action('bootstrap-modal', 'open') }}
+        ></div>
+    </template>
+</turbo-stream>

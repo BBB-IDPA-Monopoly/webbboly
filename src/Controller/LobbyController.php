@@ -212,17 +212,4 @@ final class LobbyController extends AbstractController
 
         return $this->redirectToRoute('app_lobby_overview', ['code' => $game->getCode()]);
     }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    #[Route('/game/start/{code}', name: 'app_lobby_start')]
-    public function start(Game $game): Response
-    {
-        $this->lobbyStreamService->sendGameStart($game);
-
-        return $this->redirectToRoute('app_game_start', ['code' => $game->getCode()]);
-    }
 }

@@ -6,6 +6,7 @@
 
 {% block body %}
     <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code) }}></div>
+    <div {{ turbo_stream_listen('https://webbboly/game/' ~ game.code ~ '/player/' ~ currentPlayer.number) }}></div>
 
     <div id="game">
         <div id="boardContainer">
@@ -24,4 +25,6 @@
             {% endblock %}
         </div>
     </div>
+
+    <div id="modal"></div>
 {% endblock %}

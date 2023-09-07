@@ -43,14 +43,21 @@ abstract class AbstractFieldComponent
     public function getPlayerClass(Player $player): string
     {
         return match ($player->getNumber()) {
-            1 => 'bg-primary',
-            2 => 'bg-success',
-            3 => 'bg-danger',
-            4 => 'bg-warning',
+            1 => 'primary',
+            2 => 'success',
+            3 => 'danger',
+            4 => 'warning',
             default => throw new LogicException('Invalid player number'),
         };
     }
 
-    abstract public function getField(): Field;
-    abstract public function getGame(): Game;
+    public function getGame(): Game
+    {
+        return $this->field->getGame();
+    }
+
+    public function getField(): Field
+    {
+        return $this->field->getField();
+    }
 }

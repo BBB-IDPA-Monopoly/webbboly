@@ -1,0 +1,76 @@
+<div id="buildingCard{{ building.id }}" class="card building-card"
+     style="width: 14rem;">
+    <div class="card-body">
+        <h5 class="card-title text-center p-2" style="background-color: {{ building.street.color }}">
+            {{ building.name }}
+        </h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete
+                </div>
+                {{ building.unitRent }}$
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete mit Strasse
+                </div>
+                {{ building.streetRent }}$
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete mit <i class="bi bi-house-fill text-success">1</i>
+                </div>
+                {{ building.singleHouseRent }}$
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete mit <i class="bi bi-house-fill text-success">2</i>
+                </div>
+                {{ building.doubleHouseRent }}$
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete mit <i class="bi bi-house-fill text-success">3</i>
+                </div>
+                {{ building.tripleHouseRent }}$
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete mit <i class="bi bi-house-fill text-success">4</i>
+                </div>
+                {{ building.quadrupleHouseRent }}$
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Miete mit <i class="bi bi-house-fill text-danger"></i>
+                </div>
+                {{ building.hotelRent }}$
+            </li>
+        </ul>
+        <hr>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Haus kosten
+                </div>
+                {{ building.street.houseCost }}$ pro
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Hotel kosten
+                </div>
+                {{ building.street.houseCost }}$ +4 Häuser
+            </li>
+        </ul>
+        <hr>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                    Hypothek
+                </div>
+                {{ building.mortgage }}$
+            </li>
+        </ul>
+    </div>
+</div>

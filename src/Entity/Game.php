@@ -233,4 +233,15 @@ class Game
 
         throw new Exception('Field not found');
     }
+
+    public function getGameFieldByField(Field $field): GameField|null
+    {
+        foreach ($this->getFieldsWithPositions() as $gameField) {
+            if ($gameField->getField() === $field) {
+                return $gameField;
+            }
+        }
+
+        return null;
+    }
 }

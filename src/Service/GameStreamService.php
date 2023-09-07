@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameBuilding;
 use App\Entity\GameField;
+use App\Entity\Player;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Twig\Environment;
@@ -44,6 +46,30 @@ final readonly class GameStreamService
     }
 
     /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function sendUpdatePlayer(Game $game, Player $player): void
+    {
+        $isMe = false;
+        $this->send(
+            sprintf('https://webbboly/game/%d', $game->getCode()),
+            $this->twig->render('game/stream/_update-player.stream.html.twig',
+                compact('player', 'isMe')
+            )
+        );
+
+        $isMe = true;
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d', $game->getCode(), $player->getNumber()),
+            $this->twig->render('game/stream/_update-player.stream.html.twig',
+                compact('player', 'isMe')
+            )
+        );
+    }
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
@@ -54,6 +80,21 @@ final readonly class GameStreamService
             sprintf('https://webbboly/game/%d', $game->getCode()),
             $this->twig->render('game/stream/_game-start.stream.html.twig',
                 compact('game')
+            )
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function sendShowBuildingCard(Building $building, Player $player): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d', $player->getGame()->getCode(), $player->getNumber()),
+            $this->twig->render('game/stream/_show-building-card.stream.html.twig',
+                compact('building', 'player')
             )
         );
     }

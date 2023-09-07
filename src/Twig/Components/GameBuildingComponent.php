@@ -5,6 +5,8 @@ namespace App\Twig\Components;
 use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameBuilding;
+use App\Repository\PlayerRepository;
+use App\Service\GameService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\PreMount;
@@ -13,6 +15,14 @@ use Symfony\UX\TwigComponent\Attribute\PreMount;
 final class GameBuildingComponent extends AbstractFieldComponent
 {
     public GameBuilding $field;
+
+    public function __construct(
+        private readonly GameService $gameService,
+        private readonly PlayerRepository $playerRepository,
+    )
+    {
+        parent::__construct($this->playerRepository);
+    }
 
     #[PreMount]
     public function preMount(array $data): array
@@ -29,8 +39,8 @@ final class GameBuildingComponent extends AbstractFieldComponent
         return $this->field->getField();
     }
 
-    public function getGame(): Game
+    public function wholeStreetOwned(): bool
     {
-        return $this->field->getGame();
+        return $this->gameService->wholeStreetOwned($this->getGame(), $this->getField());
     }
 }

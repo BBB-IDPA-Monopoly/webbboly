@@ -16,10 +16,10 @@ class PlayerComponent
     public function getPlayerClass(): string
     {
         return match ($this->player->getNumber()) {
-            1 => 'bg-primary',
-            2 => 'bg-success',
-            3 => 'bg-danger',
-            4 => 'bg-warning',
+            1 => 'primary',
+            2 => 'success',
+            3 => 'danger',
+            4 => 'warning',
             default => throw new LogicException('Invalid player number'),
         };
     }

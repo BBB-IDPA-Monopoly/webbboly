@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Building;
 use App\Entity\Game;
+use App\Entity\GameBuilding;
 use App\Entity\Player;
 use App\Repository\PlayerRepository;
 use App\Service\GameService;
@@ -26,7 +28,7 @@ final class GameController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/game/start/{code}/index', name: 'app_game_start')]
+    #[Route('/game/start/{code}', name: 'app_game_start')]
     public function start(Game $game, Request $request): Response
     {
         $playerId = $request->getSession()->get('player_id');
@@ -75,6 +77,25 @@ final class GameController extends AbstractController
         return $this->json([
             'success' => true,
             'position' => $player->getPosition(),
+        ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{playerId}/buy/{buildingId}', name: 'app_game_buy')]
+    public function buy(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'playerId')] Player $player,
+        #[MapEntity(id: 'buildingId')] GameBuilding $gameBuilding,
+    ): Response
+    {
+        $this->gameService->buyBuilding($game, $player, $gameBuilding);
+
+        return $this->json([
+            'success' => true,
         ]);
     }
 }

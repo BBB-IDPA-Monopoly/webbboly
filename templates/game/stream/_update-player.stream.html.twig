@@ -1,0 +1,9 @@
+<turbo-stream action="replace" target="player{{ player.id }}">
+    <template>
+        {{ component('PlayerComponent', {
+            'player': player,
+            'isMe': isMe,
+            'isHost': player.isHost,
+        }) }}
+    </template>
+</turbo-stream>

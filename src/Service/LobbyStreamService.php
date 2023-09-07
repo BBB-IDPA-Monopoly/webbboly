@@ -138,21 +138,6 @@ final readonly class LobbyStreamService
         );
     }
 
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function sendGameStart(Game $game): void
-    {
-        $this->send(
-            sprintf('https://webbboly/game/%d', $game->getCode()),
-            $this->twig->render('lobby/stream/_game-start.stream.html.twig',
-                compact('game')
-            )
-        );
-    }
-
     private function send(string $topic, string $data): void
     {
         $this->hub->publish(new Update($topic, $data));

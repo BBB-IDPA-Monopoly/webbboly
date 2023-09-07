@@ -1,7 +1,7 @@
 {% component LinkComponent with {
     id: 'startGame',
     type: 'success',
-    href: game.isGameReady ? path('app_lobby_start', {
+    href: game.isGameReady ? path('app_game_start', {
         'code': game.code,
     }) : '#',
     disabled: not game.isGameReady,

@@ -1,8 +1,29 @@
-<div id="player{{ player.id }}" class="card {% if isMe %}border-info border-3{% endif %} {{ this.getPlayerClass }}">
+<div id="player{{ player.id }}" class="card {% if isMe %}border-info border-3{% endif %} bg-{{ this.getPlayerClass }}">
     <div class="card-body">
         <div class="card-title">
             <h6>{{ player.nickname }} {% if isMe %}<span class="badge bg-info">Me</span>{% endif %}</h6>
         </div>
-        <p>{{ player.money }}</p>
+        <span class="d-block mb-2">BBBanknote: {{ player.money }}$</span>
+        <button type="button" class="btn btn-sm btn-info"
+                data-bs-toggle="modal" data-bs-target="#playerCards{{ player.id }}">
+            Cards
+        </button>
+
+        <div class="modal fade" id="playerCards{{ player.id }}" tabindex="-1"
+             aria-labelledby="playerCards{{ player.id }}label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="playerCards{{ player.id }}Label">
+                            Cards from {{ player.nickname }}
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

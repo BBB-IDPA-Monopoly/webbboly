@@ -28,9 +28,4 @@ final class GameActionFieldComponent extends AbstractFieldComponent
     {
         return $this->field->getField();
     }
-
-    public function getGame(): Game
-    {
-        return $this->field->getGame();
-    }
 }

@@ -6,7 +6,15 @@
         <span>{{ field.building.name }}</span>
 
         <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail" alt="{{ field.building.name }}">
-        <span>{{ field.building.price }}</span>
+
+        {% if field.owner is null %}
+            <span>{{ field.building.price }}$</span>
+        {% else %}
+            <span class="text-{{ this.getPlayerClass(field.owner) }}">
+                {{ field.owner.nickname }}
+                ({{ field.rent(this.wholeStreetOwned) }}$)
+            </span>
+        {% endif %}
     </div>
 
     {{ include('game/partials/_visitor.html.twig') }}

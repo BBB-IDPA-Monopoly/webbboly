@@ -214,8 +214,16 @@ final readonly class GameService
         $this->gameBuildingRepository->save($gameBuilding, true);
         $this->playerRepository->save($player, true);
 
-        $this->gameStreamService->sendUpdateField($game, $gameBuilding);
         $this->gameStreamService->sendUpdatePlayer($game, $player);
+
+        $gameStreetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
+            $game,
+            $gameBuilding->getBuilding()->getStreet()
+        );
+
+        foreach ($gameStreetBuildings as $gameStreetBuilding) {
+            $this->gameStreamService->sendUpdateField($game, $gameStreetBuilding);
+        }
     }
 
     public function wholeStreetOwned(Game $game, Building $building): bool

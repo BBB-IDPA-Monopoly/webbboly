@@ -7,6 +7,11 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
+    .copyFiles({
+      from: './assets/img',
+      to: 'images/[path][name].[hash:8].[ext]',
+    })
+
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path

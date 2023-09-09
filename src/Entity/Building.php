@@ -39,6 +39,9 @@ class Building extends Field
     #[ORM\JoinColumn(nullable: false)]
     private Street|null $street = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $img = null;
+
     public function getPrice(): int|null
     {
         return $this->price;
@@ -155,6 +158,18 @@ class Building extends Field
     public function setStreet(Street|null $street): static
     {
         $this->street = $street;
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(string $img): static
+    {
+        $this->img = $img;
 
         return $this;
     }

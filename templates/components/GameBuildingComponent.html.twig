@@ -5,7 +5,10 @@
     <div class="cell-content">
         <span>{{ field.building.name }}</span>
 
-        <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail" alt="{{ field.building.name }}">
+        <a href="{{ asset('build/images/' ~ field.building.img) }}" {{ stimulus_controller('light-box') }}>
+            <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail"
+                 alt="{{ field.building.name }}">
+        </a>
 
         {% if field.owner is null %}
             <span>{{ field.building.price }}$</span>

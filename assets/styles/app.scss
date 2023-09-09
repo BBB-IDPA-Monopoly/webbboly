@@ -254,7 +254,7 @@ body {
             .cell {
                 display: flex;
                 flex-direction: column;
-                font-size: x-small;
+                font-size: 0.5rem;
                 height: 100%;
                 width: 100%;
                 text-align: center;
@@ -405,27 +405,7 @@ body {
     justify-content: center;
     padding: 1rem;
 
-    #buildingCardTitle {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-    }
-
-    #buildingCardImage {
-        width: 100%;
-        height: 100%;
-        max-width: 200px;
-        max-height: 200px;
-        margin-bottom: 1rem;
-    }
-
-    #buildingCardButtons {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-    }
-
+    .action-field-card,
     .building-card {
         hr {
             margin: .5rem;
@@ -438,6 +418,5 @@ body {
         .card-body {
             font-size: small;
         }
-
     }
 }

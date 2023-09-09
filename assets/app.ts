@@ -14,3 +14,6 @@ import 'bootstrap/dist/js/bootstrap.esm.min.js';
 
 // Bootstrap Icons
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// SimpleLightbox
+import 'simplelightbox/dist/simple-lightbox.min.css';

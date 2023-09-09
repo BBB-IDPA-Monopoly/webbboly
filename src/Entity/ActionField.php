@@ -14,6 +14,9 @@ class ActionField extends Field
     #[ORM\Column(nullable: true)]
     private int|null $mortgage = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $img = null;
+
     public function getFunction(): string|null
     {
         return $this->function;
@@ -34,6 +37,18 @@ class ActionField extends Field
     public function setMortgage(int $mortgage): static
     {
         $this->mortgage = $mortgage;
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): static
+    {
+        $this->img = $img;
 
         return $this;
     }

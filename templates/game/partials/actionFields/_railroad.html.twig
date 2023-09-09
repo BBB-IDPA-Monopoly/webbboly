@@ -1,4 +1,7 @@
-<img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail" alt="{{ field.actionField.name }}">
+<a href="{{ asset('build/images/' ~ field.actionField.img) }}" {{ stimulus_controller('light-box') }}>
+    <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail"
+         alt="{{ field.actionField.name }}">
+</a>
 
 {% if field.owner is null %}
     <span>{{ price }}$</span>

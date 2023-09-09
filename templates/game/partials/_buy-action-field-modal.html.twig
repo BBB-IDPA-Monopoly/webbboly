@@ -1,0 +1,35 @@
+<div class="modal fade" id="actionFieldCardModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-labelledby="actionFieldModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="actionFieldCardModal">
+                    {{ actionField.name }} kaufen
+                </h1>
+            </div>
+            <div class="modal-body">
+                <div id="actionFieldCard">
+                    {{ component('ActionFieldCardComponent', {
+                        actionField: actionField,
+                    }) }}
+                </div>
+                <div class="d-flex justify-between gap-2">
+                    <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Pass</button>
+                    <button class="btn btn-success w-100 {% if player.money < price %}disabled{% endif %}"
+                            data-bs-dismiss="modal"
+                            onclick="localFetch('{{ path('app_game_buy_action_field', {
+                                code: player.game.code,
+                                playerId: player.id,
+                                actionFieldId: player.game.getGameFieldByField(actionField).id,
+                                price: price,
+                            }) }}')">
+                        Buy ({{ price }}$)
+                        {% if player.money < price %}
+                            <span class="badge bg-danger">Not enough money</span>
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

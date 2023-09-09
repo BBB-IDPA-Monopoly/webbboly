@@ -45,9 +45,14 @@
         }) }}
     </div>
     <div id="cell5" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(5),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(5),
+            price: 200,
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_railroad.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell6" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -90,9 +95,14 @@
         }) }}
     </div>
     <div id="cell14" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(15),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(15),
+            price: 200,
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_railroad.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell15" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -135,9 +145,14 @@
         }) }}
     </div>
     <div id="cell23" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(25),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(25),
+            price: 200,
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_railroad.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell24" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -180,9 +195,14 @@
         }) }}
     </div>
     <div id="cell32" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(35),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(35),
+            price: 200,
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_railroad.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell33" class="cell-container">
         {{ component('GameActionFieldComponent', {

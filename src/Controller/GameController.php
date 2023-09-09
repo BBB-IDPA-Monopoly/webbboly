@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Building;
 use App\Entity\Game;
+use App\Entity\GameActionField;
 use App\Entity\GameBuilding;
 use App\Entity\Player;
 use App\Repository\PlayerRepository;
@@ -103,14 +104,34 @@ final class GameController extends AbstractController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    #[Route('/game/{code}/player/{playerId}/buy/{buildingId}', name: 'app_game_buy')]
-    public function buy(
+    #[Route('/game/{code}/player/{playerId}/buy/{buildingId}', name: 'app_game_buy_building')]
+    public function buyBuilding(
         #[MapEntity(mapping: ['code' => 'code'])] Game $game,
         #[MapEntity(id: 'playerId')] Player $player,
         #[MapEntity(id: 'buildingId')] GameBuilding $gameBuilding,
     ): Response
     {
         $this->gameService->buyBuilding($game, $player, $gameBuilding);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{playerId}/buy/{actionFieldId}/{price}', name: 'app_game_buy_action_field')]
+    public function buyActionField(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'playerId')] Player $player,
+        #[MapEntity(id: 'actionFieldId')] GameActionField $gameActionField,
+        int $price,
+    ): Response
+    {
+        $this->gameService->buyActionField($game, $player, $gameActionField, $price);
 
         return $this->json([
             'success' => true,

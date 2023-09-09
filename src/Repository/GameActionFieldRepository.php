@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\GameActionField;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +39,46 @@ class GameActionFieldRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * @param int $gameId
+     * @param string $function
+     * @return GameActionField[]
+     */
+    public function findByGameAndFunction(int $gameId, string $function): array
+    {
+        return $this->createQueryBuilder('gameActionField')
+            ->leftJoin('gameActionField.actionField', 'actionField')
+            ->andWhere('gameActionField.game = :gameId')
+            ->andWhere('actionField.function = :function')
+            ->setParameter('gameId', $gameId)
+            ->setParameter('function', $function)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    //find by game and position
+
+    /**
+     * @param int $gameId
+     * @param int $position
+     * @return GameActionField|null
+     * @throws NonUniqueResultException
+     */
+    public function findByGameAndPosition(int $gameId, int $position): GameActionField|null
+    {
+        return $this->createQueryBuilder('gameActionField')
+            ->leftJoin('gameActionField.actionField', 'actionField')
+            ->andWhere('gameActionField.game = :gameId')
+            ->andWhere('actionField.position = :position')
+            ->setParameter('gameId', $gameId)
+            ->setParameter('position', $position)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 
 //    /**
 //     * @return GameActionField[] Returns an array of GameActionField objects

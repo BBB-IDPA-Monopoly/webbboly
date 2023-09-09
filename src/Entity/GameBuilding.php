@@ -14,7 +14,7 @@ class GameBuilding extends GameField
     private Building|null $building = null;
 
     #[ORM\ManyToOne(inversedBy: 'gameBuildings')]
-    private Player|null $owner = null;
+    protected Player|null $owner = null;
 
     #[ORM\Column]
     private int $houses = 0;
@@ -43,9 +43,9 @@ class GameBuilding extends GameField
         return $this->owner;
     }
 
-    public function setOwner(Player|null $Owner): static
+    public function setOwner(Player|null $owner): static
     {
-        $this->owner = $Owner;
+        $this->owner = $owner;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\ActionField;
 use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameBuilding;
@@ -26,7 +27,7 @@ final readonly class GameStreamService
      * @throws SyntaxError
      * @throws LoaderError
      */
-    public function sendUpdateField(Game $game, GameField $field): void
+    public function sendUpdateField(Game $game, GameField $field, int $price = 0): void
     {
         if ($field instanceof GameBuilding) {
             $this->send(
@@ -39,7 +40,7 @@ final readonly class GameStreamService
             $this->send(
                 sprintf('https://webbboly/game/%d', $game->getCode()),
                 $this->twig->render('game/stream/_update-action-field.stream.html.twig',
-                    compact('field')
+                    compact('field', 'price')
                 )
             );
         }
@@ -95,6 +96,21 @@ final readonly class GameStreamService
             sprintf('https://webbboly/game/%d/player/%d', $player->getGame()->getCode(), $player->getNumber()),
             $this->twig->render('game/stream/_show-building-card.stream.html.twig',
                 compact('building', 'player')
+            )
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function sendShowActionFieldCard(ActionField $actionField, Player $player, int $price): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d', $player->getGame()->getCode(), $player->getNumber()),
+            $this->twig->render('game/stream/_show-action-field-card.stream.html.twig',
+                compact('actionField', 'player', 'price')
             )
         );
     }

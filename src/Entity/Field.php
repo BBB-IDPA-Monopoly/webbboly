@@ -14,8 +14,8 @@ class Field
     #[ORM\Column(length: 255)]
     protected string|null $name = null;
 
-    #[ORM\Column(length: 255)]
-    protected string|null $position = null;
+    #[ORM\Column]
+    protected int|null $position = null;
 
     public function getId(): int|null
     {
@@ -34,12 +34,12 @@ class Field
         return $this;
     }
 
-    public function getPosition(): string|null
+    public function getPosition(): int|null
     {
         return $this->position;
     }
 
-    public function setPosition(string $position): static
+    public function setPosition(int $position): static
     {
         $this->position = $position;
 

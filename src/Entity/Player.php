@@ -41,10 +41,16 @@ class Player
     #[ORM\Column(nullable: true)]
     private int|null $position = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GameActionField::class)]
+    private Collection $gameActionFields;
+
+    private int $fieldsAdvanced = 0;
+
     public function __construct()
     {
         $this->gameBuildings = new ArrayCollection();
         $this->gameCards = new ArrayCollection();
+        $this->gameActionFields = new ArrayCollection();
     }
 
     public function getId(): int|null
@@ -199,6 +205,48 @@ class Player
     public function setPosition(int|null $position): static
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GameActionField>
+     */
+    public function getGameActionFields(): Collection
+    {
+        return $this->gameActionFields;
+    }
+
+    public function addGameActionField(GameActionField $gameActionField): static
+    {
+        if (!$this->gameActionFields->contains($gameActionField)) {
+            $this->gameActionFields->add($gameActionField);
+            $gameActionField->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGameActionField(GameActionField $gameActionField): static
+    {
+        if ($this->gameActionFields->removeElement($gameActionField)) {
+            // set the owning side to null (unless already changed)
+            if ($gameActionField->getOwner() === $this) {
+                $gameActionField->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFieldsAdvanced(): int
+    {
+        return $this->fieldsAdvanced;
+    }
+
+    public function setFieldsAdvanced(int $fieldsAdvanced): static
+    {
+        $this->fieldsAdvanced = $fieldsAdvanced;
 
         return $this;
     }

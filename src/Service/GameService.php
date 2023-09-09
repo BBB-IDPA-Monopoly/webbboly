@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\ActionField;
 use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameActionField;
@@ -26,6 +27,11 @@ final readonly class GameService
 {
     const STARTING_MONEY = 1500;
     const STARTING_POSITION = 0;
+    const GO_MONEY = 200;
+    const INCOME_TAX = 200;
+    const LUXURY_TAX = 100;
+    const RAILROAD_PRICE = 200;
+    const UTILITY_PRICE = 150;
 
     public function __construct(
         private GameRepository $gameRepository,
@@ -38,6 +44,7 @@ final readonly class GameService
         private CardRepository $cardRepository,
         private GameStreamService $gameStreamService,
         private GameFunctions $gameFunctions,
+        private ActionFieldRent $actionFieldRent,
     ) {}
 
     /**
@@ -182,6 +189,9 @@ final readonly class GameService
         $currentField = $fields[$currentPlayer->getPosition()];
         $newPosition = $fields[$position];
 
+        $currentPlayer->setFieldsAdvanced($position - $currentPlayer->getPosition());
+        $currentPlayer->setPosition($position);
+
         if ($newPosition instanceof GameBuilding) {
             if ($newPosition->getOwner() === null) {
                 $this->gameStreamService->sendShowBuildingCard($newPosition->getBuilding(), $currentPlayer);
@@ -196,12 +206,18 @@ final readonly class GameService
             }
         }
 
-        $currentPlayer->setPosition($position);
+        $currentPrice = $currentField instanceof GameActionField
+            ? $this->getPriceByFunction($currentField->getField()->getFunction())
+            : 0;
+
+        $newPrice = $newPosition instanceof GameActionField
+            ? $this->getPriceByFunction($newPosition->getField()->getFunction())
+            : 0;
 
         $this->playerRepository->save($currentPlayer, true);
-        $this->gameStreamService->sendUpdateField($game, $currentField);
-        $this->gameStreamService->sendUpdateField($game, $newPosition);
         $this->gameStreamService->sendUpdatePlayer($game, $currentPlayer, true);
+        $this->gameStreamService->sendUpdateField($game, $currentField, $currentPrice);
+        $this->gameStreamService->sendUpdateField($game, $newPosition, $newPrice);
     }
 
     /**
@@ -264,6 +280,48 @@ final readonly class GameService
 
         foreach ($gameStreetBuildings as $gameStreetBuilding) {
             $this->gameStreamService->sendUpdateField($game, $gameStreetBuilding);
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function buyActionField(Game $game, Player $player, GameActionField $gameActionField, int $price): void
+    {
+        if ($player->getMoney() < $price) {
+            return;
+        }
+
+        $gameActionField->setOwner($player);
+        $player->subtractMoney($price);
+
+        $this->gameActionFieldRepository->save($gameActionField, true);
+        $this->playerRepository->save($player, true);
+
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
+
+        switch ($gameActionField->getActionField()->getFunction()) {
+            case GameFunctions::FUNCTION_RAILROAD:
+                $railroads = $this->actionFieldRent->getRailroads($game);
+                $ownedRailroads = $this->actionFieldRent->getOwnedRailroads($player, $railroads);
+
+                foreach ($ownedRailroads as $railroad) {
+                    $this->gameStreamService->sendUpdateField($game, $railroad, self::RAILROAD_PRICE);
+                }
+                break;
+            case GameFunctions::FUNCTION_UTILITY:
+                $utilities = $this->actionFieldRent->getUtilities($game);
+                $ownedUtilities = $this->actionFieldRent->getOwnedUtilities($player, $utilities);
+
+                foreach ($ownedUtilities as $utility) {
+                    $this->gameStreamService->sendUpdateField($game, $utility, self::UTILITY_PRICE);
+                }
+                break;
+            default:
+                $this->gameStreamService->sendUpdateField($game, $gameActionField);
+                break;
         }
     }
 
@@ -353,5 +411,18 @@ final readonly class GameService
         $this->playerRepository->save($owner, true);
 
         $this->gameStreamService->sendUpdatePlayer($newPosition->getGame(), $owner);
+    }
+
+    private function getPriceByFunction(string|null $function): int
+    {
+        if ($function === null) {
+            return 0;
+        }
+
+        return match ($function) {
+            GameFunctions::FUNCTION_RAILROAD => self::RAILROAD_PRICE,
+            GameFunctions::FUNCTION_UTILITY => self::UTILITY_PRICE,
+            default => 0,
+        };
     }
 }

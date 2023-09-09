@@ -1,7 +1,12 @@
 <turbo-stream action="replace" target="field{{ field.actionField.position }}">
     <template>
-        {{ component('GameActionFieldComponent', {
+        {% component GameActionFieldComponent with {
             field: field,
-        }) }}
+            price: price,
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_'~ field.actionField.function ~'.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </template>
 </turbo-stream>

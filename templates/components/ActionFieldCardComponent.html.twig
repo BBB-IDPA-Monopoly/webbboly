@@ -1,0 +1,9 @@
+<div id="buildingCard{{ actionField.id }}" class="card building-card"
+     style="width: 14rem;">
+    <div class="card-body">
+        <h5 class="card-title text-center p-2">
+            {{ actionField.name }}
+        </h5>
+        {% block content %}{% endblock %}
+    </div>
+</div>

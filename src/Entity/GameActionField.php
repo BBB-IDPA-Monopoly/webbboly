@@ -13,6 +13,9 @@ class GameActionField extends GameField
     private ActionField|null $actionField = null;
 
     #[ORM\ManyToOne(inversedBy: 'gameActionFields')]
+    protected Player|null $owner = null;
+
+    #[ORM\ManyToOne(inversedBy: 'gameActionFields')]
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $game = null;
 
@@ -24,6 +27,18 @@ class GameActionField extends GameField
     public function setActionField(ActionField|null $actionField): static
     {
         $this->actionField = $actionField;
+
+        return $this;
+    }
+
+    public function getOwner(): Player|null
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(Player|null $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

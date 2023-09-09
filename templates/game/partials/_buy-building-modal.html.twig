@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="buildingCardModal">
-                    Building Card
+                    {{ building.name }} kaufen
                 </h1>
             </div>
             <div class="modal-body">
@@ -16,7 +16,12 @@
                 <div class="d-flex justify-between gap-2">
                     <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Pass</button>
                     <button class="btn btn-success w-100 {% if player.money < building.price %}disabled{% endif %}"
-                            data-bs-dismiss="modal" onclick="buyBuilding()">
+                            data-bs-dismiss="modal"
+                            onclick="localFetch('{{ path('app_game_buy_building', {
+                                code: player.game.code,
+                                playerId: player.id,
+                                buildingId: player.game.getGameFieldByField(building).id,
+                            }) }}')">
                         Buy ({{ building.price }}$)
                         {% if player.money < building.price %}
                             <span class="badge bg-danger">Not enough money</span>
@@ -27,17 +32,3 @@
         </div>
     </div>
 </div>
-<script>
-    function buyBuilding() {
-        fetch(
-            {{ path('app_game_buy', {
-                game: player.game.code,
-                player: player.id,
-                building: player.game.getGameFieldByField(building).id,
-            }) }},
-            {
-                method: 'GET',
-            }
-        )
-    }
-</script>

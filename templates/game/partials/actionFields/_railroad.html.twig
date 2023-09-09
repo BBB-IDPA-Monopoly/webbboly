@@ -1,0 +1,7 @@
+{% if field.owner is null %}
+    <span>{{ price }}$</span>
+{% else %}
+    <span class="text-{{ this.getPlayerClass(field.owner) }}">
+            {{ field.owner.nickname }} ({{ this.getRailroadRent() }}$)
+        </span>
+{% endif %}

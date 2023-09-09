@@ -39,6 +39,9 @@ class Game
     #[ORM\ManyToOne]
     private Player|null $currentTurnPlayer = null;
 
+    #[ORM\Column(nullable: true)]
+    private int|null $funds = null;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -275,6 +278,25 @@ class Game
     public function setCurrentTurnPlayer(Player|null $currentTurnPlayer): static
     {
         $this->currentTurnPlayer = $currentTurnPlayer;
+
+        return $this;
+    }
+
+    public function getFunds(): int|null
+    {
+        return $this->funds;
+    }
+
+    public function setFunds(int|null $funds): static
+    {
+        $this->funds = $funds;
+
+        return $this;
+    }
+
+    public function addFunds(int $funds): static
+    {
+        $this->funds += $funds;
 
         return $this;
     }

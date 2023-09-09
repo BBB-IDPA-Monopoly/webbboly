@@ -14,7 +14,12 @@
                 {% include 'game/partials/_board.html.twig' %}
             {% endblock %}
         </div>
-        <div id="actions">
+        <div id="actions" {{ stimulus_controller('turn', {
+            enabled: currentPlayer is same as(game.currentTurnPlayer ),
+            gameCode: game.code,
+            playerId: currentPlayer.id,
+            position: currentPlayer.position
+        }) }}>
             {% block actions %}
                 {% include 'game/partials/_actions.html.twig' %}
             {% endblock %}
@@ -25,6 +30,21 @@
             {% endblock %}
         </div>
     </div>
+
+    <script>
+        const eventSource = new EventSource(
+            '{{ mercure('https://webbboly/game/' ~ game.code ~ '/player/' ~ currentPlayer.number ~ '/turn') }}'
+        );
+
+        eventSource.onmessage = message => {
+            const data = JSON.parse(message.data);
+            const event = new CustomEvent(data.event, {
+                detail: data
+            });
+
+            document.getElementById('actions').dispatchEvent(event);
+        };
+    </script>
 
     <div id="modal"></div>
 {% endblock %}

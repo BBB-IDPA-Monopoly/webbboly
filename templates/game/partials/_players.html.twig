@@ -2,6 +2,7 @@
     {{ component('PlayerComponent', {
         'player': player,
         'isMe': player is same as(currentPlayer),
+        'isMyTurn': player is same as(game.currentTurnPlayer),
         'isHost': player.isHost,
     }) }}
 {% endfor %}

@@ -8,7 +8,6 @@ use App\Entity\GameActionField;
 use App\Entity\GameBuilding;
 use App\Entity\GameCard;
 use App\Entity\Player;
-use App\Entity\Street;
 use App\Repository\ActionFieldRepository;
 use App\Repository\BuildingRepository;
 use App\Repository\CardRepository;
@@ -17,6 +16,7 @@ use App\Repository\GameBuildingRepository;
 use App\Repository\GameCardRepository;
 use App\Repository\GameRepository;
 use App\Repository\PlayerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -87,13 +87,20 @@ final readonly class GameService
 
         $players = $game->getPlayers();
 
+        $turnOrder = new ArrayCollection();
         foreach ($players as $player) {
             $player->setMoney(self::STARTING_MONEY);
             $player->setPosition(self::STARTING_POSITION);
 
+            $turnOrder[$player->getNumber()] = $player->getId();
+
             $this->playerRepository->save($player, true);
         }
 
+        $game->setTurnOrder($turnOrder);
+        $game->setCurrentTurnPlayer($players->first());
+
+        $this->gameRepository->save($game, true);
         $this->gameStreamService->sendGameStart($game);
     }
 
@@ -194,7 +201,41 @@ final readonly class GameService
         $this->playerRepository->save($currentPlayer, true);
         $this->gameStreamService->sendUpdateField($game, $currentField);
         $this->gameStreamService->sendUpdateField($game, $newPosition);
-        $this->gameStreamService->sendUpdatePlayer($game, $currentPlayer);
+        $this->gameStreamService->sendUpdatePlayer($game, $currentPlayer, true);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function turnEnd(Game $game, Player $player): void
+    {
+        $turnOrder = $game->getTurnOrder();
+
+        while ($turnOrder->current() !== $player->getId()) {
+            $turnOrder->next();
+        }
+
+        $nextPlayerId = $turnOrder->next();
+
+        if ($nextPlayerId === false) {
+            $nextPlayerId = $turnOrder->first();
+        }
+
+        $nextPlayer = $this->playerRepository->find($nextPlayerId);
+
+        if ($nextPlayer === null) {
+            throw new Exception('This should not happen.');
+        }
+
+        $game->setCurrentTurnPlayer($nextPlayer);
+
+        $this->gameRepository->save($game, true);
+        $this->gameStreamService->sendUpdatePlayer($game, $player);
+        $this->gameStreamService->sendUpdatePlayer($game, $nextPlayer, true);
+        $this->gameStreamService->sendEndTurn($game, $player, $nextPlayer);
     }
 
     /**
@@ -214,7 +255,7 @@ final readonly class GameService
         $this->gameBuildingRepository->save($gameBuilding, true);
         $this->playerRepository->save($player, true);
 
-        $this->gameStreamService->sendUpdatePlayer($game, $player);
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
 
         $gameStreetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
             $game,

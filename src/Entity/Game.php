@@ -21,6 +21,9 @@ class Game
     #[ORM\Column]
     private int|null $code = null;
 
+    #[ORM\Column(nullable: true)]
+    private array|null $turnOrder = null;
+
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Player::class)]
     private Collection $players;
 
@@ -32,6 +35,9 @@ class Game
 
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: GameCard::class)]
     private Collection $gameCards;
+
+    #[ORM\ManyToOne]
+    private Player|null $currentTurnPlayer = null;
 
     public function __construct()
     {
@@ -117,6 +123,22 @@ class Game
     public function isGameReady(): bool
     {
         return $this->isGameFull() && $this->allPlayersReady();
+    }
+
+    public function getTurnOrder(): ArrayCollection|null
+    {
+        if ($this->turnOrder) {
+            return new ArrayCollection($this->turnOrder);
+        }
+
+        return null;
+    }
+
+    public function setTurnOrder(ArrayCollection|null $turnOrder): static
+    {
+        $this->turnOrder = $turnOrder?->toArray();
+
+        return $this;
     }
 
     /**
@@ -243,5 +265,17 @@ class Game
         }
 
         return null;
+    }
+
+    public function getCurrentTurnPlayer(): Player|null
+    {
+        return $this->currentTurnPlayer;
+    }
+
+    public function setCurrentTurnPlayer(Player|null $currentTurnPlayer): static
+    {
+        $this->currentTurnPlayer = $currentTurnPlayer;
+
+        return $this;
     }
 }

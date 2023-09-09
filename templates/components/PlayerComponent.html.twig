@@ -1,7 +1,11 @@
 <div id="player{{ player.id }}" class="card {% if isMe %}border-info border-3{% endif %} bg-{{ this.getPlayerClass }}">
     <div class="card-body">
         <div class="card-title">
-            <h6>{{ player.nickname }} {% if isMe %}<span class="badge bg-info">Me</span>{% endif %}</h6>
+            <h6>
+                {{ player.nickname }}
+                {% if isMe %}<span class="badge bg-info">Me</span>{% endif %}
+                {% if isMyTurn %}<span class="badge bg-secondary">Am Zug</span>{% endif %}
+            </h6>
         </div>
         <span class="d-block mb-2">BBBanknote: {{ player.money }}$</span>
         <button type="button" class="btn btn-sm btn-info"
@@ -11,7 +15,7 @@
 
         <div class="modal fade" id="playerCards{{ player.id }}" tabindex="-1"
              aria-labelledby="playerCards{{ player.id }}label" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="playerCards{{ player.id }}Label">
@@ -20,7 +24,40 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <div class="row">
+                            {% if player.gameBuildings|length > 0 %}
+                                {% for gameBuilding in player.gameBuildings %}
+                                    <div class="col-3">
+                                        <div id="buildingCard">
+                                            {{ component('BuildingCardComponent', {
+                                                building: gameBuilding.building,
+                                            }) }}
+                                        </div>
+                                        {% if isMe %}
+                                            {% if gameBuilding.mortgaged %}
+                                                <div class="d-flex justify-between gap-2">
+                                                    <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                                        Hypothek bezahlen ({{ gameBuilding.building.mortgage }}$)
+                                                    </button>
+                                                </div>
+                                            {% else %}
+                                                <div class="d-flex justify-between gap-2">
+                                                    <button type="button" class="btn btn-success w-100" data-bs-dismiss="modal">
+                                                        Hypothek aufnehmen
+                                                    </button>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <div class="alert alert-info" role="alert">
+                                        {{ player.nickname }} hat keine Gebäude
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -50,13 +50,13 @@ final readonly class GameStreamService
      * @throws SyntaxError
      * @throws LoaderError
      */
-    public function sendUpdatePlayer(Game $game, Player $player): void
+    public function sendUpdatePlayer(Game $game, Player $player, $isMyTurn = false): void
     {
         $isMe = false;
         $this->send(
             sprintf('https://webbboly/game/%d', $game->getCode()),
             $this->twig->render('game/stream/_update-player.stream.html.twig',
-                compact('player', 'isMe')
+                compact('player', 'isMe', 'isMyTurn')
             )
         );
 
@@ -64,7 +64,7 @@ final readonly class GameStreamService
         $this->send(
             sprintf('https://webbboly/game/%d/player/%d', $game->getCode(), $player->getNumber()),
             $this->twig->render('game/stream/_update-player.stream.html.twig',
-                compact('player', 'isMe')
+                compact('player', 'isMe', 'isMyTurn')
             )
         );
     }
@@ -96,6 +96,25 @@ final readonly class GameStreamService
             $this->twig->render('game/stream/_show-building-card.stream.html.twig',
                 compact('building', 'player')
             )
+        );
+    }
+
+    public function sendEndTurn(Game $game, Player $player, Player $nextPlayer): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d/turn', $game->getCode(), $player->getNumber()),
+            json_encode([
+                'event' => 'end-turn',
+                'position' => $player->getPosition(),
+            ])
+        );
+
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d/turn', $game->getCode(), $nextPlayer->getNumber()),
+            json_encode([
+                'event' => 'turn',
+                'position' => $nextPlayer->getPosition(),
+            ])
         );
     }
 

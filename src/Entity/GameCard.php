@@ -17,10 +17,10 @@ class GameCard
     #[ORM\JoinColumn(nullable: false)]
     private Card|null $card = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cards')]
+    #[ORM\ManyToOne(inversedBy: 'gameCards')]
     private Player|null $owner = null;
 
-    #[ORM\ManyToOne(inversedBy: 'card')]
+    #[ORM\ManyToOne(inversedBy: 'gameCards')]
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $game = null;
 

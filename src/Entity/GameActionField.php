@@ -12,7 +12,7 @@ class GameActionField extends GameField
     #[ORM\JoinColumn(nullable: false)]
     private ActionField|null $actionField = null;
 
-    #[ORM\ManyToOne(inversedBy: 'actionFields')]
+    #[ORM\ManyToOne(inversedBy: 'gameActionFields')]
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $game = null;
 

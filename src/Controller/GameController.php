@@ -81,6 +81,24 @@ final class GameController extends AbstractController
     }
 
     /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/turn/{id}/end', name: 'app_game_turn_end', priority: 1)]
+    public function turnEnd(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'id')] Player $player
+    ): Response
+    {
+        $this->gameService->turnEnd($game, $player);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError

@@ -5,8 +5,8 @@
         <div
             {{ stimulus_controller('bootstrap-modal', {
                 modalId: 'buildingCardModal',
+                state: 'open',
             }) }}
-            {{ stimulus_action('bootstrap-modal', 'open') }}
         ></div>
     </template>
 </turbo-stream>

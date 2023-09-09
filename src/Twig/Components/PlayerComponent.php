@@ -12,6 +12,7 @@ class PlayerComponent
     public Player $player;
     public bool $isHost = false;
     public bool $isMe = false;
+    public bool $isMyTurn = false;
 
     public function getPlayerClass(): string
     {

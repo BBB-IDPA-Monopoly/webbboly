@@ -11,3 +11,6 @@ import './styles/app.scss';
 
 // Bootstrap JS
 import 'bootstrap/dist/js/bootstrap.esm.min.js';
+
+// Bootstrap Icons
+import 'bootstrap-icons/font/bootstrap-icons.css';

@@ -47,4 +47,16 @@
     </script>
 
     <div id="modal"></div>
+
+    <script>
+        function localFetch(path) {
+            fetch(path, {
+                method: 'GET',
+            }).then(r => r.json()).then(data => {
+                if (!data.success) {
+                    throw new Error('Error');
+                }
+            })
+        }
+    </script>
 {% endblock %}

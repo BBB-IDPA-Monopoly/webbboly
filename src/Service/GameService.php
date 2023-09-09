@@ -267,6 +267,43 @@ final readonly class GameService
         }
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function mortgageBuilding(Game $game, Player $player, GameBuilding $gameBuilding): void
+    {
+        if ($gameBuilding->getOwner() !== $player) {
+            return;
+        }
+
+        $streetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
+            $game,
+            $gameBuilding->getBuilding()->getStreet()
+        );
+
+        foreach ($streetBuildings as $streetBuilding) {
+            if ($streetBuilding->getHouses() > 0) {
+                return;
+            }
+        }
+
+        if ($gameBuilding->isMortgaged()) {
+            $gameBuilding->setMortgaged(false);
+            $player->subtractMoney($gameBuilding->getBuilding()->getMortgage() * 1.1);
+        } else {
+            $gameBuilding->setMortgaged(true);
+            $player->addMoney($gameBuilding->getBuilding()->getMortgage());
+        }
+
+        $this->gameBuildingRepository->save($gameBuilding, true);
+        $this->playerRepository->save($player, true);
+
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
+        $this->gameStreamService->sendUpdateField($game, $gameBuilding);
+    }
+
     public function wholeStreetOwned(Game $game, Building $building): bool
     {
         $street = $building->getStreet();

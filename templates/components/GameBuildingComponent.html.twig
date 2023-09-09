@@ -10,7 +10,8 @@
         {% if field.owner is null %}
             <span>{{ field.building.price }}$</span>
         {% else %}
-            <span class="text-{{ this.getPlayerClass(field.owner) }}">
+            <span class="text-{{ this.getPlayerClass(field.owner) }}"
+                  style="{% if field.mortgaged %}text-decoration: line-through;{% endif %}">
                 {{ field.owner.nickname }}
                 ({{ field.rent(this.wholeStreetOwned) }}$)
             </span>

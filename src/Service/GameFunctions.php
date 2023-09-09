@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Player;
 
-class GameFunctions
+final class GameFunctions
 {
     public function start(Player $player): void
     {

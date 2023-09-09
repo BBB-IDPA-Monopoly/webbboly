@@ -6,6 +6,7 @@ use App\Repository\PlayerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
 class Player
@@ -132,10 +133,16 @@ class Player
 
     /**
      * @return Collection<int, GameBuilding>
+     * @throws Exception
      */
     public function getGameBuildings(): Collection
     {
-        return $this->gameBuildings;
+        $iterator = $this->gameBuildings->getIterator();
+        $iterator->uasort(static function (GameBuilding $a, GameBuilding $b) {
+            return $a->getBuilding()->getPosition() <=> $b->getBuilding()->getPosition();
+        });
+
+        return new ArrayCollection(iterator_to_array($iterator));
     }
 
     public function addProperty(GameBuilding $property): static

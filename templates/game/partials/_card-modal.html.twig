@@ -29,11 +29,15 @@
 </div>
 <script>
     function buyBuilding() {
-        const url = window.location.origin + '/game/{{ player.game.code }}/player/{{ player.id }}/buy/' +
-            {{ player.game.getGameFieldByField(building).id }};
-
-        fetch(url, {
-            method: 'GET',
-        })
+        fetch(
+            {{ path('app_game_buy', {
+                game: player.game.code,
+                player: player.id,
+                building: player.game.getGameFieldByField(building).id,
+            }) }},
+            {
+                method: 'GET',
+            }
+        )
     }
 </script>

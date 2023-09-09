@@ -116,4 +116,23 @@ final class GameController extends AbstractController
             'success' => true,
         ]);
     }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{playerId}/mortgage/{buildingId}', name: 'app_game_mortgage')]
+    public function mortgage(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'playerId')] Player $player,
+        #[MapEntity(id: 'buildingId')] GameBuilding $gameBuilding,
+    ): Response
+    {
+        $this->gameService->mortgageBuilding($game, $player, $gameBuilding);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
 }

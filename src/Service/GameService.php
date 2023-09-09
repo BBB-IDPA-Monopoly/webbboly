@@ -349,7 +349,7 @@ final readonly class GameService
 
         if ($gameBuilding->isMortgaged()) {
             $gameBuilding->setMortgaged(false);
-            $player->subtractMoney($gameBuilding->getBuilding()->getMortgage() * 1.1);
+            $player->subtractMoney((int)round($gameBuilding->getBuilding()->getMortgage() * 1.1));
         } else {
             $gameBuilding->setMortgaged(true);
             $player->addMoney($gameBuilding->getBuilding()->getMortgage());
@@ -360,6 +360,43 @@ final readonly class GameService
 
         $this->gameStreamService->sendUpdatePlayer($game, $player, true);
         $this->gameStreamService->sendUpdateField($game, $gameBuilding);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function mortgageActionField(Game $game, Player $player, GameActionField $gameActionField): void
+    {
+        if ($gameActionField->getOwner() !== $player) {
+            return;
+        }
+
+        if ($gameActionField->isMortgaged()) {
+            $gameActionField->setMortgaged(false);
+            $player->subtractMoney((int)round($gameActionField->getActionField()->getMortgage() * 1.1));
+        } else {
+            $gameActionField->setMortgaged(true);
+            $player->addMoney($gameActionField->getActionField()->getMortgage());
+        }
+
+        $this->gameActionFieldRepository->save($gameActionField, true);
+        $this->playerRepository->save($player, true);
+
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
+
+        switch ($gameActionField->getActionField()->getFunction()) {
+            case GameFunctions::FUNCTION_RAILROAD:
+                $this->gameStreamService->sendUpdateField($game, $gameActionField, self::RAILROAD_PRICE);
+                break;
+            case GameFunctions::FUNCTION_UTILITY:
+                $this->gameStreamService->sendUpdateField($game, $gameActionField, self::UTILITY_PRICE);
+                break;
+            default:
+                $this->gameStreamService->sendUpdateField($game, $gameActionField);
+                break;
+        }
     }
 
     public function wholeStreetOwned(Game $game, Building $building): bool

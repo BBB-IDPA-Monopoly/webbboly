@@ -397,8 +397,8 @@ body {
     }
 }
 
-#buildingCard,
-#actionFieldCard {
+.buildingCard,
+.actionFieldCard {
     display: flex;
     flex-direction: column;
     align-items: center;

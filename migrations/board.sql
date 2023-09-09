@@ -57,10 +57,10 @@ VALUES (1,'Start','start',0),
        (12,'Luxury Tax','luxuryTax',38);
 
 --temporarily
-INSERT INTO action_field (id, name, function, position)
-VALUES (13,'Railroad 1','railroad',5),
-       (14,'Railroad 2','railroad',15),
-       (15,'Railroad 3','railroad',25),
-       (16,'Railroad 4','railroad',35),
-       (17,'Utility 1','utility',12),
-       (18,'Utility 2','utility',28);
+INSERT INTO action_field (id, name, function, position, mortgage)
+VALUES (13,'Railroad 1','railroad',5, 100),
+       (14,'Railroad 2','railroad',15, 100),
+       (15,'Railroad 3','railroad',25, 100),
+       (16,'Railroad 4','railroad',35, 100),
+       (17,'Utility 1','utility',12, 75),
+       (18,'Utility 2','utility',28, 75);

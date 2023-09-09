@@ -1,0 +1,119 @@
+<button type="button" class="btn btn-sm btn-info"
+        data-bs-toggle="modal" data-bs-target="#playerCards{{ player.id }}">
+    Cards
+</button>
+
+<div class="modal fade" id="playerCards{{ player.id }}" tabindex="-1"
+     aria-labelledby="playerCards{{ player.id }}label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="playerCards{{ player.id }}Label">
+                    Cards from {{ player.nickname }}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    {% if player.gameBuildings|length > 0 or player.gameActionFields|length > 0 %}
+                        {% if player.gameBuildings|length > 0 %}
+                            {% for gameBuilding in player.gameBuildings %}
+                                <div class="col-3">
+                                    <div class="buildingCard">
+                                        {{ component('BuildingCardComponent', {
+                                            building: gameBuilding.building,
+                                        }) }}
+                                    </div>
+                                    {% if isMe and isMyTurn %}
+                                        <div class="d-flex justify-between gap-2">
+                                            {% if gameBuilding.mortgaged %}
+                                                <button type="button"
+                                                        class="btn btn-danger w-100"
+                                                        data-bs-dismiss="modal"
+                                                        onclick="localFetch('{{
+                                                        path('app_game_mortgage_building', {
+                                                            code: player.game.code,
+                                                            player: player.id,
+                                                            building: gameBuilding.id
+                                                        })
+                                                        }}')">
+                                                    Hypothek bezahlen ({{ (gameBuilding.building.mortgage * 1.1)|round }}$)
+                                                </button>
+                                            {% else %}
+                                                <button type="button"
+                                                        class="btn btn-success w-100"
+                                                        data-bs-dismiss="modal"
+                                                        onclick="localFetch('{{
+                                                        path('app_game_mortgage_building', {
+                                                            code: player.game.code,
+                                                            player: player.id,
+                                                            building: gameBuilding.id
+                                                        })
+                                                        }}')">
+                                                    Hypothek aufnehmen
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if player.gameActionFields|length > 0 %}
+                            {% for gameActionField in player.gameActionFields %}
+                                <div class="col-3 d-flex flex-column justify-content-between">
+                                    <div class="actionFieldCard">
+                                        {% component ActionFieldCardComponent with {
+                                            actionField: gameActionField.actionField,
+                                        } %}
+                                            {% block content %}
+                                                {% set actionField = gameActionField.actionField %}
+                                                {% include 'game/partials/actionFields/_' ~ actionField.function ~ '-card.html.twig' %}
+                                            {% endblock %}
+                                        {% endcomponent %}
+                                    </div>
+                                    {% if isMe and isMyTurn %}
+                                        <div class="d-flex justify-between gap-2">
+                                            {% if gameActionField.mortgaged %}
+                                                <button type="button"
+                                                        class="btn btn-danger w-100"
+                                                        data-bs-dismiss="modal"
+                                                        onclick="localFetch('{{
+                                                        path('app_game_mortgage_action_field', {
+                                                            code: player.game.code,
+                                                            player: player.id,
+                                                            actionField: gameActionField.id
+                                                        })
+                                                        }}')">
+                                                    Hypothek bezahlen ({{ (gameActionField.actionField.mortgage * 1.1)|round }}$)
+                                                </button>
+                                            {% else %}
+                                                <button type="button"
+                                                        class="btn btn-success w-100"
+                                                        data-bs-dismiss="modal"
+                                                        onclick="localFetch('{{
+                                                        path('app_game_mortgage_action_field', {
+                                                            code: player.game.code,
+                                                            player: player.id,
+                                                            actionField: gameActionField.id
+                                                        })
+                                                        }}')">
+                                                    Hypothek aufnehmen
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                {{ player.nickname }} hat keine Gebäude
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

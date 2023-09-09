@@ -8,10 +8,14 @@
                 </h1>
             </div>
             <div class="modal-body">
-                <div id="actionFieldCard">
-                    {{ component('ActionFieldCardComponent', {
+                <div class="actionFieldCard">
+                    {% component ActionFieldCardComponent with {
                         actionField: actionField,
-                    }) }}
+                    } %}
+                        {% block content %}
+                            {% include 'game/partials/actionFields/_' ~ actionField.function ~ '-card.html.twig' %}
+                        {% endblock %}
+                    {% endcomponent %}
                 </div>
                 <div class="d-flex justify-between gap-2">
                     <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Pass</button>

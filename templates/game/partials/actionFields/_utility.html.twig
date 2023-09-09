@@ -5,6 +5,6 @@
 {% else %}
     <span class="text-{{ this.getPlayerClass(field.owner) }}"
           style="{% if field.mortgaged %}text-decoration: line-through;{% endif %}">
-        {{ field.owner.nickname }} (w*{{ this.getRailroadRent() }})
+        {{ field.owner.nickname }} (w*{{ this.getUtilityRent() }})
     </span>
 {% endif %}

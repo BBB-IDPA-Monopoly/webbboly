@@ -19,6 +19,9 @@ class GameActionField extends GameField
     #[ORM\JoinColumn(nullable: false)]
     private Game|null $game = null;
 
+    #[ORM\Column(nullable: true)]
+    private bool $mortgaged = false;
+
     public function getActionField(): ActionField|null
     {
         return $this->actionField;
@@ -58,5 +61,17 @@ class GameActionField extends GameField
     public function getField(): ActionField
     {
         return $this->getActionField();
+    }
+
+    public function isMortgaged(): bool
+    {
+        return $this->mortgaged;
+    }
+
+    public function setMortgaged(bool $mortgaged): static
+    {
+        $this->mortgaged = $mortgaged;
+
+        return $this;
     }
 }

@@ -23,9 +23,18 @@ final readonly class ActionFieldRent
 
     public function getUtilityRent(Player $player): int
     {
+
         $game = $player->getGame();
         $utilities = $this->getUtilities($game);
         $ownedUtilities = $this->getOwnedUtilities($player, $utilities);
+
+        if ($player->getFieldsAdvanced() === 0) {
+            if (count($ownedUtilities) === 1) {
+                return 4;
+            }
+
+            return 10;
+        }
 
         if (count($ownedUtilities) === 1) {
             return 4 * $player->getFieldsAdvanced();

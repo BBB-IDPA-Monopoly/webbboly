@@ -143,14 +143,33 @@ final class GameController extends AbstractController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    #[Route('/game/{code}/player/{playerId}/mortgage/{buildingId}', name: 'app_game_mortgage')]
-    public function mortgage(
+    #[Route('/game/{code}/player/{player}/mortgage/{building}/building', name: 'app_game_mortgage_building')]
+    public function mortgageBuilding(
         #[MapEntity(mapping: ['code' => 'code'])] Game $game,
         #[MapEntity(id: 'playerId')] Player $player,
         #[MapEntity(id: 'buildingId')] GameBuilding $gameBuilding,
     ): Response
     {
         $this->gameService->mortgageBuilding($game, $player, $gameBuilding);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{player}/mortgage/{actionField}/actionField', name: 'app_game_mortgage_action_field')]
+    public function mortgageActionField(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'player')] Player $player,
+        #[MapEntity(id: 'actionField')] GameActionField $gameActionField,
+    ): Response
+    {
+        $this->gameService->mortgageActionField($game, $player, $gameActionField);
 
         return $this->json([
             'success' => true,

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\CardType;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -201,8 +202,12 @@ class Game
     /**
      * @return Collection<int, GameCard>
      */
-    public function getGameCards(): Collection
+    public function getGameCards(CardType|null $cardType = null): Collection
     {
+        if ($cardType) {
+            return $this->gameCards->filter(static fn (GameCard $gameCard) => $gameCard->getCard()->getType() === $cardType);
+        }
+
         return $this->gameCards;
     }
 

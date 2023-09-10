@@ -25,10 +25,10 @@
                                         }) }}
                                     </div>
                                     {% if isMe and isMyTurn %}
-                                        <div class="d-flex justify-between gap-2">
+                                        <div class="d-flex justify-between flex-column gap-2">
                                             {% if gameBuilding.mortgaged %}
                                                 <button type="button"
-                                                        class="btn btn-danger w-100"
+                                                        class="btn btn-sm btn-danger w-100"
                                                         data-bs-dismiss="modal"
                                                         onclick="localFetch('{{
                                                         path('app_game_mortgage_building', {
@@ -41,7 +41,7 @@
                                                 </button>
                                             {% else %}
                                                 <button type="button"
-                                                        class="btn btn-success w-100"
+                                                        class="btn btn-sm btn-success w-100"
                                                         data-bs-dismiss="modal"
                                                         onclick="localFetch('{{
                                                         path('app_game_mortgage_building', {
@@ -52,6 +52,45 @@
                                                         }}')">
                                                     Hypothek aufnehmen
                                                 </button>
+                                            {% endif %}
+                                            {% if this.wholeStreetOwned(gameBuilding.building) %}
+                                                {% if gameBuilding.houses != 5 %}
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-success w-100 {% if player.money < gameBuilding.building.street.houseCost %}disabled{% endif %}"
+                                                            data-bs-dismiss="modal"
+                                                            onclick="localFetch('{{
+                                                            path('app_game_buy_house', {
+                                                                code: player.game.code,
+                                                                player: player.id,
+                                                                building: gameBuilding.id
+                                                            })
+                                                            }}')">
+                                                        {% if gameBuilding.houses == 4 %}
+                                                            Hotel kaufen ({{ gameBuilding.building.street.houseCost }}$)
+                                                        {% else %}
+                                                            Haus kaufen ({{ gameBuilding.building.street.houseCost }}$)
+                                                        {% endif %}
+                                                    </button>
+                                                {% endif %}
+
+                                                {% if gameBuilding.houses > 0 %}
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-danger w-100"
+                                                            data-bs-dismiss="modal"
+                                                            onclick="localFetch('{{
+                                                            path('app_game_sell_house', {
+                                                                code: player.game.code,
+                                                                player: player.id,
+                                                                building: gameBuilding.id
+                                                            })
+                                                            }}')">
+                                                        {% if gameBuilding.houses == 5 %}
+                                                            Hotel verkaufen ({{ gameBuilding.building.street.houseCost / 2 }}$)
+                                                        {% else %}
+                                                            Haus verkaufen ({{ gameBuilding.building.street.houseCost / 2 }}$)
+                                                        {% endif %}
+                                                    </button>
+                                                {% endif %}
                                             {% endif %}
                                         </div>
                                     {% endif %}
@@ -72,10 +111,10 @@
                                         {% endcomponent %}
                                     </div>
                                     {% if isMe and isMyTurn %}
-                                        <div class="d-flex justify-between gap-2">
+                                        <div class="d-flex justify-between flex-column gap-2">
                                             {% if gameActionField.mortgaged %}
                                                 <button type="button"
-                                                        class="btn btn-danger w-100"
+                                                        class="btn btn-sm btn-danger w-100"
                                                         data-bs-dismiss="modal"
                                                         onclick="localFetch('{{
                                                         path('app_game_mortgage_action_field', {
@@ -88,7 +127,7 @@
                                                 </button>
                                             {% else %}
                                                 <button type="button"
-                                                        class="btn btn-success w-100"
+                                                        class="btn btn-sm btn-success w-100"
                                                         data-bs-dismiss="modal"
                                                         onclick="localFetch('{{
                                                         path('app_game_mortgage_action_field', {

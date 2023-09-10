@@ -15,7 +15,7 @@
             {% endblock %}
         </div>
         <div id="actions" {{ stimulus_controller('turn', {
-            enabled: currentPlayer is same as(game.currentTurnPlayer ),
+            enabled: currentPlayer is same as(game.currentTurnPlayer),
             gameCode: game.code,
             playerId: currentPlayer.id,
             position: currentPlayer.position
@@ -38,7 +38,7 @@
 
         eventSource.onmessage = message => {
             const data = JSON.parse(message.data);
-            const event = new CustomEvent(data.event, {
+            const event = new CustomEvent('turn', {
                 detail: data
             });
 

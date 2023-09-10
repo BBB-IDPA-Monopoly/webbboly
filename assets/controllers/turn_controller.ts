@@ -16,13 +16,13 @@ export default class extends Controller {
       position: Number,
     }
 
+    declare paschCount: number;
     declare diceTarget: HTMLDivElement;
     declare tradeTarget: HTMLDivElement;
     declare endTurnTarget: HTMLDivElement;
     declare diceOneTarget: HTMLSpanElement;
     declare diceTwoTarget: HTMLSpanElement;
 
-    declare eventSourceValue: EventSource;
     declare enabledValue: boolean;
     declare diceOneValue: number;
     declare diceTwoValue: number;
@@ -33,6 +33,7 @@ export default class extends Controller {
     connect() {
       this.element.addEventListener("turn", (e: CustomEvent) => this.handleEvent(e.detail));
 
+      this.paschCount = 0;
       this.diceOneValue = 0;
       this.diceTwoValue = 0;
 
@@ -40,7 +41,8 @@ export default class extends Controller {
       this.diceTwoTarget.innerText = this.diceTwoValue.toString();
 
       if (this.enabledValue) {
-        this.enableTrade();
+        this.disableTrade();
+        this.disableEndTurn();
       } else {
         this.disable();
       }
@@ -56,12 +58,27 @@ export default class extends Controller {
 
       this.positionValue += this.diceOneValue + this.diceTwoValue;
 
+      if (this.diceOneValue === this.diceTwoValue) {
+        this.paschCount++;
+        if (this.paschCount === 3) {
+          this.positionValue = 30;
+          this.paschCount = 0;
+        }
+      }
+
       this.fetchTurn()
         .then(response => response.json())
         .then(data => {
           this.positionValue = data.position;
-          this.enableTrade();
-          this.enableEndTurn();
+
+          if (this.paschCount === 0) {
+            this.enableTrade();
+            this.enableEndTurn();
+          } else {
+            this.enableDice();
+            this.disableTrade();
+            this.disableEndTurn();
+          }
         });
     }
 
@@ -82,6 +99,11 @@ export default class extends Controller {
         this.enable();
       } else if (data.event === 'end-turn') {
         this.disable();
+      } else if (data.event === 'turn-rolled') {
+        this.positionValue = data.position;
+        this.disableDice();
+        this.enableTrade();
+        this.enableEndTurn();
       }
     }
 

@@ -45,18 +45,18 @@ VALUES (1,1,60,'Parkanlage Martinsberggut',2,4,10,30,90,160,250,30,1, 'parkanlag
        (22,8,400,'Park Villa Boveri',50,100,200,600,1400,1700,2000,200,39, 'park_villa_boveri.jpg'); -- Blue 2
 
 INSERT INTO action_field (id, name, function, position)
-VALUES (1,'Start','start',0),
-       (2,'Community Chest','communityChest',2),
-       (3,'Income Tax','incomeTax',4),
-       (4,'Chance','chance',7),
-       (5,'Jail','jail',10),
-       (6,'Community Chest','communityChest',17),
-       (7,'Free Parking','freeParking',20),
-       (8,'Chance','chance',22),
-       (9,'Go To Jail','goToJail',30),
-       (10,'Community Chest','communityChest',33),
-       (11,'Chance','chance',36),
-       (12,'Luxury Tax','luxuryTax',38);
+VALUES (1,'Los','start',0),
+       (2,'Gemeinschaftsfeld','communityChest',2),
+       (3,'Einkommens Steuer','incomeTax',4),
+       (4,'Ereignisfeld','chance',7),
+       (5,'Gefängnis','jail',10),
+       (6,'Gemeinschaftsfeld','communityChest',17),
+       (7,'Frei Parken','freeParking',20),
+       (8,'Ereignisfeld','chance',22),
+       (9,'Geh ins Gefängnis','goToJail',30),
+       (10,'Gemeinschaftsfeld','communityChest',33),
+       (11,'Ereignisfeld','chance',36),
+       (12,'Zusatz Steuer','luxuryTax',38);
 
 --temporarily
 INSERT INTO action_field (id, name, function, position, mortgage, img)
@@ -75,9 +75,9 @@ VALUES (1, 'Die Bank zahlt dir eine divide von 50$', 'chance', 'add.100', 1),
        (4, 'Rücke bis zum nächsten Bahn-Feld vor.', 'chance', 'moveToNextRailroad', 1),
        (5, 'Strassenreparaturen sind fällig. Zahle für deine Häuser und Hotels. 25$ pro Haus und 100$ pro Hotel.', 'chance', 'repair', 1),
        (6, 'Du kommst ohne Busse aus dem Gefängnis frei.', 'chance', 'freeFromJail', 1),
-       (7, 'Zahle dein Schuldgeld 100$', 'chance', 'pay.100', 1),
+       (7, 'Zahle dein Schuldgeld 100$', 'chance', 'subtract.100', 1),
        (8, 'Rücke bis nach «Park Museum Langmatt» vor.', 'chance', 'moveTo.13', 1),
-       (9, 'Lasse alle deine Häuser renovieren. Zahle für deine Häuser und Hotels. 25$ pro Haus und 100 pro Hotel.', 'chance', 'repair', 1),
+       (9, 'Lasse alle deine Häuser renovieren. Zahle für deine Häuser und Hotels. 25$ pro Haus und 100$ pro Hotel.', 'chance', 'repair', 1),
        (10, 'Rücke bis nach «Mättelipark» vor.', 'chance', 'moveTo.36', 1),
        (11, 'Rücke auf «Start» vor.', 'chance', 'moveTo.0', 1),
        (12, 'Gehe auf direktem Weg ins Gefängnis.', 'chance', 'moveTo.10', 1),

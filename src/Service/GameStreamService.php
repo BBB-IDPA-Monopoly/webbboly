@@ -6,6 +6,7 @@ use App\Entity\ActionField;
 use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameBuilding;
+use App\Entity\GameCard;
 use App\Entity\GameField;
 use App\Entity\Player;
 use Symfony\Component\Mercure\HubInterface;
@@ -131,6 +132,32 @@ final readonly class GameStreamService
                 'event' => 'turn',
                 'position' => $nextPlayer->getPosition(),
             ])
+        );
+    }
+
+    public function sendTurnRolled(Game $game, Player $player): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d/turn', $game->getCode(), $player->getNumber()),
+            json_encode([
+                'event' => 'turn-rolled',
+                'position' => $player->getPosition(),
+            ])
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function sendShowCard(GameCard $gameCard, Player $player): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d', $player->getGame()->getCode(), $player->getNumber()),
+            $this->twig->render('game/stream/_show-card.stream.html.twig',
+                compact('gameCard', 'player')
+            )
         );
     }
 

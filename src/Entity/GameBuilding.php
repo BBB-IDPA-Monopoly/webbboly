@@ -62,6 +62,20 @@ class GameBuilding extends GameField
         return $this;
     }
 
+    public function addHouse(): static
+    {
+        $this->houses++;
+
+        return $this;
+    }
+
+    public function removeHouse(): static
+    {
+        $this->houses--;
+
+        return $this;
+    }
+
     public function isMortgaged(): bool|null
     {
         return $this->mortgaged;

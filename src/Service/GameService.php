@@ -32,6 +32,8 @@ final readonly class GameService
     const LUXURY_TAX = 100;
     const RAILROAD_PRICE = 200;
     const UTILITY_PRICE = 150;
+    const REPAIR_HOUSE = 25;
+    const REPAIR_HOTEL = 100;
 
     public function __construct(
         private GameRepository $gameRepository,
@@ -203,6 +205,8 @@ final readonly class GameService
 
             if (method_exists($this->gameFunctions, $function)) {
                 $this->gameFunctions->$function($currentPlayer);
+            } else {
+                throw new Exception('This should not happen.');
             }
         }
 
@@ -218,6 +222,7 @@ final readonly class GameService
         $this->gameStreamService->sendUpdatePlayer($game, $currentPlayer, true);
         $this->gameStreamService->sendUpdateField($game, $currentField, $currentPrice);
         $this->gameStreamService->sendUpdateField($game, $newPosition, $newPrice);
+        $this->gameStreamService->sendTurnRolled($game, $currentPlayer);
     }
 
     /**
@@ -396,6 +401,145 @@ final readonly class GameService
             default:
                 $this->gameStreamService->sendUpdateField($game, $gameActionField);
                 break;
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function buyHouse(Game $game, Player $player, GameBuilding $gameBuilding): void
+    {
+        if (
+            $gameBuilding->getOwner() !== $player ||
+            !$this->wholeStreetOwned($game, $gameBuilding->getBuilding())
+        ) {
+            return;
+        }
+
+        $streetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
+            $game,
+            $gameBuilding->getBuilding()->getStreet()
+        );
+
+        $minHouses = 5;
+        $maxHouses = 0;
+        foreach ($streetBuildings as $streetBuilding) {
+            if ($streetBuilding->getHouses() > $maxHouses) {
+                $maxHouses = $streetBuilding->getHouses();
+            }
+
+            if ($streetBuilding->getHouses() < $minHouses) {
+                $minHouses = $streetBuilding->getHouses();
+            }
+        }
+
+        if ($gameBuilding->getHouses() != $minHouses) {
+            return;
+        }
+
+        $gameBuilding->addHouse();
+        $player->subtractMoney($gameBuilding->getBuilding()->getStreet()->getHouseCost());
+
+        $this->gameBuildingRepository->save($gameBuilding, true);
+        $this->playerRepository->save($player, true);
+
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
+        $this->gameStreamService->sendUpdateField($game, $gameBuilding);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function sellHouse(Game $game, Player $player, GameBuilding $gameBuilding): void
+    {
+        if (
+            $gameBuilding->getOwner() !== $player ||
+            !$this->wholeStreetOwned($game, $gameBuilding->getBuilding())
+        ) {
+            return;
+        }
+
+        $streetBuildings = $this->gameBuildingRepository->findByGameAndStreet(
+            $game,
+            $gameBuilding->getBuilding()->getStreet()
+        );
+
+        $minHouses = 5;
+        $maxHouses = 0;
+        foreach ($streetBuildings as $streetBuilding) {
+            if ($streetBuilding->getHouses() > $maxHouses) {
+                $maxHouses = $streetBuilding->getHouses();
+            } elseif ($streetBuilding->getHouses() < $minHouses) {
+                $minHouses = $streetBuilding->getHouses();
+            }
+        }
+
+        if ($gameBuilding->getHouses() != $maxHouses) {
+            return;
+        }
+
+        $gameBuilding->removeHouse();
+        $player->addMoney($gameBuilding->getBuilding()->getStreet()->getHouseCost() / 2);
+
+        $this->gameBuildingRepository->save($gameBuilding, true);
+        $this->playerRepository->save($player, true);
+
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
+        $this->gameStreamService->sendUpdateField($game, $gameBuilding);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function callCardFunction(Game $game, Player $player, GameCard $gameCard): void
+    {
+        $function = $gameCard->getCard()->getFunction();
+        $parts = explode('.', $function);
+        $method = $parts[0];
+
+        if ($function == 'moveToNextRailroad') {
+            $currentPosition = $player->getPosition();
+            $railroads = $this->gameActionFieldRepository->findByGameAndFunction(
+                $player->getGame()->getId(),
+                GameFunctions::FUNCTION_RAILROAD
+            );
+
+            usort($railroads, static function (GameActionField $a, GameActionField $b) {
+                return $a->getField()->getPosition() <=> $b->getField()->getPosition();
+            });
+
+            foreach ($railroads as $railroad) {
+                if ($railroad->getField()->getPosition() > $currentPosition) {
+                    $this->turn($player->getGame(), $player, $railroad->getField()->getPosition());
+                    return;
+                }
+            }
+
+            $this->turn($player->getGame(), $player, 5);
+        } elseif ($function == 'moveTo') {
+            $this->turn($game, $player, (int)$parts[1]);
+        } else {
+            if (method_exists($this->gameFunctions, $method)) {
+                if (count($parts) > 1) {
+                    $this->gameFunctions->$method($player, (int)$parts[1]);
+                } else {
+                    $this->gameFunctions->$method($player);
+                }
+            } else {
+                throw new Exception('This should not happen.');
+            }
+
+            $this->gameCardRepository->save($gameCard, true);
+            $this->playerRepository->save($player, true);
+
+            $this->gameStreamService->sendUpdatePlayer($game, $player, true);
         }
     }
 

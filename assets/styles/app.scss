@@ -289,6 +289,10 @@ body {
                     height: 15%;
                 }
 
+                .img-fluid {
+                    max-width: 80%;
+                }
+
                 &.cell-rotated-90 {
                     writing-mode: vertical-rl;
 
@@ -298,12 +302,10 @@ body {
                     }
 
                     .cell-content {
-                        @extend .cell-content;
                         width: 100%;
                     }
 
                     .img-fluid {
-                        @extend .img-fluid;
                         transform: rotate(90deg);
                     }
                 }
@@ -322,12 +324,10 @@ body {
                     }
 
                     .cell-content {
-                        @extend .cell-content;
                         width: 100%;
                     }
 
                     .img-fluid {
-                        @extend .img-fluid;
                         transform: rotate(90deg);
                     }
                 }

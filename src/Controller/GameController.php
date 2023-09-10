@@ -6,6 +6,7 @@ use App\Entity\Building;
 use App\Entity\Game;
 use App\Entity\GameActionField;
 use App\Entity\GameBuilding;
+use App\Entity\GameCard;
 use App\Entity\Player;
 use App\Repository\PlayerRepository;
 use App\Service\GameService;
@@ -170,6 +171,63 @@ final class GameController extends AbstractController
     ): Response
     {
         $this->gameService->mortgageActionField($game, $player, $gameActionField);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{player}/{building}/house/buy', name: 'app_game_buy_house')]
+    public function buyHouse(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'player')] Player $player,
+        #[MapEntity(id: 'building')] GameBuilding $gameActionField,
+    ): Response
+    {
+        $this->gameService->buyHouse($game, $player, $gameActionField);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{player}/{building}/house/sell', name: 'app_game_sell_house')]
+    public function sellHouse(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'player')] Player $player,
+        #[MapEntity(id: 'building')] GameBuilding $gameActionField,
+    ): Response
+    {
+        $this->gameService->sellHouse($game, $player, $gameActionField);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{player}/{card}/function', name: 'app_game_call_card_function')]
+    public function callCardFunction(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'player')] Player $player,
+        #[MapEntity(id: 'card')] GameCard $gameCard,
+    ): Response
+    {
+        $this->gameService->callCardFunction($game, $player, $gameCard);
 
         return $this->json([
             'success' => true,

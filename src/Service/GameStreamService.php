@@ -151,6 +151,21 @@ final readonly class GameStreamService
      * @throws RuntimeError
      * @throws LoaderError
      */
+    public function sendPrisonBailOptions(Game $game, Player $player): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d', $game->getCode(), $player->getNumber()),
+            $this->twig->render('game/stream/_show-prison-bail-options.stream.html.twig',
+                compact('player')
+            )
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function sendShowCard(GameCard $gameCard, Player $player): void
     {
         $this->send(

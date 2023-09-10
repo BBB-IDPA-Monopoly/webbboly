@@ -1,0 +1,12 @@
+<turbo-stream action="update" target="modal">
+    <template>
+        {% include 'game/partials/_prison-bail-options-modal.html.twig' %}
+
+        <div
+            {{ stimulus_controller('bootstrap-modal', {
+                modalId: 'prisonBailOptionsModal',
+                state: 'open',
+            }) }}
+        ></div>
+    </template>
+</turbo-stream>

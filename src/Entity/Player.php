@@ -46,6 +46,9 @@ class Player
 
     private int $fieldsAdvanced = 0;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $prisonTurns = null;
+
     public function __construct()
     {
         $this->gameBuildings = new ArrayCollection();
@@ -247,6 +250,18 @@ class Player
     public function setFieldsAdvanced(int $fieldsAdvanced): static
     {
         $this->fieldsAdvanced = $fieldsAdvanced;
+
+        return $this;
+    }
+
+    public function getPrisonTurns(): ?int
+    {
+        return $this->prisonTurns;
+    }
+
+    public function setPrisonTurns(?int $prisonTurns): static
+    {
+        $this->prisonTurns = $prisonTurns;
 
         return $this;
     }

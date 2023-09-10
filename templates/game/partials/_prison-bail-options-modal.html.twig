@@ -1,0 +1,40 @@
+<div class="modal fade" id="prisonBailOptionsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-labelledby="prisonBailOptionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">
+                    Gefängnis freikaufen
+                </h1>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-between gap-2">
+                    <button class="btn btn-danger w-100 {% if player.money < 50 %}disabled{% endif %}"
+                            data-bs-dismiss="modal"
+                            onclick="localFetch('{{ path('app_game_prison_bail', {
+                                code: player.game.code,
+                                player: player.id,
+                                option: 'pay',
+                            }) }}')">
+                        Freikaufen (50$)
+                        {% if player.money < 50 %}
+                            <span class="badge bg-danger">Nicht genügend Geld</span>
+                        {% endif %}
+                    </button>
+                    {% if player.gameCards|length > 0 %}
+                        <button type="button" class="btn btn-success w-100"
+                                data-bs-dismiss="modal"
+                                onclick="localFetch('{{ path('app_game_prison_bail', {
+                                    code: player.game.code,
+                                    player: player.id,
+                                    option: 'card',
+                                }) }}')">
+                            Gefängnis frei Karte benutzen
+                        </button>
+                    {% endif %}
+                    <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">Weiter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

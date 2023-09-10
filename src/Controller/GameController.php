@@ -67,14 +67,15 @@ final class GameController extends AbstractController
      * @throws SyntaxError
      * @throws LoaderError
      */
-    #[Route('/game/{code}/turn/{id}/{position}', name: 'app_game_move')]
+    #[Route('/game/{code}/turn/{id}/{position}/{pasch}', name: 'app_game_move')]
     public function turn(
         #[MapEntity(mapping: ['code' => 'code'])] Game $game,
         #[MapEntity(id: 'id')] Player $player,
-        int $position
+        int $position,
+        string $pasch = 'false',
     ): Response
     {
-        $this->gameService->turn($game, $player, $position);
+        $this->gameService->turn($game, $player, $position, $pasch === 'true');
 
         return $this->json([
             'success' => true,
@@ -228,6 +229,25 @@ final class GameController extends AbstractController
     ): Response
     {
         $this->gameService->callCardFunction($game, $player, $gameCard);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{player}/{option}', name: 'app_game_prison_bail')]
+    public function prisonBail(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'player')] Player $player,
+        string $option,
+    ): Response
+    {
+        $this->gameService->prisonBail($game, $player, $option);
 
         return $this->json([
             'success' => true,

@@ -34,6 +34,8 @@ final readonly class GameService
     const UTILITY_PRICE = 150;
     const REPAIR_HOUSE = 25;
     const REPAIR_HOTEL = 100;
+    const PRISON_TURN = 3;
+    const PRISON_BAIL = 50;
 
     public function __construct(
         private GameRepository $gameRepository,
@@ -179,16 +181,33 @@ final readonly class GameService
      * @throws LoaderError
      * @throws Exception
      */
-    public function turn(Game $game, Player $currentPlayer, int $position): void
+    public function turn(Game $game, Player $currentPlayer, int $position, bool $pasch = false): void
     {
+        if ($currentPlayer->getPrisonTurns() !== null && $pasch === false) {
+            $currentPlayer->setPrisonTurns($currentPlayer->getPrisonTurns() - 1);
+
+            if ($currentPlayer->getPrisonTurns() === 0) {
+                $currentPlayer->subtractMoney(self::PRISON_BAIL);
+                $currentPlayer->setPrisonTurns(null);
+            }
+
+            $this->playerRepository->save($currentPlayer, true);
+            $this->gameStreamService->sendUpdatePlayer($game, $currentPlayer, true);
+            $this->gameStreamService->sendTurnRolled($game, $currentPlayer);
+            return;
+        } elseif ($currentPlayer->getPrisonTurns() !== null && $pasch === true) {
+            $currentPlayer->setPrisonTurns(null);
+        }
+
         $fields = $game->getFieldsWithPositions();
+        $currentPosition = $currentPlayer->getPosition();
 
         if ($position > count($fields)) {
             $position = $position - count($fields);
             $currentPlayer->addMoney(200);
         }
 
-        $currentField = $fields[$currentPlayer->getPosition()];
+        $currentField = $fields[$currentPosition];
         $newPosition = $fields[$position];
 
         $currentPlayer->setFieldsAdvanced($position - $currentPlayer->getPosition());
@@ -208,6 +227,10 @@ final readonly class GameService
             } else {
                 throw new Exception('This should not happen.');
             }
+        }
+
+        if ($currentPosition !== $currentPlayer->getPosition()) {
+            $newPosition = $fields[$currentPlayer->getPosition()];
         }
 
         $currentPrice = $currentField instanceof GameActionField
@@ -257,6 +280,10 @@ final readonly class GameService
         $this->gameStreamService->sendUpdatePlayer($game, $player);
         $this->gameStreamService->sendUpdatePlayer($game, $nextPlayer, true);
         $this->gameStreamService->sendEndTurn($game, $player, $nextPlayer);
+
+        if ($nextPlayer->getPrisonTurns() !== null) {
+            $this->gameStreamService->sendPrisonBailOptions($game, $nextPlayer);
+        }
     }
 
     /**
@@ -541,6 +568,37 @@ final readonly class GameService
 
             $this->gameStreamService->sendUpdatePlayer($game, $player, true);
         }
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function prisonBail(Game $game, Player $player, string $option): void
+    {
+        if ($option === 'pay') {
+            $player->subtractMoney(self::PRISON_BAIL);
+        } elseif ($option === 'card') {
+            $freeFromJailCard = $player->getGameCards()->first();
+
+            if ($freeFromJailCard === null) {
+                throw new Exception('This should not happen.');
+            }
+
+            $freeFromJailCard->setOwner(null);
+            $player->removeCard($freeFromJailCard);
+
+            $this->gameCardRepository->save($freeFromJailCard, true);
+        } else {
+            throw new Exception('This should not happen.');
+        }
+
+        $player->setPrisonTurns(null);
+
+        $this->playerRepository->save($player, true);
+        $this->gameStreamService->sendUpdatePlayer($game, $player, true);
     }
 
     public function wholeStreetOwned(Game $game, Building $building): bool

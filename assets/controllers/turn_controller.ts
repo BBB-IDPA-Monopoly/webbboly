@@ -96,8 +96,11 @@ export default class extends Controller {
     handleEvent(data: { event: string; position: number; }) {
       if (data.event === 'turn') {
         this.positionValue = data.position;
-        this.enable();
+        this.enableDice();
+        this.disableTrade();
+        this.disableEndTurn();
       } else if (data.event === 'end-turn') {
+        this.paschCount = 0;
         this.disable();
       } else if (data.event === 'turn-rolled') {
         this.positionValue = data.position;
@@ -108,7 +111,12 @@ export default class extends Controller {
     }
 
     getTurnURL() {
-      return window.location.origin + '/game/' + this.gameCodeValue + '/turn/' + this.playerIdValue + '/' + this.positionValue;
+      let pasch = 'false';
+      if (this.paschCount > 0) {
+        pasch = 'true';
+      }
+
+      return window.location.origin + '/game/' + this.gameCodeValue + '/turn/' + this.playerIdValue + '/' + this.positionValue + '/' + pasch;
     }
 
     getEndTurnURL() {

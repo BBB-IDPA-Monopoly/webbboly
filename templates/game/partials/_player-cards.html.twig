@@ -14,7 +14,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row mb-3">
                     {% if player.gameBuildings|length > 0 or player.gameActionFields|length > 0 %}
                         {% if player.gameBuildings|length > 0 %}
                             {% for gameBuilding in player.gameBuildings %}
@@ -148,6 +148,25 @@
                         <div class="col-12">
                             <div class="alert alert-info" role="alert">
                                 {{ player.nickname }} hat keine Gebäude
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    {% if player.gameCards|length > 0 %}
+                        {% for gameCard in player.gameCards %}
+                            <div class="col-4">
+                                <div class="buildingCard">
+                                    {{ component('GameCardComponent', {
+                                        card: gameCard.card,
+                                    }) }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-info" role="alert">
+                                {{ player.nickname }} hat keine Karten
                             </div>
                         </div>
                     {% endif %}

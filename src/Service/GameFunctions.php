@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\GameCard;
 use App\Entity\Player;
 use App\Enum\CardType;
-use App\Repository\CardRepository;
 use App\Repository\GameActionFieldRepository;
 use App\Repository\GameCardRepository;
 use App\Repository\GameRepository;
@@ -31,7 +30,6 @@ final readonly class GameFunctions
     public function __construct(
         private PlayerRepository  $playerRepository,
         private GameRepository    $gameRepository,
-        private CardRepository    $cardRepository,
         private GameCardRepository $gameCardRepository,
         private GameStreamService $gameStreamService,
         private ActionFieldRent   $actionFieldRent,
@@ -77,7 +75,10 @@ final readonly class GameFunctions
 
     public function goToJail(Player $player): void
     {
+        $player->setPosition(10);
+        $player->setPrisonTurns(GameService::PRISON_TURN);
 
+        $this->playerRepository->save($player, true);
     }
 
     /**
@@ -89,6 +90,9 @@ final readonly class GameFunctions
     {
         $gameCards = $player->getGame()->getGameCards(CardType::CHANCE);
         $gameCard = $gameCards[array_rand($gameCards->toArray())];
+        while ($gameCard->getOwner() !== null) {
+            $gameCard = $gameCards[array_rand($gameCards->toArray())];
+        }
 
         $this->gameStreamService->sendShowCard($gameCard, $player);
     }
@@ -102,6 +106,9 @@ final readonly class GameFunctions
     {
         $gameCards = $player->getGame()->getGameCards(CardType::COMMUNITY_CHEST);
         $gameCard = $gameCards[array_rand($gameCards->toArray())];
+        while ($gameCard->getOwner() !== null) {
+            $gameCard = $gameCards[array_rand($gameCards->toArray())];
+        }
 
         $this->gameStreamService->sendShowCard($gameCard, $player);
     }
@@ -243,12 +250,12 @@ final readonly class GameFunctions
      * @throws SyntaxError
      * @throws LoaderError
      */
-    public function freeFromJail(Player $player): void
+    public function freeFromJail(Player $player, int $type): void
     {
-        $freeFromJailCard = (new GameCard())
-            ->setGame($player->getGame())
-            ->setOwner($player)
-            ->setCard($this->cardRepository->findOneBy(['function' => 'freeFromJail']));
+        $cardType = $type === 1 ? CardType::CHANCE : CardType::COMMUNITY_CHEST;
+        $freeFromJailCard = $player->getGame()->getGameCards($cardType)->filter(
+            static fn (GameCard $gameCard) => str_contains($gameCard->getCard()->getFunction(), 'freeFromJail')
+        )->first();
 
         $player->addCard($freeFromJailCard);
 

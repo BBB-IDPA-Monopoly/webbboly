@@ -47,7 +47,10 @@ class Player
     private int $fieldsAdvanced = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?int $prisonTurns = null;
+    private int|null $prisonTurns = null;
+
+    #[ORM\Column]
+    private bool $bankrupt = false;
 
     public function __construct()
     {
@@ -254,14 +257,26 @@ class Player
         return $this;
     }
 
-    public function getPrisonTurns(): ?int
+    public function getPrisonTurns(): int|null
     {
         return $this->prisonTurns;
     }
 
-    public function setPrisonTurns(?int $prisonTurns): static
+    public function setPrisonTurns(int|null $prisonTurns): static
     {
         $this->prisonTurns = $prisonTurns;
+
+        return $this;
+    }
+
+    public function isBankrupt(): bool
+    {
+        return $this->bankrupt;
+    }
+
+    public function setBankrupt(bool $bankrupt): static
+    {
+        $this->bankrupt = $bankrupt;
 
         return $this;
     }

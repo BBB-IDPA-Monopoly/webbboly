@@ -16,6 +16,7 @@
      class="h-100 w-100 rounded bg-secondary text-center">
     <span class="self-center">Tauschen</span>
 </div>
-<div id="leave" class="h-100 w-100 rounded bg-danger position-relative">
-    <span class="self-center fs-6">Aufgeben</span>
+<div id="leave" {{ stimulus_target('turn', 'giveUp') }} {{ stimulus_action('turn', 'giveUp', 'click') }}
+     class="h-100 w-100 rounded bg-danger text-center">
+    <span class="self-center">Aufgeben</span>
 </div>

@@ -80,6 +80,7 @@ final class GameController extends AbstractController
         return $this->json([
             'success' => true,
             'position' => $player->getPosition(),
+            'disable' => $player->getMoney() < 0,
         ]);
     }
 
@@ -248,6 +249,24 @@ final class GameController extends AbstractController
     ): Response
     {
         $this->gameService->prisonBail($game, $player, $option);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    #[Route('/game/{code}/player/{player}/bankrupt', name: 'app_game_bankrupt', priority: 2)]
+    public function bankrupt(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+        #[MapEntity(id: 'player')] Player $player,
+    ): Response
+    {
+        $this->gameService->turnEnd($game, $player, true);
 
         return $this->json([
             'success' => true,

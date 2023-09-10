@@ -1,0 +1,12 @@
+<turbo-stream action="update" target="modal">
+    <template>
+        {% include 'game/partials/_bankruptcy-options-modal.html.twig' %}
+
+        <div
+            {{ stimulus_controller('bootstrap-modal', {
+                modalId: 'bankruptcyOptionsModal',
+                state: 'open',
+            }) }}
+        ></div>
+    </template>
+</turbo-stream>

@@ -233,6 +233,10 @@ final readonly class GameService
             $newPosition = $fields[$currentPlayer->getPosition()];
         }
 
+        if ($currentPlayer->getMoney() < 0) {
+            $this->gameStreamService->sendBankrupt($game, $currentPlayer, $newPosition->getOwner());
+        }
+
         $currentPrice = $currentField instanceof GameActionField
             ? $this->getPriceByFunction($currentField->getField()->getFunction())
             : 0;
@@ -254,9 +258,13 @@ final readonly class GameService
      * @throws LoaderError
      * @throws Exception
      */
-    public function turnEnd(Game $game, Player $player): void
+    public function turnEnd(Game $game, Player $player, bool $bankrupt = false): void
     {
         $turnOrder = $game->getTurnOrder();
+
+        if ($turnOrder->contains($player->getId()) === false) {
+            throw new Exception('This should not happen.');
+        }
 
         while ($turnOrder->current() !== $player->getId()) {
             $turnOrder->next();
@@ -272,6 +280,14 @@ final readonly class GameService
 
         if ($nextPlayer === null) {
             throw new Exception('This should not happen.');
+        }
+
+        if ($player->getMoney() < 0 || $bankrupt) {
+            $fields = $game->getFieldsWithPositions();
+            $currentField = $fields[$player->getPosition()];
+            $perpetrator = $bankrupt ? null : $currentField->getOwner();
+
+            $this->bankrupt($game, $player, $perpetrator);
         }
 
         $game->setCurrentTurnPlayer($nextPlayer);
@@ -599,6 +615,73 @@ final readonly class GameService
 
         $this->playerRepository->save($player, true);
         $this->gameStreamService->sendUpdatePlayer($game, $player, true);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function bankrupt(
+        Game $game,
+        Player $player,
+        Player|null $perpetrator = null,
+    ): void
+    {
+        foreach ($player->getGameBuildings() as $gameBuilding) {
+            $gameBuilding->setOwner($perpetrator);
+            $gameBuilding->setHouses(0);
+
+            if ($perpetrator === null) {
+                $gameBuilding->setMortgaged(false);
+            } elseif ($gameBuilding->isMortgaged()) {
+                $perpetrator->subtractMoney((int)round($gameBuilding->getBuilding()->getMortgage() * 0.1));
+            }
+
+            $this->gameBuildingRepository->save($gameBuilding, true);
+            $this->gameStreamService->sendUpdateField($game, $gameBuilding);
+        }
+
+        foreach ($player->getGameActionFields() as $gameActionField) {
+            $gameActionField->setOwner($perpetrator);
+
+            if ($perpetrator === null) {
+                $gameActionField->setMortgaged(false);
+            } elseif ($gameActionField->isMortgaged()) {
+                $perpetrator->subtractMoney((int)round($gameActionField->getActionField()->getMortgage() * 0.1));
+            }
+
+            $this->gameActionFieldRepository->save($gameActionField, true);
+            $this->gameStreamService->sendUpdateField($game, $gameActionField);
+        }
+
+        foreach ($player->getGameCards() as $gameCard) {
+            $gameCard->setOwner($perpetrator);
+
+            $this->gameCardRepository->save($gameCard, true);
+        }
+
+        $turnOrder = $game->getTurnOrder();
+        $removed = $turnOrder->removeElement($player->getId());
+
+        if ($removed === false) {
+            throw new Exception('This should not happen.');
+        }
+
+        $player->setBankrupt(true);
+        $player->setPrisonTurns(null);
+        $player->setPosition(0);
+        $player->setFieldsAdvanced(0);
+        $player->setMoney(0);
+        $player->getGame()->setTurnOrder($turnOrder);
+
+        $this->playerRepository->save($player, true);
+        $this->gameRepository->save($player->getGame(), true);
+
+        if ($perpetrator !== null) {
+            $this->playerRepository->save($perpetrator, true);
+        }
     }
 
     public function wholeStreetOwned(Game $game, Building $building): bool

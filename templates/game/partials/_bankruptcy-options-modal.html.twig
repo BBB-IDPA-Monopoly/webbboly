@@ -1,0 +1,28 @@
+<div class="modal fade" id="bankruptcyOptionsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-labelledby="bankruptcyOptionsModalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">
+                    Bankrott
+                </h1>
+            </div>
+            <div class="modal-body">
+                <p>Dein Kontostand ist im Minus gelandet was willst du machen? Wenn der Kontostand am Ende der Runde immer noch im Minus ist, wirst du automatisch als Bankrott erklärt.</p>
+                <div class="d-flex justify-between gap-2">
+                    <button class="btn btn-danger w-100"
+                            data-bs-dismiss="modal"
+                            onclick="localFetch('{{ path('app_game_bankrupt', {
+                                code: player.game.code,
+                                player: player.id
+                            }) }}')">
+                        Bankrott erklären
+                    </button>
+                    <button type="button" class="btn btn-success w-100" data-bs-dismiss="modal">
+                        Besitze verkaufen oder Hypotheken aufnehmen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

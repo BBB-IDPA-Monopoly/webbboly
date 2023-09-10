@@ -6,7 +6,7 @@ import { Controller } from '@hotwired/stimulus';
 */
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['dice', 'trade', 'endTurn', 'diceOne', 'diceTwo']
+    static targets = ['dice', 'trade', 'endTurn', 'diceOne', 'diceTwo', 'giveUp']
     static values = {
       enabled: Boolean,
       diceOne: Number,
@@ -22,6 +22,7 @@ export default class extends Controller {
     declare endTurnTarget: HTMLDivElement;
     declare diceOneTarget: HTMLSpanElement;
     declare diceTwoTarget: HTMLSpanElement;
+    declare giveUpTarget: HTMLDivElement;
 
     declare enabledValue: boolean;
     declare diceOneValue: number;
@@ -71,7 +72,7 @@ export default class extends Controller {
         .then(data => {
           this.positionValue = data.position;
 
-          if (this.paschCount === 0) {
+          if (this.paschCount === 0 || data.disable) {
             this.enableTrade();
             this.enableEndTurn();
           } else {
@@ -90,6 +91,21 @@ export default class extends Controller {
           if (data.success !== true) {
             alert(data.message);
           }
+        });
+    }
+
+    giveUp() {
+      this.disable();
+      fetch(window.location.origin + '/game/' + this.gameCodeValue + '/player/' + this.playerIdValue + '/bankrupt', {
+        method: 'GET',
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success !== true) {
+            alert(data.message);
+          }
+
+          this.disableGiveUp();
         });
     }
 
@@ -169,5 +185,13 @@ export default class extends Controller {
 
     disableEndTurn() {
       this.endTurnTarget.setAttribute('disabled', 'disabled');
+    }
+
+    enableGiveUp() {
+      this.giveUpTarget.removeAttribute('disabled');
+    }
+
+    disableGiveUp() {
+      this.giveUpTarget.setAttribute('disabled', 'disabled');
     }
 }

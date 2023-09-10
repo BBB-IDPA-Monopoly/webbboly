@@ -5,6 +5,7 @@
                 {{ player.nickname }}
                 {% if isMe %}<span class="badge bg-info">Me</span>{% endif %}
                 {% if isMyTurn %}<span class="badge bg-secondary">Am Zug</span>{% endif %}
+                {% if player.bankrupt %}<span class="badge bg-danger">Bankrott</span>{% endif %}
             </h6>
         </div>
         <span class="d-block mb-2">BBBanknote: {{ player.money }}$</span>

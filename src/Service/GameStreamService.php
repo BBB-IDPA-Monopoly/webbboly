@@ -166,6 +166,21 @@ final readonly class GameStreamService
      * @throws RuntimeError
      * @throws LoaderError
      */
+    public function sendBankrupt(Game $game, Player $player, Player|null $perpetrator): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d/player/%d', $game->getCode(), $player->getNumber()),
+            $this->twig->render('game/stream/_show-bankruptcy-options.stream.html.twig',
+                compact('player', 'perpetrator')
+            )
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function sendShowCard(GameCard $gameCard, Player $player): void
     {
         $this->send(

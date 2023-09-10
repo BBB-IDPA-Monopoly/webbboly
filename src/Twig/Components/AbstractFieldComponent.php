@@ -37,7 +37,11 @@ abstract class AbstractFieldComponent
         $game = $this->getGame();
         $position = $this->getField()->getPosition();
 
-        return $this->playerRepository->findBy(compact('game', 'position'));
+        return $this->playerRepository->findBy([
+            'game' => $game,
+            'position' => $position,
+            'bankrupt' => false,
+        ]);
     }
 
     public function getPlayerClass(Player $player): string

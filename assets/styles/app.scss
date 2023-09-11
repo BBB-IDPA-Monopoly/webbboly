@@ -1,7 +1,7 @@
 @import '~bootstrap/scss/bootstrap';
 
 body {
-    background-color: slategrey;
+    background-color: #5a7fa3;
 }
 
 .icon-flex, .icon-wrapper {
@@ -42,7 +42,7 @@ body {
 
             tr {
                 text-align: center;
-                border-bottom-color: slategrey;
+                border-bottom-color: #5a7fa3;
 
                 td {
                     background-color: #95a6b7;
@@ -295,6 +295,10 @@ body {
                     display: flex;
                     justify-content: space-between;
                     flex-direction: column;
+
+                    span {
+                        overflow: hidden;
+                    }
                 }
 
                 .cell-color {

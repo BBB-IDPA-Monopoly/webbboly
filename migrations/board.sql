@@ -46,15 +46,15 @@ VALUES (1,1,60,'Parkanlage Martinsberggut',2,4,10,30,90,160,250,30,1, 'parkanlag
 
 INSERT INTO action_field (id, name, function, position)
 VALUES (1,'Los','start',0),
-       (2,'Gemeinschaftsfeld','communityChest',2),
+       (2,'Gemeinschafts-Feld','communityChest',2),
        (3,'Einkommens Steuer','incomeTax',4),
        (4,'Ereignisfeld','chance',7),
        (5,'Gefängnis','jail',10),
-       (6,'Gemeinschaftsfeld','communityChest',17),
+       (6,'Gemeinschafts-Feld','communityChest',17),
        (7,'Frei Parken','freeParking',20),
        (8,'Ereignisfeld','chance',22),
        (9,'Geh ins Gefängnis','goToJail',30),
-       (10,'Gemeinschaftsfeld','communityChest',33),
+       (10,'Gemeinschafts-Feld','communityChest',33),
        (11,'Ereignisfeld','chance',36),
        (12,'Zusatz Steuer','luxuryTax',38);
 

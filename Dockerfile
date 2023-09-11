@@ -109,6 +109,13 @@ RUN set -eux; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync;
 
+# Build frontend
+FROM node AS app_encore
+
+WORKDIR /srv/app
+COPY --from=php_prod /srv/app .
+RUN npm install && npm run encore:build
+
 
 # Base Caddy image
 FROM caddy_upstream AS caddy_base
@@ -126,3 +133,5 @@ COPY --link docker/caddy/Caddyfile /etc/caddy/Caddyfile
 FROM caddy_base AS caddy_prod
 
 COPY --from=php_prod --link /srv/app/public public/
+COPY --from=app_encore --link /srv/app/public public/
+

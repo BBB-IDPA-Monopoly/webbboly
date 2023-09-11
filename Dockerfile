@@ -110,12 +110,22 @@ RUN set -eux; \
 	chmod +x bin/console; sync;
 
 # Build frontend
-FROM node AS app_encore
+#install npm
+RUN apk add --no-cache nodejs npm
 
-WORKDIR /srv/app
-COPY --from=php_prod /srv/app .
-RUN npm install && npm run encore:build
+# npm install
+COPY --link package*.json ./
+RUN set -eux; \
+	if [ -f package.json ]; then \
+		npm install; \
+	fi
 
+# build assets
+COPY --link assets assets/
+RUN set -eux; \
+	if [ -f package.json ]; then \
+		npm run encore:build; \
+	fi
 
 # Base Caddy image
 FROM caddy_upstream AS caddy_base
@@ -133,5 +143,4 @@ COPY --link docker/caddy/Caddyfile /etc/caddy/Caddyfile
 FROM caddy_base AS caddy_prod
 
 COPY --from=php_prod --link /srv/app/public public/
-COPY --from=app_encore --link /srv/app/public public/
 

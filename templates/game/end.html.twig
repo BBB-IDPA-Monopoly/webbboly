@@ -4,9 +4,9 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>Game over #{{ game.code }}</h1>
-                <p>Winner: {{ winner.nickname }}</p>
-                <p>Players:</p>
+                <h1>Spiel #{{ game.code }} vorbei</h1>
+                <p>Gewinner: {{ winner.nickname }}</p>
+                <p>Spieler:</p>
                 <ul>
                     {% for player in players %}
                         <li>{{ player.nickname }}</li>
@@ -19,6 +19,6 @@
 {% endblock %}
 
 {% block title %}
-    Game over #{{ game.code }}
+    Spiel #{{ game.code }} vorbei
 {% endblock %}
 

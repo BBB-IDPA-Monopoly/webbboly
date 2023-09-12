@@ -1,5 +1,5 @@
 <a href="{{ asset('build/images/' ~ field.actionField.img) }}" {{ stimulus_controller('light-box') }}>
-    <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail"
+    <img src="{{ asset('build/images/preview/' ~ field.actionField.img) }}" class="img-fluid img-thumbnail"
          alt="{{ field.actionField.name }}">
 </a>
 

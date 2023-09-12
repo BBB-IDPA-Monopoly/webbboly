@@ -6,10 +6,10 @@
                 <span class="badge bg-secondary">Host</span>
             {% endif %}
             {% if this.isMe %}
-                <span class="badge bg-primary">Me</span>
+                <span class="badge bg-primary">Ich</span>
             {% endif %}
             {% if this.player.isReady %}
-                <span class="badge bg-success">Ready</span>
+                <span class="badge bg-success">Bereit</span>
             {% endif %}
             {% if this.forHost and not this.isMe %}
                 <a class="badge bg-danger" href="{{ path('app_lobby_kick', {

@@ -7,12 +7,12 @@
     disabled: not game.isGameReady,
 } %}
     {% block content %}
-        Start game
+        Spiel starten
 
         {% if game.isGameFull and not game.isGameReady %}
-            <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to be ready...</span>
+            <span id="gameDisabledMsg" class="badge bg-danger">Warten darauf, dass die Spieler bereit sind...</span>
         {% elseif not game.isGameReady %}
-            <span id="gameDisabledMsg" class="badge bg-danger">Waiting for players to join...</span>
+            <span id="gameDisabledMsg" class="badge bg-danger">Warten darauf, dass Spieler beitreten...</span>
         {% endif %}
     {% endblock %}
 {% endcomponent %}

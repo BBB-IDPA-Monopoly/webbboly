@@ -42,13 +42,13 @@
                     <a class="btn btn-danger" href="{{ path('app_lobby_ready', {
                         'code': game.code,
                     }) }}">
-                        Unready
+                        Nicht bereit
                     </a>
                 {% else %}
                     <a class="btn btn-success" href="{{ path('app_lobby_ready', {
                         'code': game.code,
                     }) }}">
-                        Ready
+                        Bereit
                     </a>
                 {% endif %}
 
@@ -62,7 +62,7 @@
                         href: path('app_lobby_delete', {
                             'code': game.code,
                         }),
-                        text: 'Delete game',
+                        text: 'Spiel löschen',
                     }) }}
                 {% else %}
                     {{ component('LinkComponent', {
@@ -70,7 +70,7 @@
                         href: path('app_lobby_leave', {
                             'code': game.code,
                         }),
-                        text: 'Leave game',
+                        text: 'Spiel verlassen',
                     }) }}
                 {% endif %}
             </div>

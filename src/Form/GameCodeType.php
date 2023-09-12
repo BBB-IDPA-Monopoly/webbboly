@@ -17,20 +17,20 @@ class GameCodeType extends AbstractType
     {
         $builder
             ->add('code', NumberType::class, [
-                'label' => 'Game Code',
+                'label' => 'Spielcode',
                 'required' => true,
                 'attr' => [
                     'maxlength' => '6',
                     'class' => 'form-control',
                     'autofocus' => 'autofocus',
-                    'placeholder' => 'Game Code',
+                    'placeholder' => 'Spielcode',
                 ],
                 'constraints' => [
                     new NotBlank(),
                     new PositiveOrZero(),
                     new Length(['min' => 6, 'max' => 6]),
                 ],
-                'invalid_message' => 'Please enter a valid game code (6 digits).',
+                'invalid_message' => 'Bitte geben Sie einen gültigen Spielcode ein (6 nummern).',
             ])
         ;
     }

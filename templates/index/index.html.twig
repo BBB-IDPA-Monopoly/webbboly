@@ -14,14 +14,14 @@
                 <div class="col-lg-4 mx-auto">
                     <div class="input-group input-group-lg has-validation">
                         {{ form_row(form.code) }}
-                        <button class="btn btn-success" type="submit">Join</button>
+                        <button class="btn btn-success" type="submit">Beitreten</button>
                     </div>
                 </div>
                 {{ form_end(form) }}
             </div>
             <div class="h-50">
                 <div id="my_div_id" {{ turbo_stream_listen('https://example.com/index') }}></div>
-                <a class="btn btn-outline-warning btn-lg px-4" href="{{ path('app_lobby_create') }}">Create Game</a>
+                <a class="btn btn-outline-warning btn-lg px-4" href="{{ path('app_lobby_create') }}">Spiel erstellen</a>
             </div>
         </div>
     </div>

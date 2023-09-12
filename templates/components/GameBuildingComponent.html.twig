@@ -16,7 +16,7 @@
         <span>{{ field.building.name }}</span>
 
         <a href="{{ asset('build/images/' ~ field.building.img) }}" {{ stimulus_controller('light-box') }}>
-            <img src="https://placehold.co/50x50.png" class="img-fluid img-thumbnail"
+            <img src="{{ asset('build/images/preview/' ~ field.building.img) }}" class="img-fluid img-thumbnail"
                  alt="{{ field.building.name }}">
         </a>
 

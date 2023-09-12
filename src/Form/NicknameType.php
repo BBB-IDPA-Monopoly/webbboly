@@ -16,23 +16,23 @@ class NicknameType extends AbstractType
     {
         $builder
             ->add('nickname', TextType::class, [
-                'label' => 'Nickname',
+                'label' => 'Spitzname',
                 'required' => true,
                 'attr' => [
                     'maxlength' => '20',
                     'class' => 'form-control',
                     'autofocus' => 'autofocus',
-                    'placeholder' => 'Enter your Nickname',
+                    'placeholder' => 'Spitzname eingeben',
                 ],
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3, 'max' => 20]),
                     new Expression(
                         'value not in ' . json_encode($options['taken_nicknames']),
-                        'This nickname is already taken.'
+                        'Dieser Spitzname wurde bereits benutzt.'
                     ),
                 ],
-                'invalid_message' => 'Please enter a valid nickname (3-20 characters).',
+                'invalid_message' => 'Bitte geben Sie einen gültigen Spitzname ein (3-20 zeichen).',
             ])
         ;
     }

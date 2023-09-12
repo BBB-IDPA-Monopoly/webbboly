@@ -1,0 +1,23 @@
+{% extends 'game/layout.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Game over #{{ game.code }}</h1>
+                <p>Winner: {{ game.winner.nickname }}</p>
+                <p>Players:</p>
+                <ul>
+                    {% for player in game.players %}
+                        <li>{{ player.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+    Game over #{{ game.code }}
+{% endblock %}
+

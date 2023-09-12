@@ -1,0 +1,9 @@
+<turbo-stream action="append" target="lobby">
+    <template>
+        <div {{ stimulus_controller('redirect', {
+            path: path('app_game_end', {
+                code: game.code
+            })
+        }) }}></div>
+    </template>
+</turbo-stream>

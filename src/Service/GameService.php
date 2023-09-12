@@ -262,6 +262,20 @@ final readonly class GameService
     {
         $turnOrder = $game->getTurnOrder();
 
+        if ($player->getMoney() < 0 || $bankrupt) {
+            $fields = $game->getFieldsWithPositions();
+            $currentField = $fields[$player->getPosition()];
+            $perpetrator = $bankrupt ? null : $currentField->getOwner();
+
+            $this->bankrupt($game, $player, $perpetrator);
+
+            if ($game->getCurrentTurnPlayer() !== $player) {
+                $this->gameRepository->save($game, true);
+                $this->gameStreamService->sendUpdatePlayer($game, $player);
+                return;
+            }
+        }
+
         if ($turnOrder->contains($player->getId()) === false) {
             throw new Exception('This should not happen.');
         }
@@ -271,7 +285,6 @@ final readonly class GameService
         }
 
         $nextPlayerId = $turnOrder->next();
-
         if ($nextPlayerId === false) {
             $nextPlayerId = $turnOrder->first();
         }
@@ -280,14 +293,6 @@ final readonly class GameService
 
         if ($nextPlayer === null) {
             throw new Exception('This should not happen.');
-        }
-
-        if ($player->getMoney() < 0 || $bankrupt) {
-            $fields = $game->getFieldsWithPositions();
-            $currentField = $fields[$player->getPosition()];
-            $perpetrator = $bankrupt ? null : $currentField->getOwner();
-
-            $this->bankrupt($game, $player, $perpetrator);
         }
 
         $game->setCurrentTurnPlayer($nextPlayer);
@@ -681,6 +686,10 @@ final readonly class GameService
 
         if ($perpetrator !== null) {
             $this->playerRepository->save($perpetrator, true);
+        }
+
+        if ($turnOrder->count() === 1) {
+            $this->gameStreamService->sendGameEnd($game, $turnOrder->first());
         }
     }
 

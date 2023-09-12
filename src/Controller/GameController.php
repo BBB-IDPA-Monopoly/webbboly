@@ -272,4 +272,13 @@ final class GameController extends AbstractController
             'success' => true,
         ]);
     }
+
+    #[Route('/game/{code}/end', name: 'app_game_end')]
+    public function end(
+        #[MapEntity(mapping: ['code' => 'code'])] Game $game,
+    ): Response
+    {
+        return $this->render('game/end.html.twig', compact('game'));
+    }
+
 }

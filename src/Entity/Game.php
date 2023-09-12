@@ -305,4 +305,21 @@ class Game
 
         return $this;
     }
+
+    /**
+     * @throws Exception
+     */
+    public function winner(): Player|null
+    {
+        $players = $this->getPlayers();
+        $winner = null;
+        $max = 0;
+        foreach ($players as $player) {
+            if ($player->getMoney() > $max) {
+                $max = $player->getMoney();
+                $winner = $player;
+            }
+        }
+        return $winner;
+    }
 }

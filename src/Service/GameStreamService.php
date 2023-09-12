@@ -181,6 +181,21 @@ final readonly class GameStreamService
      * @throws RuntimeError
      * @throws LoaderError
      */
+    public function sendGameEnd(Game $game): void
+    {
+        $this->send(
+            sprintf('https://webbboly/game/%d', $game->getCode()),
+            $this->twig->render('game/stream/_game-end.stream.html.twig',
+                compact('game')
+            )
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function sendShowCard(GameCard $gameCard, Player $player): void
     {
         $this->send(

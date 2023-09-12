@@ -15,8 +15,6 @@ export default class extends Controller {
       playerId: Number,
       position: Number,
     }
-
-    declare paschCount: number;
     declare diceTarget: HTMLDivElement;
     declare tradeTarget: HTMLDivElement;
     declare endTurnTarget: HTMLDivElement;
@@ -30,6 +28,11 @@ export default class extends Controller {
     declare gameCodeValue: number;
     declare playerIdValue: number;
     declare positionValue: number;
+    declare paschCount: number;
+    declare diceDisabled: boolean;
+    declare tradeDisabled: boolean;
+    declare endTurnDisabled: boolean;
+    declare giveUpDisabled: boolean;
 
     connect() {
       this.element.addEventListener("turn", (e: CustomEvent) => this.handleEvent(e.detail));
@@ -37,6 +40,10 @@ export default class extends Controller {
       this.paschCount = 0;
       this.diceOneValue = 0;
       this.diceTwoValue = 0;
+      this.diceDisabled = false;
+      this.tradeDisabled = false;
+      this.endTurnDisabled = false;
+      this.giveUpDisabled = false;
 
       this.diceOneTarget.innerText = this.diceOneValue.toString();
       this.diceTwoTarget.innerText = this.diceTwoValue.toString();
@@ -50,6 +57,10 @@ export default class extends Controller {
     }
 
     roll() {
+      if (this.diceDisabled) {
+        return;
+      }
+
       this.disableDice();
       this.diceOneValue = Math.floor(Math.random() * 6) + 1;
       this.diceTwoValue = Math.floor(Math.random() * 6) + 1;
@@ -84,6 +95,10 @@ export default class extends Controller {
     }
 
     endTurn() {
+      if (this.endTurnDisabled) {
+        return;
+      }
+
       this.disable();
       this.fetchEndTurn()
         .then(response => response.json())
@@ -95,6 +110,14 @@ export default class extends Controller {
     }
 
     giveUp() {
+      if (this.giveUpDisabled) {
+        return;
+      }
+
+      if (!confirm('Bist du dir sicher, dass du aufgeben möchtest?')) {
+        return;
+      }
+
       this.disable();
       fetch(window.location.origin + '/game/' + this.gameCodeValue + '/player/' + this.playerIdValue + '/bankrupt', {
         method: 'GET',
@@ -164,34 +187,42 @@ export default class extends Controller {
     }
 
     enableTrade() {
+      this.tradeDisabled = false;
       this.tradeTarget.removeAttribute('disabled');
     }
 
     disableTrade() {
+      this.tradeDisabled = true;
       this.tradeTarget.setAttribute('disabled', 'disabled');
     }
 
     enableDice() {
+      this.diceDisabled = false;
       this.diceTarget.removeAttribute('disabled');
     }
 
     disableDice() {
+      this.diceDisabled = true;
       this.diceTarget.setAttribute('disabled', 'disabled');
     }
 
     enableEndTurn() {
+      this.endTurnDisabled = false;
       this.endTurnTarget.removeAttribute('disabled');
     }
 
     disableEndTurn() {
+      this.endTurnDisabled = true;
       this.endTurnTarget.setAttribute('disabled', 'disabled');
     }
 
     enableGiveUp() {
+      this.giveUpDisabled = false;
       this.giveUpTarget.removeAttribute('disabled');
     }
 
     disableGiveUp() {
+      this.giveUpDisabled = true;
       this.giveUpTarget.setAttribute('disabled', 'disabled');
     }
 }

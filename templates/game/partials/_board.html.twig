@@ -5,24 +5,40 @@
         </div>
     </div>
     <div id="start" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(0),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(0)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_start.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="jail" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(10),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(10)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_jail.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="parking" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(20),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(20)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_freeParking.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="goToJail" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(30),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(30)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_goToJail.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell1" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -30,9 +46,13 @@
         }) }}
     </div>
     <div id="cell2" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(2),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(2)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_communityChest.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell3" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -40,9 +60,13 @@
         }) }}
     </div>
     <div id="cell4" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(4),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(4)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_incomeTax.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell5" class="cell-container">
         {% component GameActionFieldComponent with {
@@ -60,9 +84,13 @@
         }) }}
     </div>
     <div id="cell7" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(7),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(7)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_chance.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell8" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -115,9 +143,13 @@
         }) }}
     </div>
     <div id="cell16" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(17),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(17)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_communityChest.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell17" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -135,9 +167,13 @@
         }) }}
     </div>
     <div id="cell20" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(22),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(22)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_chance.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell21" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -195,9 +231,13 @@
         }) }}
     </div>
     <div id="cell30" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(33),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(33)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_communityChest.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell31" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -215,9 +255,13 @@
         {% endcomponent %}
     </div>
     <div id="cell33" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(36),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(36)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_chance.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell34" class="cell-container">
         {{ component('GameBuildingComponent', {
@@ -225,9 +269,13 @@
         }) }}
     </div>
     <div id="cell35" class="cell-container">
-        {{ component('GameActionFieldComponent', {
-            'field': game.getFieldByPosition(38),
-        }) }}
+        {% component GameActionFieldComponent with {
+            field: game.getFieldByPosition(38)
+        } %}
+            {% block content %}
+                {% include 'game/partials/actionFields/_luxuryTax.html.twig' %}
+            {% endblock %}
+        {% endcomponent %}
     </div>
     <div id="cell36" class="cell-container">
         {{ component('GameBuildingComponent', {

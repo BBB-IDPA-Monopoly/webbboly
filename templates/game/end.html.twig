@@ -5,14 +5,15 @@
         <div class="row">
             <div class="col-12">
                 <h1>Game over #{{ game.code }}</h1>
-                <p>Winner: {{ game.winner.nickname }}</p>
+                <p>Winner: {{ winner.nickname }}</p>
                 <p>Players:</p>
                 <ul>
-                    {% for player in game.players %}
-                        <li>{{ player.name }}</li>
+                    {% for player in players %}
+                        <li>{{ player.nickname }}</li>
                     {% endfor %}
                 </ul>
             </div>
+            <a href="{{ path('app_index') }}" class="btn btn-primary">Zurück zur Startseite</a>
         </div>
     </div>
 {% endblock %}

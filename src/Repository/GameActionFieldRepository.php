@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Game;
 use App\Entity\GameActionField;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -76,6 +77,17 @@ class GameActionFieldRepository extends ServiceEntityRepository
             ->setParameter('position', $position)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+    }
+
+    public function removeByGame(Game $game): void
+    {
+        $this->createQueryBuilder('gameActionField')
+            ->delete()
+            ->where('gameActionField.game = :game')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->execute()
         ;
     }
 

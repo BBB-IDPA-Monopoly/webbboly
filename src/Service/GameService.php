@@ -72,6 +72,19 @@ final readonly class GameService
         return $game;
     }
 
+    public function end(Game $game): void
+    {
+        $game->setCurrentTurnPlayer(null);
+        $game->setTurnOrder(null);
+        $this->gameRepository->save($game, true);
+
+        $this->gameActionFieldRepository->removeByGame($game);
+        $this->gameBuildingRepository->removeByGame($game);
+        $this->gameCardRepository->removeByGame($game);
+        $this->playerRepository->removeByGame($game);
+        $this->gameRepository->remove($game, true);
+    }
+
     /**
      * @throws Exception
      */
@@ -689,7 +702,7 @@ final readonly class GameService
         }
 
         if ($turnOrder->count() === 1) {
-            $this->gameStreamService->sendGameEnd($game, $turnOrder->first());
+            $this->gameStreamService->sendGameEnd($game);
         }
     }
 

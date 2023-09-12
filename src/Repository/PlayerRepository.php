@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Game;
 use App\Entity\Player;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,17 @@ class PlayerRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function removeByGame(Game $game): void
+    {
+        $this->createQueryBuilder('p')
+            ->delete()
+            ->where('p.game = :game')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
 //    /**

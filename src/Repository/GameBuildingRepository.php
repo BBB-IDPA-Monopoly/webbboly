@@ -57,6 +57,17 @@ class GameBuildingRepository extends ServiceEntityRepository
         ;
     }
 
+    public function removeByGame(Game $game): void
+    {
+        $this->createQueryBuilder('gb')
+            ->delete()
+            ->andWhere('gb.game = :game')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
 //    /**
 //     * @return GameBuilding[] Returns an array of GameBuilding objects
 //     */

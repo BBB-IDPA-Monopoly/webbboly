@@ -312,14 +312,25 @@ class Game
     public function winner(): Player|null
     {
         $players = $this->getPlayers();
-        $winner = null;
+        $players = $players->filter(static fn (Player $player) => $player->isBankrupt() === false);
+
+        if ($players->count() === 1) {
+            return $players->first();
+        }
+
+        if ($players->count() === 0) {
+            return null;
+        }
+
         $max = 0;
+        $winner = null;
         foreach ($players as $player) {
             if ($player->getMoney() > $max) {
                 $max = $player->getMoney();
                 $winner = $player;
             }
         }
+
         return $winner;
     }
 }

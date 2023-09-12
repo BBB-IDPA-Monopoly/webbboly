@@ -1,0 +1,55 @@
+<button type="button" class="btn btn-secondary position-absolute" style="top: .5rem; right: .5rem"
+        data-bs-toggle="modal" data-bs-target="#rulesModal">
+    <i class="bi bi-list-ul" data-bs-toggle="tooltip" data-bs-title="Spielregeln"></i>
+</button>
+
+<div class="modal fade" id="rulesModal" tabindex="-1" aria-labelledby="rulesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="rulesModalLabel">Spielregeln</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>Es braucht 4 Spieler:innen.</li>
+                    <li>Am Anfang beginnt jede:r Spieler:in auf dem Feld mit der Bezeichnung „Los“ (Startfeld).</li>
+                    <li>Jede:r Spieler:in beginnt mit 1’500 Startguthaben der Spielwährung (BBBanknoten).</li>
+                    <li>Der/Die Spieler:in welche:r das Spielt erstellte, darf beginnen. Danach geht es der Reihenfolge nach, wer dem Spiel beigetreten ist.</li>
+                    <li>
+                        Der Spieler / Die Spieler, welche:r an der Reihe ist, würfelt mit zwei Würfeln und zieht seine / ihre Spielfigur entsprechend viele Felder im Uhrzeigersinn. Man unterscheidet dabei zwischen folgenden Feldern:
+                        <ul>
+                            <li>Grundstück: Gehört das Grundstück noch niemandem, so kann man das Grundstück für den festgelegten Preis kaufen. Gehört es bereits jemandem, so muss man dieser Person die entsprechende Miete bezahlen, wie es das Feld auf seiner Karte festgelegt hat.</li>
+                            <li>Gemeinschafts- / Ereignisfeld: Landet man auf diesem Feld, erhält man eine Karte aus dem jeweils gleichnamigen Stapel und führt dessen Anweisung aus.</li>
+                            <li>Freies Parken: Man erhält das gesamte Geld, welches an die Bank ging, seit der/die letzte Spieler:in auf diesem Feld gelandet ist.</li>
+                            <li>Gehen Sie ins Gefängnis: Man kommt direkt ins Gefängnis und erhält kein Geld für das Überqueren des Startfeldes.</li>
+                            <li>„Los“ (Startfeld): Beim Überqueren dieses Feldes erhält man 200 BBBanknoten. Landet man genau auf diesem Feld, so erhält man 400 BBBanknoten</li>
+                            <li>Einkommenssteuer / Zusatzsteuer: Man bezahlt der Bank den auf dem Feld niedergeschriebenen Wert.</li>
+                            <li>
+                                Gefängnis: Man kommt nur durch gewisse Karten von Ereignis- / Gemeinschaftsfeldern, das Würfeln von 3 Paschen hintereinander oder durch das „Gehen Sie ins Gefängnis“ Feld ins Gefängnis, ansonsten ist man Besucher und das Feld hat keine besondere Bedeutung.<br>
+                                Ist man im Gefängnis gelandet, so gibt es 3 Arten wieder heraus zu kommen:
+                                <ul>
+                                    <li>50 BBBanknoten bezahlen vor dem Würfelwurf</li>
+                                    <li>Einen Pasch würfeln, jedoch ist der Zug nach dem Laufen der entsprechenden Felder beendet</li>
+                                    <li>Eine „Frei aus dem Gefängnis“ Karte einsetzten</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Ist man nach drei eigenen Würfen immer noch im Gefängnis, so muss man die Busse von 50 BBBanknoten bezahlen und darf sich ab dem nächsten Wurf sich wieder frei bewegen.</li>
+                    <li>Würfelt man einen Pasch, so darf man nach der Aktion auf dem gelandeten Feld einen weiteren Würfelwurf ausüben. Geschieht dies dreimal hintereinander, so landet man direkt im Gefängnis.</li>
+                    <li>
+                        Um Häuser und Hotels zu bauen, benötigt es zwei Voraussetzungen:
+                        <ul>
+                            <li>Man besitzt alle Grundstücke der zu bebauenden Farbe</li>
+                            <li>Man ist mit seiner Spielfigur momentan auf dem Feld, auf welchem man Häuser oder Hotels bauen will.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Verstanden</button>
+            </div>
+        </div>
+    </div>
+</div>

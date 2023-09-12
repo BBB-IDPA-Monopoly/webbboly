@@ -17,3 +17,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // SimpleLightbox
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+// Bootstrap Helper
+import './bootstrap/bootstrap-helper';
+
